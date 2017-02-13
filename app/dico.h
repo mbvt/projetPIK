@@ -1,11 +1,16 @@
 /* dico.h */
 
-#ifndef _DICO_H
-#define _DICO_H
+#ifndef _PROJETPIK_DICO_H
+#define _PROJETPIK_DICO_H
 
-// list de dico
-struct dico {
-
+struct dico{
+  int id;
+  int id_cat;
+  int id_lvl;
+  char *text;
+  char *text_key;
 
 };
+
+
 #endif
