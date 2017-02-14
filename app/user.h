@@ -5,25 +5,25 @@
 #include "profile.h"
 
 struct user{
-    int             id_user;
-    char            *name;
-    char            *firstname;
-    int             age;
-    int             status; // 1 adult - 2 child
-    int             handicap; // 0 none - 1 visual - 2 motor
-    struct profile  *profile;
+  int             id_user;
+  char            *name;
+  char            *firstname;
+  int             age;
+  int             status; // 1 adult - 2 child
+  int             handicap; // 0 none - 1 visual - 2 motor
+  struct profile  *profile;
 };
 
-/* 
+/*
 **  Initialize a user with name, firstname, age, status, handicap, profile
-**  Adding it to the database 
+**  Adding it to the database
 **  Get the id from the database and initialize the id_user
 **  return the struct user.
 */
-struct user *init_user(char *name, char *firstname, int age, int status, 
-            int handicap, struct profile *profile);
+struct user *init_user(char *name, char *firstname, int age, int status,
+    int handicap, struct profile *profile);
 
-/*  
+/*
 **  Finding the user into the database with name and firstname
 **  store it in the struct user given in args,
 **  return 1 if success or 0.
@@ -48,10 +48,10 @@ int delete_user(char *name, char *firstname);
 **  gets used with a keyboard and if he has an handicap.
 **  For the status and the handicap:
 **    - get a list of handicap and status from database
-**    - in the question for both of them loop on the posibilities (for each 
+**    - in the question for both of them loop on the posibilities (for each
 **  status and handicap print the id and the libelle
 **    - get the answeer and check if it exist in the database.
-**  
+**
 **  Then the function will initialize a profile with a category determined
 **  by the function determine_cat in the file profile.c.
 **  After using the function init_user and updating the data, the function will

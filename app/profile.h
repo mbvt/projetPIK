@@ -13,7 +13,7 @@ struct profile {
 
 /*
 **  Initialize a profil with an id_category given by the function determine_cat
-**  and a struct user that is linked with, then insert the profile in the 
+**  and a struct user that is linked with, then insert the profile in the
 **  database.
 */
 struct profile *init_profile(int id_category, struct user *user);
