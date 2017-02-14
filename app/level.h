@@ -55,4 +55,8 @@ struct level *actual_level (int user_id);
 */
 int is_succeed(int score, long speed, struct level *level);
 
+/*
+**  Generate all the level and inserting them in the database.
+**  At the same moment generate also the dico for the level.
+*/
 #endif
