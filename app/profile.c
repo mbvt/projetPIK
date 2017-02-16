@@ -1,8 +1,9 @@
 /* profile.c */
+
 #include <stdlib.h>
-#include <stdio.h>
 #include "profile.h"
-#include "dico.h"
+
+
 struct profile *init_profile(int id_category, struct user *user)
 {
   struct profile *profile = malloc(sizeof (struct profile));
@@ -11,7 +12,16 @@ struct profile *init_profile(int id_category, struct user *user)
   return profile;
 }
 
-struct profile *determine_category(int status, int handicap)
+int modify_profile(int id_category, struct user *user)
+{
+  //TODO QUERY update
+  // check if its done
+  // return 1 or 0 if fails
+  return 1;
+
+}
+
+int determine_category(int status, int handicap)
 {
   // enfant
   // handicap
@@ -26,7 +36,7 @@ struct profile *determine_category(int status, int handicap)
 /* TODO determiner
 ** les dicos
 ** les speed
-** les clavier couleur etc
+** les clavier couleur etc // Pour l'instant juste clavier noir et blanc
 ** est il possible d'avoir plussieur handicap + etre enfant
 */
 
@@ -35,16 +45,18 @@ struct profile *determine_category(int status, int handicap)
 /*
 ** TODO category = status ??
 */
-  if (status > -1)
+  if (status > 0)
     category = status
   else
     return -1;
 
   if (handicap > 0)
-    category = handicap +1;
+    category = handicap +2;
     //verify that category exist in database
   else
     return -1
 
   return category;
 }
+
+
