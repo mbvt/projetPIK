@@ -4,7 +4,7 @@
 
 
 /*
-**  Statistics will be a table in the database and each of tuple is a stat.
+**  Statistics will be a table in the database and each tuple is a stat.
 **  Each level will record a stat and inserting it in the database.
 **  It's possible to have multiple stat for one level so the var attempt is
 **  usefull.

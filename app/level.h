@@ -26,7 +26,7 @@ struct level {
 **  Init a level with the world (3) , stage(3), difficulty(3), category (atm 4)
 */
 struct level *init_level (int world, int stage, int difficulty, int category,
-    int id_statistic, long  score_expected);
+    int id_statistic, int score_expected, long speed_expected);
 
 /*
 **  Generate id_lvl with the Difficulty, the World and the stage.
@@ -36,10 +36,10 @@ struct level *init_level (int world, int stage, int difficulty, int category,
 int generate_idlvl(int world, int stage, int difficulty);
 
 /*
-**  Get the level from the database
+**  Get the level info from the database
 **  Return 1 on success or -1.
 */
-int get_level();
+int get_level(int id_lvl, struct user **user);
 
 /*
 **  This function will use a query to find the max idlvl of the user and verify
