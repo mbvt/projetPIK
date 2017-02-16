@@ -8,7 +8,7 @@
 **  the speed or not with Difficulty and Category , the score needed )
 **    - It's maybe needed to create an user that could be the reference for all
 **  the levels.
-**
+** TODO  - Enlever id_statistic
 */
 struct level {
   int id;
