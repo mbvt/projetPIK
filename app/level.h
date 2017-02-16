@@ -8,32 +8,31 @@
 **  the speed or not with Difficulty and Category , the score needed )
 **    - It's maybe needed to create an user that could be the reference for all
 **  the levels.
-** TODO  - Enlever id_statistic
+** TODO  text_key will be for later.
 */
 struct level {
   int id;
   int id_lvl;
-  int world;
   int stage;
   int difficulty;
   int category;
-  int id_statistic;
   int score_expected;
   long speed_expected;
+  char *text;
 };
 
 /*
 **  Init a level with the world (3) , stage(3), difficulty(3), category (atm 4)
 */
-struct level *init_level (int world, int stage, int difficulty, int category,
-    int id_statistic, int score_expected, long speed_expected);
+struct level *init_level (int stage, int difficulty, int category,
+    int score_expected, long speed_expected, char *text);
 
 /*
 **  Generate id_lvl with the Difficulty, the World and the stage.
 **  There is only 3 of each of them so the first level will be 111 (DWS)
 **  This function will take in arguments D , W and S.
 */
-int generate_idlvl(int world, int stage, int difficulty);
+int generate_idlvl(int stage, int difficulty, int category);
 
 /*
 **  Get the level info from the database
