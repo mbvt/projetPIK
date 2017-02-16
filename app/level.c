@@ -8,12 +8,13 @@ struct level *init_level (int world, int stage, int difficulty, int category,
     int id_statistic, int score_expected, long speed_expected)
 {
   struct level *lvl = malloc(sizeof (struct level));
-  int id_lvl = generate_idlvl(world,stage,difficulty);
+  int id_lvl = generate_idlvl(world,stage,difficulty,category);
   // TODO Handle erro ??
   lvl->id_lvl = id_lvl;
   lvl->world = world;
   lvl->stage = stage;
   lvl->difficulty = difficulty;
+  lvl->category = category;
   lvl->id_statistic = id_statistic;
   lvl->score_expected = score_expected;
   lvl->speed_expected = speed_expected;
@@ -21,11 +22,11 @@ struct level *init_level (int world, int stage, int difficulty, int category,
   return lvl;
 }
 
-int generate_idlvl (int difficulty, int world, int stage)
+int generate_idlvl (int difficulty, int world, int stage, int category)
 {
   int id_lvl = 0;
   if ((difficulty + world + stage) > 0)
-    id_lvl = (difficulty*100) + (world*10) + stage;
+    id_lvl = (difficulty*100)< + (world*10) + stage;
   return id_lvl;
 }
 

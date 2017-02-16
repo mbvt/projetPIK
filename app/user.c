@@ -52,7 +52,7 @@ int find_user(char *name, char *firstname, struct user **user){
     printf("line %d : %s",i,line);
     i++;
   }
-  
+
   fclose(file);
   return 1;
 }
@@ -112,4 +112,35 @@ int *mcq_user(struct user **user)
   }
 
   return 1;
+}
+
+int determine_category(int status, int handicap)
+{
+  // enfant
+  // handicap
+  // black_white
+  // motor
+
+
+  /* TODO determiner
+   ** les dicos
+   ** les speed
+   ** les clavier couleur etc // Pour l'instant juste clavier noir et blanc
+   ** est il possible d'avoir plussieur handicap + etre enfant
+   */
+
+  int category;
+
+  if (status > 0)
+    category = status
+  else
+    return -1;
+
+  if (handicap > 0)
+    category = handicap +2;
+  //verify that category exist in database
+  else
+    return -1;
+
+  return category;
 }

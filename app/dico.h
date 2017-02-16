@@ -17,5 +17,8 @@ struct dico{
 */
 struct dico *init_dico(int id_lvl);
 
+/*
+**  Create all the dico with different words
+*/
 
 #endif
