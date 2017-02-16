@@ -22,9 +22,9 @@ struct level {
 };
 
 /*
-**  Init a level with the world (3) , stage(3), difficulty(3), category (atm 4)
+**  Init a level with the  stage(1-99), difficulty(3), category (atm 4)
 */
-struct level *init_level (int stage, int difficulty, int category,
+struct level *init_level (int category, int difficulty, int stage,
     int score_expected, long speed_expected, char *text);
 
 /*
@@ -32,7 +32,7 @@ struct level *init_level (int stage, int difficulty, int category,
 **  There is only 3 of each of them so the first level will be 111 (DWS)
 **  This function will take in arguments D , W and S.
 */
-int generate_idlvl(int stage, int difficulty, int category);
+int generate_idlvl(int category, int difficulty, int stage);
 
 /*
 **  Get the level info from the database

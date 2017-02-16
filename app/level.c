@@ -4,29 +4,27 @@
 
 # include "level.h"
 
-struct level *init_level (int world, int stage, int difficulty, int category,
-    int id_statistic, int score_expected, long speed_expected)
+struct level *init_level (int stage, int difficulty, int category,
+     int score_expected, long speed_expected, char *text)
 {
   struct level *lvl = malloc(sizeof (struct level));
-  int id_lvl = generate_idlvl(world,stage,difficulty,category);
+  int id_lvl = generate_idlvl(stage,difficulty,category);
   // TODO Handle erro ??
   lvl->id_lvl = id_lvl;
-  lvl->world = world;
   lvl->stage = stage;
   lvl->difficulty = difficulty;
   lvl->category = category;
-  lvl->id_statistic = id_statistic;
   lvl->score_expected = score_expected;
   lvl->speed_expected = speed_expected;
-
+  lvl->test = text;
   return lvl;
 }
 
-int generate_idlvl (int difficulty, int world, int stage, int category)
+int generate_idlvl (int category, int difficulty, int stage )
 {
   int id_lvl = 0;
-  if ((difficulty + world + stage) > 0)
-    id_lvl = (difficulty*100)< + (world*10) + stage;
+  if ((category + difficulty + stage) > 0)
+    id_lvl = (category*1000) + (difficulty*100)  + stage;
   return id_lvl;
 }
 

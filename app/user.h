@@ -2,8 +2,6 @@
 #ifndef _PROJETPIK_USER_H
 #define _PROJETPIK_USER_H
 
-#include "profile.h"
-
 struct user{
   int             id_user;
   char            *name;
@@ -12,7 +10,6 @@ struct user{
   int             status; // 1 adult - 2 child
   int             handicap; // 0 none - 1 visual - 2 motor
   int             category;
-  struct profile  *profile;
 };
 
 /*
@@ -22,7 +19,7 @@ struct user{
  **  return the struct user.
  */
 struct user *init_user(char *name, char *firstname, int age, int status,
-    int handicap, struct profile *profile);
+    int handicap, int category);
 
 /*
  **  Finding the user into the database with name and firstname
@@ -37,13 +34,12 @@ int find_user(char *name, char *firstname, struct user **user);
  **  return 1 if success or 0.
  */
 int modify_user(char *name, char *firstname, int age, int status,
-    int handicap, struct profile *profile, struct user **user);
+    int handicap, struct user **user);
 
 /*
  **  Delete the user in the database and return 1 on success or 0.
  */
 int delete_user(struct user *user);
-
 
 /*
  **  This function determine the category with the status of the user and if he
@@ -59,7 +55,7 @@ int determine_category(int status, int handicap);
  **    - get a list of handicap and status from database
  **    - in the question for both of them loop on the posibilities (for each
  **  status and handicap print the id and the libelle
- **    - get the answeer and check if it exist in the database.
+ **    - get the answer and check if it exist in the database.
  **
  **  Then the function will initialize a profile with a category determined
  **  by the function determine_cat in the file profile.c.

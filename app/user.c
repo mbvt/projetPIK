@@ -5,124 +5,53 @@
 # include "user.h"
 
 struct user *init_user(char *name, char *firstname, int age, int status, int
-    handicap, struct profile *profile){
+    handicap, int category){
 
   struct user *newuser =  malloc(sizeof (struct user));
   newuser->name =            name;
   newuser->firstname =       firstname;
   newuser->age =             age;
-  newuser->profile =         profile;
+  newuser->category =        category;
 
-  //char profname[] = *(profile->name);
-
-  //TODO Remplace next lines with Database query
-  char append[2];
-  FILE *file = fopen("~/data/user","w");
-  char *line = malloc(256*sizeof(char));
-  strcat(line,name);
-  strcat(line,"/");
-  strcat(line,firstname);
-  strcat(line,"/");
-  sprintf(append,"%d",age);
-  strcat(line,append);
-  strcat(line,"/");
-  strcat(line,profname);
-  fwrite(line,1,sizeof(line),file);
-  fclose(file);
-
+  /*
+   **  TODO  query to add the user in the database
+   */
   return  newuser;
 }
 
 int find_user(char *name, char *firstname, struct user **user){
 
-  //TODO Query select user
-  // then initialize a user
-  // return 1 on sucess or 0;
-  FILE *file = fopen("~/data/user","r");
-  struct user *user = malloc(sizeof (struct user));
-  char line[128];
-  int i = 0;
-  int find = 0;
-  while(fgets(line, sizeof (line), file) != NULL && find == 0 )
-  {
-    //for each elmt seperate by delimiter
-    // stocker dans liste tout la ligne
-    // si l.name = name && l.firstname = firstname
-    // init_user avec les elmt de la liste retourné le user.
-    printf("line %d : %s",i,line);
-    i++;
-  }
-
-  fclose(file);
+  /*  TODO Query select user
+   **  then initialize a user
+   **  return 1 on sucess or 0;
+   */
   return 1;
 }
 
 int modify_user(char *name, char *firstname, int age, int status, int handicap,
-    struct profile *profile, struct user **user)
+    int category, struct user **user)
 {
-  //TODO Querry to modify user
-  //Check if everything is ok return 1 or 0
+  /*  TODO Querry to modify user
+   **  Check if everything is ok return 1 or 0
+   */
   return 1;
 }
 
 int delete_user(struct user *user)
 {
-  //TODO Querry to delete user
-  //Check if everything is ok return 1 or 0
-  return 1;
-}
-
-int *mcq_user(struct user **user)
-{
-  struct user *user;
-  struct profile *profile;
-  char name[50];
-  char firstname[50];
-  char age[3];
-  int keyboard;
-  int handicap;
-  int category;
-
-  printf("Entrez votre nom:\n");
-  scanf("%s",name);
-  printf("Entrez votre prenom:\n");
-  scanf("%s",firstname);
-  printf("Entrez votre age:\n");
-  scanf("%s",age);
-  printf("Avez vous déjà utilisé un clavier ? 0/1\n");
-  scanf("%d",&keyboard);
-
-  //TODO Query select to get all the handicap possible
-  // then loop printf ( handicapname, i)
-  printf("Avez vous un handicap ? 0/1\n");
-  printf("Lequel : Daltonien(1) Moteur(2)\n");
-  scanf("%d",&handicap);
-
-  if ((category = determine_category) == -1)
-    err("1", "error while determine category");
-
-  // créer le profile
-  profile = init_profile(category,user);
-
-  // initialize the user
-  if( find_user(name,firstname, user) == -1)
-  {
-    if ((user = init_user(name,firstname,age,profile)) == NULL)
-      err("1", "error while initialize user");
-  }
-
+  /*  TODO Querry to delete user
+   **  Check if everything is ok return 1 or 0
+   */
   return 1;
 }
 
 int determine_category(int status, int handicap)
 {
-  // enfant
-  // handicap
-  // black_white
-  // motor
-
-
-  /* TODO determiner
+  /* enfant
+   ** handicap
+   ** black_white
+   ** motor
+   TODO determiner
    ** les dicos
    ** les speed
    ** les clavier couleur etc // Pour l'instant juste clavier noir et blanc
@@ -143,4 +72,44 @@ int determine_category(int status, int handicap)
     return -1;
 
   return category;
+}
+
+int *mcq_user(struct user **user)
+{
+  struct user *user;
+  struct profile *profile;
+  char name[50];
+  char firstname[50];
+  int age;
+  int keyboard;
+  int handicap;
+  int category;
+
+  printf("Entrez votre nom:\n");
+  scanf("%s",name);
+  printf("Entrez votre prenom:\n");
+  scanf("%s",firstname);
+  printf("Entrez votre age:\n");
+  scanf("%d",age);
+  printf("Avez vous déjà utilisé un clavier ? 0/1\n");
+  scanf("%d",&keyboard);
+
+  //TODO Query select to get all the handicap possible
+  // then loop printf ( handicapname, i)
+  printf("Avez vous un handicap ? 0/1\n");
+  printf("Lequel : Daltonien(1) Moteur(2)\n");
+  scanf("%d",&handicap);
+
+  //TODO if age > 16 status = 1 (adult) else 0
+  if ((category = determine_category(status, handicap)) == -1)
+    err("1", "error while determine category");
+
+  // initialize the user
+  if( find_user(name,firstname, user) == -1)
+  {
+    if ((user = init_user(name,firstname,age)) == NULL)
+      err("1", "error while initialize user");
+  }
+
+  return 1;
 }
