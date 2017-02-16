@@ -41,7 +41,7 @@ int modify_user(char *name, char *firstname, int age, int status,
 /*
 **  Delete the user in the database and return 1 on success or 0.
 */
-int delete_user(char *name, char *firstname);
+int delete_user(struct user *user);
 
 /*
 **  MCQ to create the user. It will ask the name, firstname, age, if the user

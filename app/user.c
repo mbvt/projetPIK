@@ -37,6 +37,7 @@ int find_user(char *name, char *firstname, struct user **user){
 
   //TODO Query select user
   // then initialize a user
+  // return 1 on sucess or 0;
   FILE *file = fopen("~/data/user","r");
   struct user *user = malloc(sizeof (struct user));
   char line[128];
@@ -51,9 +52,24 @@ int find_user(char *name, char *firstname, struct user **user){
     printf("line %d : %s",i,line);
     i++;
   }
-
+  
   fclose(file);
-  return user;
+  return 1;
+}
+
+int modify_user(char *name, char *firstname, int age, int status, int handicap,
+    struct profile *profile, struct user **user)
+{
+  //TODO Querry to modify user
+  //Check if everything is ok return 1 or 0
+  return 1;
+}
+
+int delete_user(struct user *user)
+{
+  //TODO Querry to delete user
+  //Check if everything is ok return 1 or 0
+  return 1;
 }
 
 int *mcq_user(struct user **user)
