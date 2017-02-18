@@ -1,6 +1,6 @@
-/* stats.h */
-# ifndef _PROJETPIK_STATISTICS_H
-# define _PROJETPIK_STATISTICS_H
+/* stat.h */
+# ifndef _PROJETPIK_STAT_H
+# define _PROJETPIK_STAT_H
 
 
 /*
@@ -27,11 +27,12 @@ struct stat{
 
 /*
 **  Initialize a stat for a lvl.
-**  TODO how the attempt , score_expected, speed_expected will be initialized?
-**    - before the initialization or in the initialization
+**  How the attempt , score_expected, speed_expected will be initialized?
+**    - before the initialization
 **    - then get the score and speed from the level
+**    - attempt initialize in the func
 */
-struct stat *init_stat(int id_lvl, int attempt, int score, int score_expected,
+struct stat *init_stat(int id_lvl, int score, int score_expected,
     long speed, long speed_expected, struct user *user, int done);
 
 /*
@@ -44,5 +45,8 @@ struct stat *init_stat(int id_lvl, int attempt, int score, int score_expected,
 */
 int get_best_stat(int difficulty, int world, int stage, int user_id, struct
     stat **stat);
-
+/*
+** get the last attempt of game by a user
+*/
+int get_last_attempt(int id_lvl, int id_user);
 #endif

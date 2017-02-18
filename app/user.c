@@ -2,6 +2,7 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
+
 # include "user.h"
 
 struct user *init_user(char *name, char *firstname, int age, int status, int
@@ -11,11 +12,14 @@ struct user *init_user(char *name, char *firstname, int age, int status, int
   newuser->name =            name;
   newuser->firstname =       firstname;
   newuser->age =             age;
+  newuser->status =          status;
+  newuser->handicap =        handicap;
   newuser->category =        category;
 
   /*
-   **  TODO  query to add the user in the database
-   */
+  **  TODO  query to add the user in the database
+  **  get the id from the user and add it to newuser->id_user
+  */
   return  newuser;
 }
 
@@ -77,13 +81,12 @@ int determine_category(int status, int handicap)
 int *mcq_user(struct user **user)
 {
   struct user *user;
-  struct profile *profile;
   char name[50];
   char firstname[50];
   int age;
-  int keyboard;
   int handicap;
   int category;
+  int status;
 
   printf("Entrez votre nom:\n");
   scanf("%s",name);
@@ -91,8 +94,6 @@ int *mcq_user(struct user **user)
   scanf("%s",firstname);
   printf("Entrez votre age:\n");
   scanf("%d",age);
-  printf("Avez vous déjà utilisé un clavier ? 0/1\n");
-  scanf("%d",&keyboard);
 
   //TODO Query select to get all the handicap possible
   // then loop printf ( handicapname, i)
@@ -100,14 +101,14 @@ int *mcq_user(struct user **user)
   printf("Lequel : Daltonien(1) Moteur(2)\n");
   scanf("%d",&handicap);
 
-  //TODO if age > 16 status = 1 (adult) else 0
+  (age > 16)? status = 1 : status = 0; // if age > 16 ? adulte : child
   if ((category = determine_category(status, handicap)) == -1)
     err("1", "error while determine category");
 
   // initialize the user
   if( find_user(name,firstname, user) == -1)
   {
-    if ((user = init_user(name,firstname,age)) == NULL)
+    if ((user = init_user(name,firstname,age,status,handicap,category)) == NULL)
       err("1", "error while initialize user");
   }
 
