@@ -17,6 +17,10 @@ struct level *init_level (int stage, int difficulty, int category,
   lvl->score_expected = score_expected;
   lvl->speed_expected = speed_expected;
   lvl->test = text;
+  /*
+  **  TODO insert data int database
+  **  get the id to store int lvl->id_lvl;
+  */
   return lvl;
 }
 
@@ -28,11 +32,10 @@ int generate_idlvl (int category, int difficulty, int stage )
   return id_lvl;
 }
 
-int get_level(int id_lvl, struct user **user)
+int get_level(int id_lvl, struct level **lvl)
 {
-  struct user *u;
   //TODO select * from lvl where id_lvl = id_lvl
-  // store data in user
+  // store data in level
   // return 1 on sucess or 0
   return 1;
 }
@@ -40,13 +43,15 @@ int get_level(int id_lvl, struct user **user)
 struct level *actual_level (int user_id)
 {
   struct level *level;
+  //  TODO QUERY select last level with the user_id
+  //  store it in the struct level *level.
   return level;
 }
 
 int is_succeed(int score, long speed, struct level *level);
 {
   return (score > level->score_expected) && (speed < speed_expected);
-}
+
 
 
 /*

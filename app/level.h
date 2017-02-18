@@ -8,7 +8,8 @@
 **  the speed or not with Difficulty and Category , the score needed )
 **    - It's maybe needed to create an user that could be the reference for all
 **  the levels.
-** TODO  text_key will be for later.
+**  TODO  text_key will be for later.
+**
 */
 struct level {
   int id;
@@ -38,7 +39,7 @@ int generate_idlvl(int category, int difficulty, int stage);
 **  Get the level info from the database
 **  Return 1 on success or -1.
 */
-int get_level(int id_lvl, struct user **user);
+int get_level(int id_lvl, struct level **lvl);
 
 /*
 **  This function will use a query to find the max idlvl of the user and verify
