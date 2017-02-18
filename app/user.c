@@ -1,4 +1,5 @@
 /* user.c */
+# include <err.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
@@ -29,7 +30,7 @@ int find_user(char *name, char *firstname, struct user **user){
    **  then initialize a user
    **  return 1 on sucess or 0;
    */
-  return 1;
+  return 0;
 }
 
 int modify_user(char *name, char *firstname, int age, int status, int handicap,
@@ -65,26 +66,23 @@ int determine_category(int status, int handicap)
   int category;
 
   if (status > 0)
-    category = status
+    category = status;
   else
     return -1;
 
   if (handicap > 0)
     category = handicap +2;
   //verify that category exist in database
-  else
-    return -1;
 
   return category;
 }
 
-int *mcq_user(struct user **user)
+int mcq_user(struct user **user)
 {
-  struct user *user;
   char name[50];
   char firstname[50];
   int age;
-  int handicap;
+  int handicap = 0;
   int category;
   int status;
 
@@ -93,23 +91,26 @@ int *mcq_user(struct user **user)
   printf("Entrez votre prenom:\n");
   scanf("%s",firstname);
   printf("Entrez votre age:\n");
-  scanf("%d",age);
+  scanf("%d",&age);
 
   //TODO Query select to get all the handicap possible
   // then loop printf ( handicapname, i)
   printf("Avez vous un handicap ? 0/1\n");
-  printf("Lequel : Daltonien(1) Moteur(2)\n");
   scanf("%d",&handicap);
-
-  (age > 16)? status = 1 : status = 0; // if age > 16 ? adulte : child
+  if (handicap == 1)
+  {
+     printf("Lequel : Daltonien(1) Moteur(2)\n");
+     scanf("%d",&handicap);
+  }
+  status = (age > 16)?  1 :  2; // if age > 16 ? adulte : child
   if ((category = determine_category(status, handicap)) == -1)
-    err("1", "error while determine category");
+    err(1, "error while determine category");
 
   // initialize the user
-  if( find_user(name,firstname, user) == -1)
+  if( find_user(name,firstname, user) == 0)
   {
-    if ((user = init_user(name,firstname,age,status,handicap,category)) == NULL)
-      err("1", "error while initialize user");
+    if ((*user = init_user(name,firstname,age,status,handicap,category)) == NULL)
+      err(1, "error while initialize user");
   }
 
   return 1;

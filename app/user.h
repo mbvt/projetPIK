@@ -34,7 +34,7 @@ int find_user(char *name, char *firstname, struct user **user);
  **  return 1 if success or 0.
  */
 int modify_user(char *name, char *firstname, int age, int status,
-    int handicap, struct user **user);
+    int handicap, int category, struct user **user);
 
 /*
  **  Delete the user in the database and return 1 on success or 0.

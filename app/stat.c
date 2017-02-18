@@ -4,6 +4,7 @@
 # include <stdlib.h>
 
 # include "stat.h"
+# include "user.h"
 
 struct stat *init_stat(int id_lvl, int score, int score_expected,
     long speed, long speed_expected, struct user *user, int done)
@@ -16,17 +17,17 @@ struct stat *init_stat(int id_lvl, int score, int score_expected,
   stat->speed_expected =  speed_expected;
   stat->user =            user;
   stat->done =            done;
-
-  stat->attempt =         get_last_attempt(id_lvl, user->id_user);
+  int id_user = user->id_user;
+  stat->attempt =         get_last_attempt(id_lvl,id_user);
 
   return stat;
 }
 
 
-int get_best_stat(int difficulty, int world, int stage, int user_id, struct
+int get_best_stat(int difficulty, int world, int stage, int id_user, struct
     stat **stat)
 {
-
+  return 1;
 }
 
 int get_last_attempt(int id_lvl, int id_user){
@@ -36,6 +37,5 @@ int get_last_attempt(int id_lvl, int id_user){
   // store the result in stat
   x = stat->attempt;
   free(stat);
-  return x
+  return x;
 }
-#endif

@@ -16,7 +16,7 @@ struct level *init_level (int stage, int difficulty, int category,
   lvl->category = category;
   lvl->score_expected = score_expected;
   lvl->speed_expected = speed_expected;
-  lvl->test = text;
+  lvl->text = text;
   /*
   **  TODO insert data int database
   **  get the id to store int lvl->id_lvl;
@@ -42,20 +42,19 @@ int get_level(int id_lvl, struct level **lvl)
 
 struct level *actual_level (int user_id)
 {
-  struct level *level;
+  struct level *level = NULL;
   //  TODO QUERY select last level with the user_id
   //  store it in the struct level *level.
   return level;
 }
 
-int is_succeed(int score, long speed, struct level *level);
+int is_succeed(int score, long speed, struct level *level)
 {
-  return (score > level->score_expected) && (speed < speed_expected);
-
+  return (score > level->score_expected) && (speed < level->speed_expected);
+}
 
 
 /*
 **  Generate all the level and inserting them in the database.
 **  At the same moment generate also the dico for the level.
 */
-#endif
