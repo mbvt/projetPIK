@@ -37,8 +37,8 @@ struct user *menu(){
   return user;
 
 }
-int main(){
 
+int main(){
 
   return 0;
 
