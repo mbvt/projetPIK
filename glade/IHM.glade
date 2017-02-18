@@ -98,6 +98,7 @@ Pedagogical Interactive Keyboard</property>
             <property name="receives_default">True</property>
             <property name="margin_left">54</property>
             <property name="margin_right">54</property>
+            <signal name="clicked" handler="on_Inscription_clicked" swapped="no"/>
           </object>
           <packing>
             <property name="expand">False</property>

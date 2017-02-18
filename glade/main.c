@@ -9,6 +9,7 @@ GtkWidget *Connexion;
 GtkWidget *Inscription;
 GtkWidget *MainWindow;
 GtkWidget *CoWindow;
+GtkWidget *InsWindow;
 
 //gchar *new;
 
@@ -56,12 +57,43 @@ void on_Connexion_clicked()
 
 }
 
+void on_Inscription_clicked()
+{
+  GtkBuilder *builderins;
+
+  builderins = gtk_builder_new();
+  gtk_builder_add_from_file (builderins, "inscription.glade", NULL);
+
+  InsWindow = GTK_WIDGET(gtk_builder_get_object(builderins, "InsWindow"));
+  gtk_builder_connect_signals(builderins, NULL);
+
+  g_object_unref(G_OBJECT(builderins));
+
+  gtk_widget_show(InsWindow);
+  gtk_main();
+
+  gtk_widget_destroy(InsWindow);
+
+
+
+}
+
 void on_quit_clicked()
 {
   gtk_main_quit();
 }
 
-void on_quit1_clicked()
+void on_quitconnexion_clicked()
+{
+  gtk_main_quit();
+}
+
+void on_quitinscri_clicked()
+{
+  gtk_main_quit();
+}
+
+void on_quitqcm_clicked()
 {
   gtk_main_quit();
 }
@@ -70,3 +102,5 @@ void on_MainWindow_main_destroy()
 {
   gtk_main_quit();
 }
+
+
