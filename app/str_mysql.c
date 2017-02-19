@@ -46,10 +46,6 @@ char *find_fields(S_MYSQL *smysql)
 
   size_t len = strlen(str1) + strlen(str2) + strlen(smysql->table_name) + strlen(end);
 
-  printf("str1 : %zu\n", strlen(str1));
-  printf("str2 : %zu\n", strlen(str2));
-  printf("end : %zu\n", strlen(end));
-
   char *query = calloc(len, sizeof(char));
   strcat(query, str1);
   strcat(query, str2);
@@ -59,62 +55,49 @@ char *find_fields(S_MYSQL *smysql)
   printf("Query: %s\n", query);
 
   if(mysql_query(smysql->con, query))
+  {
     finish_success(smysql->con);
-  
-  MYSQL_RES *res_store  = malloc(sizeof(MYSQL_RES));
+    free(query);
+  }
+
+  MYSQL_RES *res_store = malloc(sizeof(MYSQL_RES));
     
-  if(res_store = mysql_store_result(smysql->con))   //TODO mysql_use_result
+  if(res_store = mysql_store_result(smysql->con))
    {
     finish_success(smysql->con);
-    printf("OK stored\n");
+    printf("Result stored\n");
    }
   else
   {
-    printf("NOPE\n");
+    printf("Did not manage to store result\n");
   }
 
- // MYSQL_RES *result = mysql_store_result(smysql->con);
-  size_t num_fields = mysql_num_rows(res_store);
-  printf("num_fields : %zu\n", num_fields);
-
- /* MYSQL_ROW row;
-  int i = 0
+  int num_fields = mysql_num_fields(res_store);
+  MYSQL_ROW row;
+  char *res = calloc(num_fields, sizeof(char));
+  int i = 0;
+  
   while((row = mysql_fetch_row(res_store)))
   {
-    printf("%ld\n", i)
-    ++i; 
-  }*/
-  
-  MYSQL_FIELD *fields;
-  fields = mysql_fetch_fields(res_store);
-
-  char *res = calloc(num_fields, sizeof(char));
-  //TODO WORKING but takes field's name not the right result
-  for(size_t i = 0; i < num_fields; ++i)
-  {
-    printf("Le champ %zu est %s\n", i, fields[i].name);
-    strcat(res, fields[i].name);
-    strcat(res, ", ");
+    for(; i < num_fields; ++i)
+    {
+      printf("%s", row[i] ? row[i] : "NULL");
+      strcat(res, row[i]);
+    } 
+    printf("\n");
   }
-
-
-
- /* char *res_tab[num_rows];
-  char *res;
-
-  for(int i = 0; i < num_rows; ++i)
-  {
-    res_tab[i] = (char*)result[i];
-    printf("%s\n", res_tab[i]);
-    res = strcat(res, res_tab[i]);
-  }
-  */
+ 
+  mysql_free_result(res_store);
 
   return res;
 }
 
 int insert_table(S_MYSQL *smysql)
 {
+  char *flds = find_fields(smysql);
+  //char *query
+  
+  
   /*char *flds = "";
   char *vals = "";
   if(mysql_query(smysql->con, "Insert into "+ smysql->table_name +"("+ flds +
