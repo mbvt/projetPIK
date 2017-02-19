@@ -20,7 +20,7 @@ typedef struct S_MYSQL{
   char *db;//[MAX_NAME_LENGTH];
   char *table_name;//[MAX_NAME_LENGTH];
   char *query_create_table;//[MAX_QUERY_LENGTH];
-  char *query_create_db;//[MAX_QUERY_LENGTH];
+  char *insert_values;//[MAX_QUERY_LENGTH];
   char *query_data;//[MAX_QUERY_LENGTH];
 }S_MYSQL;
 

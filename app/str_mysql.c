@@ -15,7 +15,7 @@ void finish_success(MYSQL *mysql){
 
 int init_sql(MYSQL *mysql)
 {
-  if(mysql_init(mysql)==NULL) //&mysql
+  if(mysql_init(mysql)==NULL) 
   {
     printf("\nFailed to initate MySQL connection");
     return 0;
@@ -95,7 +95,41 @@ char *find_fields(S_MYSQL *smysql)
 int insert_table(S_MYSQL *smysql)
 {
   char *flds = find_fields(smysql);
-  //char *query
+  char *values = smysql->insert_values;
+  char *table = smysql->table_name;
+
+  char *str1 = "insert into ";
+  char *str2 = " (";
+  char *str3 = ") values (";
+  char *end = ");";
+ 
+  size_t len = strlen(str1) + strlen(table) + strlen(str2) + strlen(flds)
+                + strlen(str3) + strlen(values) + strlen(end);
+  
+  char *query = calloc(len, sizeof(char));
+  strcat(query, str1);
+  strcat(query, table);
+  strcat(query, str2);
+  strcat(query, flds);
+  strcat(query, str3);
+  strcat(query, values);
+  strcat(query, end);
+ 
+  printf("Query Ins: %s\n", query);
+
+  mysql_query(smysql->con, "use projetpik;");
+
+  if(mysql_query(smysql->con, query))
+      finish_success(smysql->con);
+
+  int id_u;
+  
+  if(id_u = mysql_insert_id(smysql->con))
+   finish_success(smysql->con);
+
+  printf("id user: %d\n", id_u);
+
+  
   
   
   /*char *flds = "";
@@ -124,13 +158,18 @@ int main()//int argc, char* argv[])
   req->password = "projetpik";
   req->db = "projetpik";
   req->table_name = "pik_user";
+  req->insert_values = "1,\'Amine\',\'Ahmed Ali\',23,1,1";
 
     check = connect_sql(req->con, req->server, req->user, req->password);
   if(check == 0)                                                                
     printf("Error while connecting db in main");
 
-  char *res = find_fields(req);
-  printf("RES MAIN : %s\n", res);
+  //char *res = find_fields(req);
+  //printf("RES MAIN : %s\n", res);
+  
+  check = insert_table(req);
+  if(check != 0)
+    printf("Error while inserting");
 
   return 0;
 }
