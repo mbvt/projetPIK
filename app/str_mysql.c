@@ -1,5 +1,6 @@
 /* str_mysql.c */
-
+/*to compile :gcc str_mysql.c -o str_mysql -std=c99  `mysql_config --cflags
+ * --libs` */
 #include "str_mysql.h"
 
 void finish_with_error(MYSQL *mysql){
@@ -9,7 +10,7 @@ void finish_with_error(MYSQL *mysql){
 
 void finish_success(MYSQL *mysql){
   printf("Success !\n");
-  mysql_close(mysql);
+  //mysql_close(mysql);
 }
 
 int init_sql(MYSQL *mysql)
@@ -39,22 +40,30 @@ int connect_sql(MYSQL *mysql, char *host, char *user, char *pwd)
 
 char *find_fields(S_MYSQL *smysql)
 {
-  char *str1 = "select COLUMN_NAME from INFORMATION_SCHEMA.COLUMNS";
+  char *str1 = "select group_concat(COLUMN_NAME) from INFORMATION_SCHEMA.COLUMNS";
   char *str2 = " where table_name = \'";
   char *end = "\';";
 
-  unsigned int len = strlen(str1) + strlen(str2) + strlen(smysql->table_name) + strlen(end);
+  size_t len = strlen(str1) + strlen(str2) + strlen(smysql->table_name) + strlen(end);
 
-  char *query = malloc(len * sizeof(char));
+  printf("str1 : %zu\n", strlen(str1));
+  printf("str2 : %zu\n", strlen(str2));
+  printf("end : %zu\n", strlen(end));
+
+  char *query = calloc(len, sizeof(char));
   strcat(query, str1);
   strcat(query, str2);
   strcat(query, smysql->table_name);
   strcat(query, end);
 
+  printf("Query: %s\n", query);
+
   if(mysql_query(smysql->con, query))
     finish_success(smysql->con);
-
-  if(mysql_store_result(smysql->con))   //TODO mysql_use_result
+  
+  MYSQL_RES *res_store  = malloc(sizeof(MYSQL_RES));
+    
+  if(res_store = mysql_store_result(smysql->con))   //TODO mysql_use_result
    {
     finish_success(smysql->con);
     printf("OK stored\n");
@@ -64,16 +73,26 @@ char *find_fields(S_MYSQL *smysql)
     printf("NOPE\n");
   }
 
-  MYSQL_RES *result = mysql_store_result(smysql->con);
-  unsigned int num_fields = mysql_num_rows(result);
+ // MYSQL_RES *result = mysql_store_result(smysql->con);
+  size_t num_fields = mysql_num_rows(res_store);
+  printf("num_fields : %zu\n", num_fields);
 
-  MYSQL_FIELD *fields;
-  fields = mysql_fetch_fields(result);
-
-  char *res = "";
-  for(unsigned int i = 0; i < num_fields; ++i)
+ /* MYSQL_ROW row;
+  int i = 0
+  while((row = mysql_fetch_row(res_store)))
   {
-    printf("Le champ %u est %s\n", i, fields[i].name);
+    printf("%ld\n", i)
+    ++i; 
+  }*/
+  
+  MYSQL_FIELD *fields;
+  fields = mysql_fetch_fields(res_store);
+
+  char *res = calloc(num_fields, sizeof(char));
+  //TODO WORKING but takes field's name not the right result
+  for(size_t i = 0; i < num_fields; ++i)
+  {
+    printf("Le champ %zu est %s\n", i, fields[i].name);
     strcat(res, fields[i].name);
     strcat(res, ", ");
   }
