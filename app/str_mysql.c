@@ -61,12 +61,12 @@ char *find_fields(S_MYSQL *smysql)
   }
 
   MYSQL_RES *res_store = malloc(sizeof(MYSQL_RES));
-    
+
   if(res_store = mysql_store_result(smysql->con))
-   {
+  {
     finish_success(smysql->con);
     printf("Result stored\n");
-   }
+  }
   else
   {
     printf("Did not manage to store result\n");
@@ -76,7 +76,7 @@ char *find_fields(S_MYSQL *smysql)
   MYSQL_ROW row;
   char *res = calloc(num_fields, sizeof(char));
   int i = 0;
-  
+
   while((row = mysql_fetch_row(res_store)))
   {
     for(; i < num_fields; ++i)
@@ -86,7 +86,7 @@ char *find_fields(S_MYSQL *smysql)
     } 
     printf("\n");
   }
- 
+
   mysql_free_result(res_store);
 
   return res;
@@ -94,50 +94,52 @@ char *find_fields(S_MYSQL *smysql)
 
 int insert_table(S_MYSQL *smysql)
 {
-  char *flds = find_fields(smysql);
+  //char *flds = find_fields(smysql);
   char *values = smysql->insert_values;
   char *table = smysql->table_name;
 
   char *str1 = "insert into ";
-  char *str2 = " (";
-  char *str3 = ") values (";
+  //char *str2 = " (";
+  char *str3 = " values (";
   char *end = ");";
- 
-  size_t len = strlen(str1) + strlen(table) + strlen(str2) + strlen(flds)
-                + strlen(str3) + strlen(values) + strlen(end);
-  
+
+  size_t len = strlen(str1) + strlen(table) + strlen(str3) + strlen(values) + strlen(end);
+
   char *query = calloc(len, sizeof(char));
   strcat(query, str1);
   strcat(query, table);
-  strcat(query, str2);
-  strcat(query, flds);
+  //  strcat(query, str2);
+  //  strcat(query, flds);
   strcat(query, str3);
   strcat(query, values);
   strcat(query, end);
- 
+
   printf("Query Ins: %s\n", query);
 
   mysql_query(smysql->con, "use projetpik;");
 
   if(mysql_query(smysql->con, query))
+    finish_success(smysql->con);
+
+  if(table == "pik_user")
+  {
+    int id_u;
+
+    if(id_u = mysql_insert_id(smysql->con))
       finish_success(smysql->con);
 
-  int id_u;
-  
-  if(id_u = mysql_insert_id(smysql->con))
-   finish_success(smysql->con);
+    printf("id user: %d\n", id_u);
+    return id_u;
+  }
 
-  printf("id user: %d\n", id_u);
 
-  
-  
-  
+
   /*char *flds = "";
-  char *vals = "";
-  if(mysql_query(smysql->con, "Insert into "+ smysql->table_name +"("+ flds +
-        ") values (" + vals + ");"))
+    char *vals = "";
+    if(mysql_query(smysql->con, "Insert into "+ smysql->table_name +"("+ flds +
+    ") values (" + vals + ");"))
     finish_success(smysql->con);
-*/
+    */
   return 0;
 }
 
@@ -153,22 +155,50 @@ int main()//int argc, char* argv[])
   if(check == 0)
     printf("Error while init in main");
 
+//  struct S_MYSQL *query = malloc(sizeof(struct S_MYSQL));                       
+/*  char *firstname = "Brandon";
+  char *name = "QUINNE";
+  int age = 22;
+  int category = 1;
+  int status = 1;
+
+  char *str = firstname;                                                        
+  char *str2 = name;                                                            
+  strcat(str, ",");                                                             
+  strcat(str, str2);                                                            
+
+  char *buf;                                                                
+  sprintf(buf, ",%d,%d,%d", age, category, status);                
+
+
+  char *q = calloc(100,sizeof(char));                                               
+
+  strcat(q, "(");                                                               
+  strcat(q, str);                                                               
+  strcat(q, buf);                                                               
+  strcat(q, ")");                                                               
+
+  //query->table_name = "pik_user";                                               
+  req->insert_values = q;                                                     
+
+*/
   req->server = "localhost";
   req->user = "adminPIK";
   req->password = "projetpik";
   req->db = "projetpik";
   req->table_name = "pik_user";
-  req->insert_values = "1,\'Amine\',\'Ahmed Ali\',23,1,1";
+  req->insert_values = "NULL,\'Amine\',\'Ahmed Ali\',23,1,1";
+  
 
-    check = connect_sql(req->con, req->server, req->user, req->password);
+  check = connect_sql(req->con, req->server, req->user, req->password);
   if(check == 0)                                                                
     printf("Error while connecting db in main");
 
   //char *res = find_fields(req);
   //printf("RES MAIN : %s\n", res);
-  
+
   check = insert_table(req);
-  if(check != 0)
+  if(check == 0)
     printf("Error while inserting");
 
   return 0;

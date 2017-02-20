@@ -5,6 +5,7 @@
 # include <string.h>
 
 # include "user.h"
+# include "str_mysql.h"
 
 struct user *init_user(char *name, char *firstname, int age, int status, int
     handicap, int category){
@@ -20,7 +21,33 @@ struct user *init_user(char *name, char *firstname, int age, int status, int
   /*
   **  TODO  query to add the user in the database
   **  get the id from the user and add it to newuser->id_user
+  **  - convert int to string for query values
   */
+
+  struct S_MYSQL *query = malloc(sizeof(struct S_MYSQL));
+
+  char *str = firstname;
+  char *str2 = name;
+  strcat(str, ",");
+  strcat(str, str2);
+
+  char buf[100];
+  sprintf(buf, ",%d,%d,%d,%d", age, status, handicap, category);
+
+  char *q = calloc(sizeof(char));
+
+  strcat(q, "(");
+  strcat(q, str);
+  strcat(q, buf);
+  strcat(q, ")");
+
+  query->table_name = "pik_user";
+  query->insert_values = q;
+
+  int id_user = insert_table(query);
+
+  newuser->id_user = id_user;
+
   return  newuser;
 }
 
