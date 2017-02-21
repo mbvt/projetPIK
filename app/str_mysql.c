@@ -132,14 +132,6 @@ int insert_table(S_MYSQL *smysql)
     return id_u;
   }
 
-
-
-  /*char *flds = "";
-    char *vals = "";
-    if(mysql_query(smysql->con, "Insert into "+ smysql->table_name +"("+ flds +
-    ") values (" + vals + ");"))
-    finish_success(smysql->con);
-    */
   return 0;
 }
 
@@ -156,38 +148,56 @@ int main()//int argc, char* argv[])
     printf("Error while init in main");
 
 //  struct S_MYSQL *query = malloc(sizeof(struct S_MYSQL));                       
-/*  char *firstname = "Brandon";
+  char *firstname = "Brandon";
   char *name = "QUINNE";
   int age = 22;
   int category = 1;
   int status = 1;
 
-  char *str = firstname;                                                        
-  char *str2 = name;                                                            
+  printf("début -d\n");
+  char *str = calloc(8,sizeof(char));
+  *str = *firstname;                                                        
+  char *str2 = calloc(6, sizeof(char));
+  *str2 = *name;                                                            
   strcat(str, ",");                                                             
-  strcat(str, str2);                                                            
+  printf("début -dd\n");
+  strcat(str, name);                                                            
+  strcat(str, ",");
+  //char *buf = calloc(3,sizeof(char));
+  //sprintf(buf, ",%d,%d,%d", age, category, status);
+  printf("début\n");
 
-  char *buf;                                                                
-  sprintf(buf, ",%d,%d,%d", age, category, status);                
-
+  char *ch_age = malloc(2*sizeof(char)); 
+  sprintf(ch_age,"%d", age);
+  printf("début s\n");
+  strcat(ch_age, ",");
+  printf("%s\n", ch_age);
+  char *ch_cat = malloc(sizeof(char));
+  sprintf(ch_cat, "%d", category);
+  strcat(ch_cat, ",");
+  char *ch_status = malloc(sizeof(char));
+  sprintf(ch_status, "%d", status);
 
   char *q = calloc(100,sizeof(char));                                               
 
-  strcat(q, "(");                                                               
-  strcat(q, str);                                                               
-  strcat(q, buf);                                                               
-  strcat(q, ")");                                                               
+  //strcat(q, "(");
+  strcat(q, "NULL,");
+  strcat(q, str);                                                      
+  strcat(q, ch_age);
+  strcat(q, ch_cat);
+  strcat(q, ch_status);  
+ // strcat(q, ")");                                                     
 
   //query->table_name = "pik_user";                                               
   req->insert_values = q;                                                     
 
-*/
+
   req->server = "localhost";
   req->user = "adminPIK";
   req->password = "projetpik";
   req->db = "projetpik";
   req->table_name = "pik_user";
-  req->insert_values = "NULL,\'Amine\',\'Ahmed Ali\',23,1,1";
+//  req->insert_values = "NULL,\'Amine\',\'Ahmed Ali\',23,1,1";
   
 
   check = connect_sql(req->con, req->server, req->user, req->password);
