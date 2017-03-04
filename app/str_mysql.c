@@ -148,21 +148,25 @@ int main()//int argc, char* argv[])
     printf("Error while init in main");
 
 //  struct S_MYSQL *query = malloc(sizeof(struct S_MYSQL));                       
-  char *firstname = "Brandon";
+  char *firstname = "BRANDON";
   char *name = "QUINNE";
   int age = 22;
   int category = 1;
   int status = 1;
 
   printf("début -d\n");
-  char *str = calloc(8,sizeof(char));
-  *str = *firstname;                                                        
+  char *str = calloc(50, sizeof(char));
+  char *str1 = calloc(8,sizeof(char));
+  *str1 = *firstname;                                                        
   char *str2 = calloc(6, sizeof(char));
-  *str2 = *name;                                                            
-  strcat(str, ",");                                                             
+  *str2 = *name;
+ // char *gui = "\'";
+ // strcat(gui, str);  
+  strcat(str, firstname);
+  strcat(str, "\',\'");                                                             
   printf("début -dd\n");
   strcat(str, name);                                                            
-  strcat(str, ",");
+  strcat(str, "\',");
   //char *buf = calloc(3,sizeof(char));
   //sprintf(buf, ",%d,%d,%d", age, category, status);
   printf("début\n");
@@ -182,14 +186,17 @@ int main()//int argc, char* argv[])
 
   //strcat(q, "(");
   strcat(q, "NULL,");
+  strcat(q, "\'");
   strcat(q, str);                                                      
   strcat(q, ch_age);
   strcat(q, ch_cat);
   strcat(q, ch_status);  
  // strcat(q, ")");                                                     
 
-  //query->table_name = "pik_user";                                               
-  req->insert_values = q;                                                     
+//query->table_name = "pik_user";                                               
+  req->insert_values = q;
+
+  printf("Requete : %s\n", q);  
 
 
   req->server = "localhost";
@@ -197,19 +204,19 @@ int main()//int argc, char* argv[])
   req->password = "projetpik";
   req->db = "projetpik";
   req->table_name = "pik_user";
-//  req->insert_values = "NULL,\'Amine\',\'Ahmed Ali\',23,1,1";
+  //req->insert_values = "NULL,\'Amine\',\'Ahmed Ali\',23,1,1";
   
 
   check = connect_sql(req->con, req->server, req->user, req->password);
   if(check == 0)                                                                
-    printf("Error while connecting db in main");
+    printf("Error while connecting db in main\n");
 
   //char *res = find_fields(req);
   //printf("RES MAIN : %s\n", res);
 
   check = insert_table(req);
   if(check == 0)
-    printf("Error while inserting");
+    printf("Error while inserting\n");
 
   return 0;
 }
