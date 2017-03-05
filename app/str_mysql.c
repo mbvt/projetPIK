@@ -38,6 +38,8 @@ int connect_sql(MYSQL *mysql, char *host, char *user, char *pwd)
   return 1;
 }
 
+
+/***** ADD QUOTES BEFORE AND AFTER THE WORD FOR INSERTION IN QUERY ********/
 char* insert_string(char *word)
 {
   size_t len = strlen(word);
@@ -59,6 +61,7 @@ char* int_to_str(int nb)
   return str_int;
 }
 
+/******* BUILD QUERY FOR smysql->query *******/
 char* build_req_values(char* str1, char* str2, char* str3, char* str4, char* str5)
 {
   strcat(str1, ",");
@@ -130,6 +133,90 @@ char *find_fields(S_MYSQL *smysql)
   return res;
 }
 
+/****** INIT CONNECTION STRUCT MYSQL *******/
+S_MYSQL *conn_init_sql()
+{
+  int check = 1;
+  S_MYSQL *smysql = malloc(sizeof(struct S_MYSQL));
+  MYSQL var;
+
+  smysql->con = &var;
+  check = init_sql(smysql->con);
+  if(check == 0)
+    printf("Error while init in connect_sql");
+
+  smysql->server = "localhost";
+  smysql->user = "adminPIK";
+  smysql->password = "projetpik";
+  smysql->db = "projetpik";
+ 
+  return smysql;
+}
+
+/******** STORE RESULT IN STRING ***********/
+char *result_query(S_MYSQL *smysql)
+{
+  MYSQL_RES *res_store = malloc(sizeof(MYSQL_RES));
+
+  if(res_store = mysql_store_result(smysql->con))
+  {
+    finish_success(smysql->con);
+    printf("Result stored\n");
+  }
+  else
+  {
+    printf("Did not manage to store result\n");
+  }
+  
+  int num_fields = mysql_num_fields(res_store);
+  MYSQL_ROW row;
+  char *res = calloc(100, sizeof(char));
+  int i = 0;
+
+  while((row = mysql_fetch_row(res_store)))
+  {
+    for(; i < num_fields; ++i)
+    {
+      printf("%s", row[i] ? row[i] : "NULL");
+      strcat(res, row[i]);
+    } 
+    printf("\n");
+  }
+
+  char* query_res = *res;
+
+  mysql_free_result(res_store);
+
+  return query_res;
+
+}
+
+/******SELECT QUERY BY NAME AND FIRSTNAME & CHECK IF EXISTS USER******/
+int select_user(char* name, char* firstname)
+{
+  name = insert_string(name);
+  firstname = insert_string(firstname);
+
+  char* req = "select name_pik_user, fname_pik_user from pik_user ";
+  strcat(req, "where name_pik_user = ");
+  strcat(req, name);
+  strcat(req, " and fname_pik_user = ");
+  strcat(req, firstname);
+  strcat(req, ";");
+
+  S_MYSQL *smysql = conn_init_sql();
+
+  mysql_query(smysql->con, "use projetpik;");
+
+  if(mysql_query(smysql->con, req))
+    finish_success(smysql->con);
+
+  char *res_query = result_query(smysql->con);
+
+  return strlen(res_query) > 0;
+}
+
+/****** INSERT QUERY IN TABLE GIVEN BY smysql->table_name ******/
 int insert_table(S_MYSQL *smysql)
 {
   //char *flds = find_fields(smysql);
