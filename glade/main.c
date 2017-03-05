@@ -74,8 +74,6 @@ void on_Inscription_clicked()
 
   gtk_widget_destroy(InsWindow);
 
-
-
 }
 
 void on_quit_clicked()
