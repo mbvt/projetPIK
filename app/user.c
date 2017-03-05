@@ -19,34 +19,41 @@ struct user *init_user(char *name, char *firstname, int age, int status, int
   newuser->category =        category;
 
   /*
-  **  TODO  query to add the user in the database
-  **  get the id from the user and add it to newuser->id_user
-  **  - convert int to string for query values
-  */
+   **  TODO  query to add the user in the database
+   **  get the id from the user and add it to newuser->id_user
+   **  - convert int to string for query values
+   */
+  if(!exist_user(name, firstname))
+  {
 
-  struct S_MYSQL *query = malloc(sizeof(struct S_MYSQL));
+    struct S_MYSQL *query = malloc(sizeof(struct S_MYSQL));
 
-  firstname = insert_string(firstname);
-  name = insert_string(name);
+    firstname = insert_string(firstname);
+    name = insert_string(name);
 
-  char* str_age = int_to_str(age);
-  char* str_cat = int_to_str(category);
-  char* str_status = int_to_str(status);
+    char* str_age = int_to_str(age);
+    char* str_cat = int_to_str(category);
+    char* str_status = int_to_str(status);
 
-  char* reqst = build_req_values(firstname, name, str_age, str_cat, str_status);
+    char* reqst = build_req_values(firstname, name, str_age, str_cat, str_status);
 
-  char* q = calloc(100, sizeof(char));
-  strcat(q, "NULL,");
-  strcat(q, reqst);
+    char* q = calloc(100, sizeof(char));
+    strcat(q, "NULL,");
+    strcat(q, reqst);
 
-  query->table_name = "pik_user";
-  query->insert_values = q;
+    query->table_name = "pik_user";
+    query->insert_values = q;
 
-  int id_user = insert_table(query);
+    int id_user = insert_table(query);
 
-  newuser->id_user = id_user;
-
+    newuser->id_user = id_user;
+  }
   return  newuser;
+}
+
+int exist_user(char *name, char *firstname)
+{
+  return select_user(name, firstname);
 }
 
 int find_user(char *name, char *firstname, struct user **user){
@@ -124,8 +131,8 @@ int mcq_user(struct user **user)
   scanf("%d",&handicap);
   if (handicap == 1)
   {
-     printf("Lequel : Daltonien(1) Moteur(2)\n");
-     scanf("%d",&handicap);
+    printf("Lequel : Daltonien(1) Moteur(2)\n");
+    scanf("%d",&handicap);
   }
   status = (age > 16)?  1 :  2; // if age > 16 ? adulte : child
   if ((category = determine_category(status, handicap)) == -1)
