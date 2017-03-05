@@ -98,7 +98,7 @@ void on_Connexion_clicked()
   GtkBuilder *builderco;
 
   builderco = gtk_builder_new();
-  gtk_builder_add_from_file (builderco, "connexion.glade", NULL);
+  gtk_builder_add_from_file (builderco, "page1", NULL);
 
   CoWindow = GTK_WIDGET(gtk_builder_get_object(builderco, "page1"));
   gtk_builder_connect_signals(builderco, NULL);

@@ -24,7 +24,6 @@
             <property name="receives_default">True</property>
             <property name="halign">end</property>
             <property name="valign">end</property>
-            <property name="margin_left">540</property>
             <property name="image">image1</property>
             <property name="always_show_image">True</property>
             <signal name="clicked" handler="on_quit_clicked" swapped="no"/>

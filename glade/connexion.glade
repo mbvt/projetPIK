@@ -22,6 +22,7 @@
         <property name="spacing">60</property>
         <child>
           <object class="GtkButton" id="quit">
+            <property name="name">'</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>

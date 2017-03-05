@@ -13,6 +13,9 @@ GtkWidget *InsWindow;
 
 //gchar *new;
 
+void on_Inscription_clicked();
+void on_Connexion_clicked();
+
 int main(int argc, char *argv[])
 {
 
