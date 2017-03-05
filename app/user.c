@@ -26,20 +26,18 @@ struct user *init_user(char *name, char *firstname, int age, int status, int
 
   struct S_MYSQL *query = malloc(sizeof(struct S_MYSQL));
 
-  char *str = firstname;
-  char *str2 = name;
-  strcat(str, ",");
-  strcat(str, str2);
+  firstname = insert_string(firstname);
+  name = insert_string(name);
 
-  char buf[100];
-  sprintf(buf, ",%d,%d,%d,%d", age, status, handicap, category);
+  char* str_age = int_to_str(age);
+  char* str_cat = int_to_str(category);
+  char* str_status = int_to_str(status);
 
-  char *q = calloc(sizeof(char));
+  char* reqst = build_req_values(firstname, name, str_age, str_cat, str_status);
 
-  strcat(q, "(");
-  strcat(q, str);
-  strcat(q, buf);
-  strcat(q, ")");
+  char* q = calloc(100, sizeof(char));
+  strcat(q, "NULL,");
+  strcat(q, reqst);
 
   query->table_name = "pik_user";
   query->insert_values = q;

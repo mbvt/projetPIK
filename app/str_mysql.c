@@ -1,6 +1,6 @@
 /* str_mysql.c */
 /*to compile :gcc str_mysql.c -o str_mysql -std=c99  `mysql_config --cflags
- * --libs` */
+--libs` */
 #include "str_mysql.h"
 
 void finish_with_error(MYSQL *mysql){
@@ -37,6 +37,44 @@ int connect_sql(MYSQL *mysql, char *host, char *user, char *pwd)
 
   return 1;
 }
+
+char* insert_string(char *word)
+{
+  size_t len = strlen(word);
+  char* f_str = calloc(len + 2, sizeof(char));
+
+  strcat(f_str, "\'");
+  strcat(f_str, word);
+  strcat(f_str, "\'");
+
+  return f_str;
+}
+
+
+char* int_to_str(int nb)
+{
+  char* str_int = calloc(3, sizeof(char));
+  sprintf(str_int, "%d", nb);
+
+  return str_int;
+}
+
+char* build_req_values(char* str1, char* str2, char* str3, char* str4, char* str5)
+{
+  strcat(str1, ",");
+  strcat(str1, str2);
+  strcat(str1, ",");
+  strcat(str1, str3);
+  strcat(str1, ",");
+  strcat(str1, str4);
+  strcat(str1, ",");
+  strcat(str1, str5);
+
+  printf("builded req_val : %s\n", str1);
+
+  return str1;
+}
+
 
 char *find_fields(S_MYSQL *smysql)
 {
@@ -148,13 +186,25 @@ int main()//int argc, char* argv[])
     printf("Error while init in main");
 
 //  struct S_MYSQL *query = malloc(sizeof(struct S_MYSQL));                       
-  char *firstname = "BRANDON";
+  char *firstname = "Brandon";
   char *name = "QUINNE";
-  int age = 22;
+  int age = 23;
   int category = 1;
   int status = 1;
 
-  printf("début -d\n");
+  firstname = insert_string(firstname);
+  name = insert_string(name);
+
+  char* ch_age = int_to_str(age);
+  char* ch_cat = int_to_str(category);
+  char* ch_status = int_to_str(status);
+
+  char *reqst = build_req_values(firstname, name, ch_age, ch_cat, ch_status);
+
+  
+
+
+  /*printf("début -d\n");
   char *str = calloc(50, sizeof(char));
   char *str1 = calloc(8,sizeof(char));
   *str1 = *firstname;                                                        
@@ -163,15 +213,15 @@ int main()//int argc, char* argv[])
  // char *gui = "\'";
  // strcat(gui, str);  
   strcat(str, firstname);
-  strcat(str, "\',\'");                                                             
+  strcat(str, ",");                                                             
   printf("début -dd\n");
   strcat(str, name);                                                            
-  strcat(str, "\',");
+  strcat(str, ",");
   //char *buf = calloc(3,sizeof(char));
   //sprintf(buf, ",%d,%d,%d", age, category, status);
   printf("début\n");
-
-  char *ch_age = malloc(2*sizeof(char)); 
+*/
+/*  char *ch_age = malloc(2*sizeof(char)); 
   sprintf(ch_age,"%d", age);
   printf("début s\n");
   strcat(ch_age, ",");
@@ -181,16 +231,18 @@ int main()//int argc, char* argv[])
   strcat(ch_cat, ",");
   char *ch_status = malloc(sizeof(char));
   sprintf(ch_status, "%d", status);
+*/
+
 
   char *q = calloc(100,sizeof(char));                                               
 
   //strcat(q, "(");
   strcat(q, "NULL,");
-  strcat(q, "\'");
-  strcat(q, str);                                                      
-  strcat(q, ch_age);
+ // strcat(q, "\'");
+  strcat(q, reqst);                                                      
+ /* strcat(q, ch_age);
   strcat(q, ch_cat);
-  strcat(q, ch_status);  
+  strcat(q, ch_status);  */
  // strcat(q, ")");                                                     
 
 //query->table_name = "pik_user";                                               

@@ -29,6 +29,9 @@ void finish_with_error(MYSQL *mysql);
 void finish_success(MYSQL *mysql);
 int init_sql(MYSQL *mysql);
 int connect_sql(MYSQL *mysql, char *host, char *user, char *pwd);
+char* insert_string(char *word);
+char* int_to_str(int nb);
+char* build_req_values(char* str1, char* str2, char* str3, char* str4, char* str5);
 char *find_fields(S_MYSQL *smysql);
 
 
