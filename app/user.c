@@ -56,6 +56,38 @@ int exist_user(char *name, char *firstname)
   return select_user(name, firstname);
 }
 
+struct user *fill_user(char *string, struct user **user)
+{  
+  char *s = ",";
+  char *token = strtok(string, s);
+  int cpt = 0;
+
+  while(token != NULL)
+  {
+    if (cpt == 0)
+      *user->id_user = token;
+
+    if (cpt == 1)
+      *user->firstname = token;
+
+    if (cpt == 2)
+      *user->name = token;
+
+    if (cpt == 3)
+      *user->age = token;
+
+    if (cpt == 4)
+      *user->category = token;
+
+    if (cpt == 5)
+      *user->status = token;
+  }
+
+  // *user->handicap left (in another table)
+
+  return user;
+}
+
 int find_user(char *name, char *firstname, struct user **user){
 
   /*  TODO Query select user

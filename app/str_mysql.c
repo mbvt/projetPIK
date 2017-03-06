@@ -52,6 +52,26 @@ char* insert_string(char *word)
   return f_str;
 }
 
+/******* BUILD QUERY CONCAT(STR1, ',', STR2, ',', ...) ********/
+char* concat_query(char* str1, char* str2, char* str3, char* str4, char* str5)
+{
+  char* conc = "concat(";
+  strcat(conc, str1);
+  strcat(conc, ",");
+  strcat(conc, "\',\',");
+  strcat(conc, str2);
+  strcat(conc, ",");
+  strcat(conc, "\',\',");
+  strcat(conc, str3);
+  strcat(conc, ",");
+  strcat(conc, str4);
+  strcat(conc, "\',\',");
+  strcat(conc, ",");
+  strcat(conc, str5);
+  strcat(conc, ") ");
+
+  return conc;
+}
 
 char* int_to_str(int nb)
 {
@@ -134,7 +154,7 @@ char *find_fields(S_MYSQL *smysql)
 }
 
 /****** INIT CONNECTION STRUCT MYSQL *******/
-S_MYSQL *conn_init_sql()
+struct S_MYSQL *conn_init_sql()
 {
   int check = 1;
   S_MYSQL *smysql = malloc(sizeof(struct S_MYSQL));
@@ -191,7 +211,7 @@ char *result_query(S_MYSQL *smysql)
 
 }
 
-/******SELECT QUERY BY NAME AND FIRSTNAME & CHECK IF EXISTS USER******/
+/****** SELECT QUERY BY NAME AND FIRSTNAME & CHECK IF EXISTS USER ******/
 int select_user(char* name, char* firstname)
 {
   name = insert_string(name);
