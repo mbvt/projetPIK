@@ -3,7 +3,7 @@
 #include <string.h>
 #include <regex.h>
 
-#define SIZEOF_TREGEX 2
+#define SIZEOF_TREGEX 7
 #define SIZEOF_WORD 1024
 
 char **tab_regex(void)
@@ -74,7 +74,7 @@ int r(void)
          printf("%s",tab_r[y]);
         regex_t preg;
         /* compile the regex */
-        err = regcomp (&preg, "([a-z]*)", REG_EXTENDED);
+        err = regcomp (&preg, tab_r[y], REG_EXTENDED);
         if (err == 0)
         {
           int match;
