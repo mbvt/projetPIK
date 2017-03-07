@@ -3,81 +3,78 @@
 #include <string.h>
 #include <regex.h>
 
-char *tab_regex(void)
+#define SIZEOF_TREGEX 2
+#define SIZEOF_WORD 1024
+
+char **tab_regex(void)
 {
 
   FILE *file = fopen("regexfile2","r+");
-  char *regex[21];
+  char **regex=malloc( SIZEOF_TREGEX * sizeof (char*));
   long fl_size;
   size_t res;
   if ( file != NULL )
   {
-    char line [ 128 ]; /* or other suitable maximum line size */
+    char *line = malloc(SIZEOF_WORD *sizeof(char)); /* or other suitable maximum line size */
+    //char line[21]; /* or other suitable maximum line size */
     int i = 0;
-    while ( fgets ( line, sizeof line, file ) != NULL ) /* read a line */
+    while ( fgets ( line, SIZEOF_WORD, file ) != NULL ) /* read a line */
     {
-      //      printf("Ligne : %s", line); /* write the line */
       regex[i]=line;
-      printf("Ligne : %s", regex[i]); /* write the line */
+      printf("Ligne %d : %s",i ,regex[i]); /* write the line */
+      i++;
+      //line[0] = '\0';
+    //  memset(line,0,MAX_SIZEOF_WORD);
+      line = malloc(SIZEOF_WORD *sizeof(char)); /* or other suitable maximum line size */
     }
     fclose ( file );
+    free(line);
   }
   else
   {
     perror ( "regexfile" ); /* why didn't the file open? */
   }
-  return *regex;
+  //printf("ligne 0 %s",regex[0]);
+  //printf("ligne 1 %s",regex[1]);
+  return regex;
 
 }
 
 int r(void)
 {
   int err;
-//  const char *str_request = "http://www.developpez.net/forums/index.php";
- /// const char *str_regex = "(www\\.[-_[:alnum:]]+\\.[[:lower:]]{2,4})";
-
 
   /* GET AND STORE THE REGEXS IN TAB REGEX*/
-  FILE *file = fopen("regexfile2","r+");
-  char *regex[21];
-  long fl_size;
-  size_t res;
-  if ( file != NULL )
+  char **tab_r;
+  tab_r = tab_regex();
+  //printf("%s",tab_r[1]);
+  
+  
+  
+  char **dico= malloc (SIZEOF_TREGEX *sizeof(char*));
+  for (int i =0 ; i< SIZEOF_TREGEX; i++)
   {
-    char line [ 128 ]; /* or other suitable maximum line size */
-    int i = 0;
-    while ( fgets ( line, sizeof line, file ) != NULL ) /* read a line */
-    {
-      //      printf("Ligne : %s", line); /* write the line */
-      regex[i]=line;
-      printf("Ligne : %s", regex[i]); /* write the line */
-      i++;
-    }
-    fclose ( file );
+    dico[i] = calloc(SIZEOF_WORD , sizeof(char));
   }
-  else
-  {
-    perror ( "regexfile" ); /* why didn't the file open? */
-  }
-
   printf("\n next round \n");
   FILE *file2 = fopen("dicowordsfr.txt","r+");
-  char *dico[21];
   long fl_size2;
   size_t res2;
-
+  
   printf("\n next round222 \n");
   if ( file2 != NULL )
   {
-    char line [22]; /* or other suitable maximum line size */
-    int i = 0;
+    char *line = malloc(SIZEOF_WORD* sizeof(char)); /* or other suitable maximum line size */
+    /*  for each word */
     while ( fgets ( line, sizeof line, file2 ) != NULL ) /* read a line */
     {
-      for (int y = 0; y <2; y++)
+      /* for each regex  */
+      for (int y = 0; y < SIZEOF_TREGEX; y++)
       {
+         printf("%s",tab_r[y]);
         regex_t preg;
-        /* (1) */
-        err = regcomp (&preg, regex[y], REG_EXTENDED);
+        /* compile the regex */
+        err = regcomp (&preg, "([a-z]*)", REG_EXTENDED);
         if (err == 0)
         {
           int match;
@@ -88,26 +85,27 @@ int r(void)
           pmatch = malloc (sizeof (*pmatch) * nmatch);
           if (pmatch)
           {
-            /* (2) */
+            /* try to match */
             match = regexec (&preg, line, nmatch, pmatch, 0);
-            /* (3) */
+            /* free the regex compiled */
             regfree (&preg);
             /* (4) */
             if (match == 0)
             {
-              char *site = NULL;
+              char *str = NULL;
               int start = pmatch[0].rm_so;
               int end = pmatch[0].rm_eo;
               size_t size = end - start;
 
-              site = malloc (sizeof (*site) * (size + 1));
-              if (site)
+              str = malloc (sizeof (char) * (size + 1));
+              if (str)
               {
-                
-                dico[i]=line;
-                site[size] = '\0';
-                printf ("%s\n", line);
-                free (site);
+                strncpy(str,&line[start],size);
+                strcat(str," ");
+                //printf ("%s\n", str);
+                strcat(dico[y],str);
+                printf ("%s\n", dico[y]);
+                free (str);
               }
             }
             /* (5) */
@@ -115,7 +113,7 @@ int r(void)
             {
             //  printf ("%s n\'est pas une adresse internet valide\n",&line);
             }
-            /* (6) */
+            /* ERROR HANDLE */
             else
             {
               char *text;
@@ -144,27 +142,33 @@ int r(void)
             exit (EXIT_FAILURE);
           }
         }
-
+      line= malloc(SIZEOF_WORD * sizeof(char));
       }
-      i++;
     }
-    fclose ( file );
+    fclose ( file2 );
   }
   else
   {
     perror ( "regexfile" ); /* why didn't the file open? */
   }
-
-
-
-
   return 1;
 }
 
 int main(void)
 {
-  char x;
+  
+  int x;
   x = r();
   printf("%d",x);
+  
+  /*
+  char **x;
+  x = tab_regex();
+  printf("%s",x[0]);
+  printf("%s",x[1]);
+  strcat(x[0],"YOYOOYYO");
+
+  printf("%s",x[0]);
+  */
 }
 
