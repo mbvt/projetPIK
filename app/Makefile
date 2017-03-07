@@ -7,7 +7,7 @@ CFLAGS= -Wall -Wextra -std=c99 -O0 -g
 LDFLAGS=
 LDLIBS=
 
-SRC= app.c user.c stat.c level.c
+SRC= app.c user.c stat.c level.c str_mysql.c
 OBJ= ${SRC:.c=.o}
 DEP= ${SRC:.c=.d}
 
