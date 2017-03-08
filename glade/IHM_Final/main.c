@@ -3,18 +3,21 @@
 # include <SDL/SDL.h>
 # include <SDL/SDL_image.h>
 
-//GdkPixbuf *p;
+
 GtkWidget *label;
 GtkWidget *Connexion;
 GtkWidget *Inscription;
 GtkWidget *MainWindow;
 GtkWidget *CoWindow;
 GtkWidget *InsWindow;
-GtkWidget *test;
+GtkWidget *IHM;
+
 
 int p = 0;
 
-//gchar *new;
+
+void on_Inscription_clicked();
+void on_Connexion_clicked();
 
 int main(int argc, char *argv[])
 {
@@ -25,13 +28,13 @@ int main(int argc, char *argv[])
   gtk_init(&argc, &argv);
 
   builder = gtk_builder_new();
-  gtk_builder_add_from_file (builder, "test.glade", NULL);
+  gtk_builder_add_from_file (builder, "IHM_final.glade", NULL);
 
 
   MainWindow  = GTK_WIDGET(gtk_builder_get_object(builder, "MainWindow"));
   Connexion   = GTK_WIDGET(gtk_builder_get_object(builder, "Connexion"));
   Inscription = GTK_WIDGET(gtk_builder_get_object(builder, "Inscription"));
-  test        = GTK_WIDGET(gtk_builder_get_object(builder, "test"));
+  IHM         = GTK_WIDGET(gtk_builder_get_object(builder, "IHM"));
   gtk_builder_connect_signals(builder, NULL);
 
   g_object_unref(G_OBJECT(builder));
@@ -44,35 +47,60 @@ int main(int argc, char *argv[])
 
 void on_Connexion_clicked()
 {
-  if(p == 0)
-    gtk_stack_set_visible_child_name(GTK_STACK(test), "page1");
-  else
-    gtk_stack_set_visible_child_name(GTK_STACK(test), "page0");
+  //if(p == 0)
+    gtk_stack_set_visible_child_name(GTK_STACK(IHM), "ConnPage");
+  //else
+    //gtk_stack_set_visible_child_name(GTK_STACK(IHM), "MainPage");
 }
 
-
-/*
-void on_Connexion_clicked()
+void on_Inscription_clicked()
 {
-  GtkBuilder *builderco;
-
-  builderco = gtk_builder_new();
-  gtk_builder_add_from_file (builderco, "test.glade", NULL);
-
-  CoWindow = GTK_WIDGET(gtk_builder_get_object(builderco, "ww"));
-  gtk_builder_connect_signals(builderco, NULL);
-
-  g_object_unref(G_OBJECT(builderco));
-
-  gtk_widget_show(CoWindow);
-  gtk_main();
-
-  gtk_widget_destroy(CoWindow);
-
+  gtk_stack_set_visible_child_name(GTK_STACK(IHM), "InscriPage");
 }
-*/
+
+
+void on_quit_clicked()
+{
+  gtk_main_quit();
+}
+
+
+void on_coquit_clicked()
+{  
+  gtk_main_quit();
+}
+
+void on_insquit_clicked()
+{
+  gtk_main_quit();
+}
+
+void on_MainWindow_main_destroy()
+{
+  gtk_main_quit();
+}
+
 
 /*
+   void on_Connexion_clicked()
+   {
+   GtkBuilder *builderco;
+
+   builderco = gtk_builder_new();
+   gtk_builder_add_from_file (builderco, "connexion.glade", NULL);
+
+   CoWindow = GTK_WIDGET(gtk_builder_get_object(builderco, "CoWindow"));
+   gtk_builder_connect_signals(builderco, NULL);
+
+   g_object_unref(G_OBJECT(builderco));
+
+   gtk_widget_show(CoWindow);
+   gtk_main();
+
+   gtk_widget_destroy(CoWindow);
+
+   }
+
    void on_Inscription_clicked()
    {
    GtkBuilder *builderins;
@@ -90,16 +118,12 @@ void on_Connexion_clicked()
 
    gtk_widget_destroy(InsWindow);
    }
-   */
 
+   void on_quit_clicked()
+   {
+   gtk_main_quit();
+   }
 
-
-void on_quit_clicked()
-{
-  gtk_main_quit();
-}
-
-/*
    void on_quitconnexion_clicked()
    {
    gtk_main_quit();
@@ -110,17 +134,11 @@ void on_quit_clicked()
    gtk_main_quit();
    }
 
-
    void on_quitqcm_clicked()
    {
    gtk_main_quit();
    }
-   */
-
-void on_MainWindow_main_destroy()
-{
-  gtk_main_quit();
-}
+ */
 
 
 
