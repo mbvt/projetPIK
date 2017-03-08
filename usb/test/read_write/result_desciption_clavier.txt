@@ -1,0 +1,74 @@
+	|------------------------------------------------------------|
+	|			 	 			     |
+	|			USB Keyboard			     |
+	|							     |
+	|____________________________________________________________|
+
+---------------------------------------------------------------
+
+id = 3 
+
+---------------------------------------------------------------
+
+bLength, Size of this descriptor = 0x12
+USB Keyboard
+
+---------------------------------------------------------------
+
+bDescriptorType, Descriptor type = 0x01
+      
+
+---------------------------------------------------------------
+
+bcdUSB, USB specification release number in binary-coded decimal = 0x0200
+      
+
+---------------------------------------------------------------
+
+bDeviceClass, USB-IF class code for the device = 0x00
+---------------------------------------------------------------
+
+bDeviceSubClass, qualified by the bDeviceClass value  = 0x00
+---------------------------------------------------------------
+
+bDeviceProtocol,qualified by the bDeviceClass and bDeviceSubClass values  = 0x00
+---------------------------------------------------------------
+
+bMaxPacketSize0, Maximum packet size for endpoint 0  = 0x40
+      
+
+---------------------------------------------------------------
+
+idVendor, USB-IF vendor ID = 0x0c45
+      
+
+---------------------------------------------------------------
+
+idProduct, USB-IF product ID.  = 0x8060
+      
+
+---------------------------------------------------------------
+
+bcdDevice, USB-IF product ID.  = 0x0101
+      
+
+---------------------------------------------------------------
+
+iManufacturer, string descriptor describing manufacturer = 0x01
+      
+
+---------------------------------------------------------------
+
+iProduct, Index of string descriptor describing product  = 0x02
+USB Keyboard
+
+---------------------------------------------------------------
+
+iSerialNumber, string descriptor containing device serial number = 0x00
+---------------------------------------------------------------
+
+bNumConfigurations, Number of possible configurations = 0x01
+     
+
+---------------------------------------------------------------
+
