@@ -60,6 +60,12 @@ void on_Connexion_clicked()
 
 }
 
+void on_Connexion_hide()
+{
+  gtk_widget_hide(CoWindow);
+}
+
+
 void on_Inscription_clicked()
 {
   GtkBuilder *builderins;
@@ -76,7 +82,6 @@ void on_Inscription_clicked()
   gtk_main();
 
   gtk_widget_destroy(InsWindow);
-
 }
 
 void on_quit_clicked()
