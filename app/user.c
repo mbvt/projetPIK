@@ -23,8 +23,6 @@ struct user *init_user(char *name, char *firstname, int age, int status, int
    **  get the id from the user and add it to newuser->id_user
    **  - convert int to string for query values
    */
-  if(!exist_user(name, firstname))
-  {
 
     struct S_MYSQL *query = malloc(sizeof(struct S_MYSQL));
 
@@ -47,16 +45,18 @@ struct user *init_user(char *name, char *firstname, int age, int status, int
     int id_user = insert_table(query);
 
     newuser->id_user = id_user;
-  }
+
   return  newuser;
 }
 
 int exist_user(char *name, char *firstname)
 {
-  return select_user(name, firstname);
+  char *data = select_user(name, firstname);
+
+  return strlen(data) == 0;
 }
 
-struct user *fill_user(char *string, struct user **user)
+struct user *get_user(char *string, struct user **user)
 {  
   char *s = ",";
   char *token = strtok(string, s);
@@ -81,6 +81,8 @@ struct user *fill_user(char *string, struct user **user)
 
     if (cpt == 5)
       *user->status = token;
+
+    cpt += 1;
   }
 
   // *user->handicap left (in another table)
@@ -94,6 +96,9 @@ int find_user(char *name, char *firstname, struct user **user){
    **  then initialize a user
    **  return 1 on sucess or 0;
    */
+
+  
+
   return 0;
 }
 

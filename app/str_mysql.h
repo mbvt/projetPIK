@@ -33,8 +33,8 @@ char* insert_string(char *word);
 char* int_to_str(int nb);
 char* concat_query(char* str1, char* str2, char* str3, char* str4, char* str5);
 char* build_req_values(char* str1, char* str2, char* str3, char* str4, char* str5);
-int select_user(char* name, char* firstname);
-char *result_query(S_MYSQL *smysql);
+char* select_user(char* name, char* firstname, S_MYSQL *smysql);
+char *result_query(MYSQL *smysql);
 struct S_MYSQL *conn_init_sql();
 char *find_fields(S_MYSQL *smysql);
 

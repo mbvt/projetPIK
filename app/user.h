@@ -21,6 +21,12 @@ struct user{
 struct user *init_user(char *name, char *firstname, int age, int status,
     int handicap, int category);
 
+
+int exist_user(char *name, char *firstname);
+
+struct user *get_user(char *string, struct user **user);
+
+
 /*
  **  Finding the user into the database with name and firstname
  **  store it in the struct user given in args,

@@ -43,7 +43,7 @@ int connect_sql(MYSQL *mysql, char *host, char *user, char *pwd)
 char* insert_string(char *word)
 {
   size_t len = strlen(word);
-  char* f_str = calloc(len + 2, sizeof(char));
+  char* f_str = calloc(len + 3, sizeof(char));
 
   strcat(f_str, "\'");
   strcat(f_str, word);
@@ -174,13 +174,13 @@ struct S_MYSQL *conn_init_sql()
 }
 
 /******** STORE RESULT IN STRING ***********/
-char *result_query(S_MYSQL *smysql)
+char *result_query(MYSQL *mysql_con)
 {
   MYSQL_RES *res_store = malloc(sizeof(MYSQL_RES));
 
-  if(res_store = mysql_store_result(smysql->con))
+  if(res_store = mysql_store_result(mysql_con))
   {
-    finish_success(smysql->con);
+    finish_success(mysql_con);
     printf("Result stored\n");
   }
   else
@@ -199,11 +199,13 @@ char *result_query(S_MYSQL *smysql)
     {
       printf("%s", row[i] ? row[i] : "NULL");
       strcat(res, row[i]);
+      if( i < num_fields - 1)
+        strcat(res, ",");
     } 
     printf("\n");
   }
 
-  char* query_res = *res;
+  char* query_res = res;
 
   mysql_free_result(res_store);
 
@@ -211,29 +213,51 @@ char *result_query(S_MYSQL *smysql)
 
 }
 
+
+/******* REMOVE PARENTHESES FROM RESULTING STRING ******/
+char *remove_parths(char* data)
+{
+  char *dst = "";
+  char *tmp = "";
+
+  for(size_t i = 1; i < strlen(data)-1; ++i)
+  {
+    *tmp = data[i];
+    strcat(dst, tmp);
+  }
+
+  return dst;
+}
+
+
 /****** SELECT QUERY BY NAME AND FIRSTNAME & CHECK IF EXISTS USER ******/
-int select_user(char* name, char* firstname)
+char* select_user(char* name, char* firstname, S_MYSQL *smysql)
 {
   name = insert_string(name);
   firstname = insert_string(firstname);
 
-  char* req = "select name_pik_user, fname_pik_user from pik_user ";
+  char* req = calloc(300, sizeof(char));
+  strcat(req, "select * from pik_user ");
   strcat(req, "where name_pik_user = ");
   strcat(req, name);
   strcat(req, " and fname_pik_user = ");
   strcat(req, firstname);
   strcat(req, ";");
 
-  S_MYSQL *smysql = conn_init_sql();
+  printf("select_user = %s\n", req);
+
+  //S_MYSQL *smysql = conn_init_sql();
 
   mysql_query(smysql->con, "use projetpik;");
+
+  printf("use proj\n");
 
   if(mysql_query(smysql->con, req))
     finish_success(smysql->con);
 
   char *res_query = result_query(smysql->con);
 
-  return strlen(res_query) > 0;
+  return res_query;
 }
 
 /****** INSERT QUERY IN TABLE GIVEN BY smysql->table_name ******/
@@ -295,7 +319,7 @@ int main()//int argc, char* argv[])
 //  struct S_MYSQL *query = malloc(sizeof(struct S_MYSQL));                       
   char *firstname = "Brandon";
   char *name = "QUINNE";
-  int age = 23;
+/*  int age = 23;
   int category = 1;
   int status = 1;
 
@@ -307,7 +331,7 @@ int main()//int argc, char* argv[])
   char* ch_status = int_to_str(status);
 
   char *reqst = build_req_values(firstname, name, ch_age, ch_cat, ch_status);
-
+*/
   
 
 
@@ -340,23 +364,23 @@ int main()//int argc, char* argv[])
   sprintf(ch_status, "%d", status);
 */
 
-
+/*
   char *q = calloc(100,sizeof(char));                                               
 
   //strcat(q, "(");
   strcat(q, "NULL,");
  // strcat(q, "\'");
   strcat(q, reqst);                                                      
- /* strcat(q, ch_age);
+  strcat(q, ch_age);
   strcat(q, ch_cat);
-  strcat(q, ch_status);  */
+  strcat(q, ch_status);  
  // strcat(q, ")");                                                     
 
 //query->table_name = "pik_user";                                               
   req->insert_values = q;
 
   printf("Requete : %s\n", q);  
-
+*/
 
   req->server = "localhost";
   req->user = "adminPIK";
@@ -373,9 +397,12 @@ int main()//int argc, char* argv[])
   //char *res = find_fields(req);
   //printf("RES MAIN : %s\n", res);
 
-  check = insert_table(req);
+/*  check = insert_table(req);
   if(check == 0)
     printf("Error while inserting\n");
+*/
 
+  char *string = select_user(name, firstname, req);
+  printf("Returned string : %s\n", string);
   return 0;
 }
