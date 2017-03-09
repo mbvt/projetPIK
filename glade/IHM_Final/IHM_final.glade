@@ -249,9 +249,11 @@ Pedagogical Interactive Keyboard</property>
                             <property name="position_set">True</property>
                             <property name="wide_handle">True</property>
                             <child>
-                              <object class="GtkEntry">
+                              <object class="GtkEntry" id="test">
+                                <property name="name">test</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
+                                <signal name="activate" handler="on_test_activate" swapped="no"/>
                               </object>
                               <packing>
                                 <property name="resize">False</property>
@@ -259,13 +261,14 @@ Pedagogical Interactive Keyboard</property>
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkButton">
+                              <object class="GtkButton" id="CoEntry">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
                                 <property name="halign">start</property>
                                 <property name="image">CoEnter</property>
                                 <property name="always_show_image">True</property>
+                                <signal name="clicked" handler="on_CoEntry_clicked" swapped="no"/>
                               </object>
                               <packing>
                                 <property name="resize">True</property>
@@ -478,13 +481,14 @@ Pedagogical Interactive Keyboard</property>
             <property name="orientation">vertical</property>
             <property name="spacing">45</property>
             <child>
-              <object class="GtkButton">
+              <object class="GtkButton" id="QcmQuit">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="halign">end</property>
                 <property name="image">McqQuit</property>
                 <property name="always_show_image">True</property>
+                <signal name="clicked" handler="on_QcmQuit_clicked" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -642,7 +646,7 @@ Pedagogical Interactive Keyboard</property>
                         <property name="orientation">vertical</property>
                         <child>
                           <object class="GtkCheckButton">
-                            <property name="label" translatable="yes">Oui</property>
+                            <property name="label" translatable="yes">Daltonien</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -655,7 +659,7 @@ Pedagogical Interactive Keyboard</property>
                         </child>
                         <child>
                           <object class="GtkCheckButton">
-                            <property name="label" translatable="yes">Non</property>
+                            <property name="label" translatable="yes">Moteur</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
