@@ -11,18 +11,21 @@ GtkWidget *MainWindow;
 GtkWidget *CoWindow;
 GtkWidget *InsWindow;
 GtkWidget *IHM;
+GtkWidget *CoEntry;
 
 
-int p = 0;
-
-
-void on_Inscription_clicked();
 void on_Connexion_clicked();
+void on_Inscription_clicked();
+void on_connback_clicked();
+void on_insback_clicked();
+void on_qcm_clicked();
+void on_CoEntry_clicked();
 
+
+/*----------------------------------MAIN---------------------------------------
+ *---------------------------------------------------------------------------*/
 int main(int argc, char *argv[])
 {
-
-
   GtkBuilder *builder;
 
   gtk_init(&argc, &argv);
@@ -32,12 +35,13 @@ int main(int argc, char *argv[])
 
 
   MainWindow  = GTK_WIDGET(gtk_builder_get_object(builder, "MainWindow"));
-  Connexion   = GTK_WIDGET(gtk_builder_get_object(builder, "Connexion"));
-  Inscription = GTK_WIDGET(gtk_builder_get_object(builder, "Inscription"));
   IHM         = GTK_WIDGET(gtk_builder_get_object(builder, "IHM"));
   gtk_builder_connect_signals(builder, NULL);
 
   g_object_unref(G_OBJECT(builder));
+
+  CoEntry = gtk_entry_new();
+  CoEntry = malloc(sizeof(char));
 
   gtk_widget_show(MainWindow);
   gtk_main();
@@ -45,6 +49,10 @@ int main(int argc, char *argv[])
   return 0;
 }
 
+
+
+/*-----------------------------STACK BUTTON-----------------------------------
+ *---------------------------------------------------------------------------*/
 void on_Connexion_clicked()
 {
   gtk_stack_set_visible_child_name(GTK_STACK(IHM), "ConnPage");
@@ -55,14 +63,13 @@ void on_Inscription_clicked()
   gtk_stack_set_visible_child_name(GTK_STACK(IHM), "InscriPage");
 }
 
-
 void on_connback_clicked()
 {
-   gtk_stack_set_visible_child_name(GTK_STACK(IHM), "MainPage");
+  gtk_stack_set_visible_child_name(GTK_STACK(IHM), "MainPage");
 }
 
 void on_insback_clicked()
-{ 
+{
   gtk_stack_set_visible_child_name(GTK_STACK(IHM), "MainPage");
 }
 
@@ -71,17 +78,50 @@ void on_qcm_clicked()
   gtk_stack_set_visible_child_name(GTK_STACK(IHM), "QcmPage");
 }
 
+void on_test_ativate(GtkWidget *pEntry, gpointer data)
+{
+  const gchar *sText;
+  sText = gtk_entry_get_text(GTK_ENTRY(pEntry));
+}
+
+void on_CoEntry_clicked(GtkWidget *pButton, gpointer data)
+{
+
+  GtkWidget *pTempEntry;
+  //GtkWidget *pTempLabel;
+  GList *pList;
+  const gchar *sText;
+
+  pList = gtk_container_get_children(GTK_CONTAINER((GtkWidget*)data));
+  pTempEntry = GTK_WIDGET(pList->data);
+  pList = g_list_next(pList);
+
+
+  sText = gtk_entry_get_text(GTK_ENTRY(pTempEntry));
+  printf("Nom d'utilisateur saisi : %s\n", sText);
+
+  g_list_free(pList);
+}
+
+
+/*-----------------------------QUIT BUTTON-------------------------------------
+ *---------------------------------------------------------------------------*/
 void on_quit_clicked()
 {
   gtk_main_quit();
 }
 
 void on_coquit_clicked()
-{  
+{
   gtk_main_quit();
 }
 
 void on_insquit_clicked()
+{
+  gtk_main_quit();
+}
+
+void on_QcmQuit_clicked()
 {
   gtk_main_quit();
 }
