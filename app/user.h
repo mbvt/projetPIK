@@ -2,6 +2,8 @@
 #ifndef _PROJETPIK_USER_H
 #define _PROJETPIK_USER_H
 
+# include "str_mysql.h"
+
 struct user{
   int             id_user;
   char            *name;
@@ -23,6 +25,8 @@ struct user *init_user(char *name, char *firstname, int age, int status,
 
 
 int exist_user(char *name, char *firstname);
+
+int insert_user(struct user *newuser, struct S_MYSQL *query);
 
 struct user *get_user(char *string, struct user **user);
 
