@@ -5,7 +5,6 @@
 # include <string.h>
 
 # include "user.h"
-# include "str_mysql.h"
 
 struct user *init_user(char *name, char *firstname, int age, int status, int
     handicap, int category){
@@ -24,14 +23,25 @@ struct user *init_user(char *name, char *firstname, int age, int status, int
    **  - convert int to string for query values
    */
 
-    struct S_MYSQL *query = malloc(sizeof(struct S_MYSQL));
+   return  newuser;
+}
 
-    firstname = insert_string(firstname);
-    name = insert_string(name);
+int exist_user(char *name, char *firstname)
+{
 
-    char* str_age = int_to_str(age);
-    char* str_cat = int_to_str(category);
-    char* str_status = int_to_str(status);
+  char *data = select_user(name, firstname);
+
+  return strlen(data) != 0;
+}
+
+int insert_user(struct user *newuser, struct S_MYSQL *query)
+{
+    firstname = insert_string(newuser->firstname);
+    name = insert_string(newuser->name);
+
+    char* str_age = int_to_str(newuser->age);
+    char* str_cat = int_to_str(newuser->category);
+    char* str_status = int_to_str(newuser->status);
 
     char* reqst = build_req_values(firstname, name, str_age, str_cat, str_status);
 
@@ -46,17 +56,10 @@ struct user *init_user(char *name, char *firstname, int age, int status, int
 
     newuser->id_user = id_user;
 
-  return  newuser;
+    return id_user != 0;
 }
 
-int exist_user(char *name, char *firstname)
-{
-  char *data = select_user(name, firstname);
-
-  return strlen(data) == 0;
-}
-
-struct user *get_user(char *string, struct user **user)
+struct user *get_user(char *string, struct user *user)
 {  
   char *s = ",";
   char *token = strtok(string, s);
@@ -65,22 +68,22 @@ struct user *get_user(char *string, struct user **user)
   while(token != NULL)
   {
     if (cpt == 0)
-      *user->id_user = token;
+      user->id_user = token;
 
     if (cpt == 1)
-      *user->firstname = token;
+      user->firstname = token;
 
     if (cpt == 2)
-      *user->name = token;
+      user->name = token;
 
     if (cpt == 3)
-      *user->age = token;
+      user->age = token;
 
     if (cpt == 4)
-      *user->category = token;
+      user->category = token;
 
     if (cpt == 5)
-      *user->status = token;
+      user->status = token;
 
     cpt += 1;
   }

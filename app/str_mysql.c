@@ -206,7 +206,8 @@ char *result_query(MYSQL *mysql_con)
   }
 
   char* query_res = res;
-
+  size_t len = strlen(query_res);
+  printf("len res : %zu\n", len);
   mysql_free_result(res_store);
 
   return query_res;
@@ -317,7 +318,7 @@ int main()//int argc, char* argv[])
     printf("Error while init in main");
 
 //  struct S_MYSQL *query = malloc(sizeof(struct S_MYSQL));                       
-  char *firstname = "Brandon";
+  char *firstname = "Brandoun";
   char *name = "QUINNE";
 /*  int age = 23;
   int category = 1;
