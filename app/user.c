@@ -62,30 +62,41 @@ int insert_user(struct user *newuser, struct S_MYSQL *query)
 struct user *get_user(char *string, struct user *user)
 {  
   char *s = ",";
-  char *token = strtok(string, s);
+  char *token;
   int cpt = 0;
+  int tmp = 0; 
+  token = strtok(string, s);
 
   while(token != NULL)
   {
     if (cpt == 0)
-      user->id_user = token;
-
-    if (cpt == 1)
+    {
+     tmp = atoi(token);
+     user->id_user = tmp;
+    }
+    else if (cpt == 1)
       user->firstname = token;
 
-    if (cpt == 2)
+    else if (cpt == 2)
       user->name = token;
 
-    if (cpt == 3)
-      user->age = token;
-
-    if (cpt == 4)
-      user->category = token;
-
-    if (cpt == 5)
-      user->status = token;
-
+    else if (cpt == 3)
+    {
+      tmp = atoi(token);
+      user->age = tmp;
+    }
+    else if (cpt == 4)
+    {
+      tmp = atoi(token);
+      user->category = tmp;
+    }
+    else if (cpt == 5)
+    {
+      tmp = atoi(token);
+      user->status = tmp;
+    }
     cpt += 1;
+    token = strtok(NULL, s);
   }
 
   // *user->handicap left (in another table)

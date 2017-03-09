@@ -7,6 +7,9 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <unistd.h>
+
+
 
 #define MAX_NAME_LENGTH   128
 #define MAX_QUERY_LENGTH  1024

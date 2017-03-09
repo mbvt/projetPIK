@@ -1,7 +1,18 @@
 /* str_mysql.c */
 /*to compile :gcc str_mysql.c -o str_mysql -std=c99  `mysql_config --cflags
---libs` */
+  --libs` */
 #include "str_mysql.h"
+#define MAXSIZE 1000
+
+struct user{                                                                   
+  int             id_user;                                                     
+  char            *name;                                                       
+  char            *firstname;                                                  
+  int             age;                                                         
+  int             status; // 1 adult - 2 child                                 
+  int             handicap; // 0 none - 1 visual - 2 motor                     
+  int             category;
+};
 
 void finish_with_error(MYSQL *mysql){
   printf("Error: %s\n", mysql_error(mysql));
@@ -169,7 +180,7 @@ struct S_MYSQL *conn_init_sql()
   smysql->user = "adminPIK";
   smysql->password = "projetpik";
   smysql->db = "projetpik";
- 
+
   return smysql;
 }
 
@@ -187,7 +198,7 @@ char *result_query(MYSQL *mysql_con)
   {
     printf("Did not manage to store result\n");
   }
-  
+
   int num_fields = mysql_num_fields(res_store);
   MYSQL_ROW row;
   char *res = calloc(100, sizeof(char));
@@ -199,7 +210,7 @@ char *result_query(MYSQL *mysql_con)
     {
       printf("%s", row[i] ? row[i] : "NULL");
       strcat(res, row[i]);
-      if( i < num_fields - 1)
+      if( i < num_fields)
         strcat(res, ",");
     } 
     printf("\n");
@@ -306,6 +317,7 @@ int insert_table(S_MYSQL *smysql)
 }
 
 
+
 int main()//int argc, char* argv[])
 {
   int check = 1;
@@ -317,33 +329,33 @@ int main()//int argc, char* argv[])
   if(check == 0)
     printf("Error while init in main");
 
-//  struct S_MYSQL *query = malloc(sizeof(struct S_MYSQL));                       
-  char *firstname = "Brandoun";
+  //  struct S_MYSQL *query = malloc(sizeof(struct S_MYSQL));                       
+  char *firstname = "Brandon";
   char *name = "QUINNE";
-/*  int age = 23;
-  int category = 1;
-  int status = 1;
+  /*  int age = 23;
+      int category = 1;
+      int status = 1;
 
-  firstname = insert_string(firstname);
-  name = insert_string(name);
+      firstname = insert_string(firstname);
+      name = insert_string(name);
 
-  char* ch_age = int_to_str(age);
-  char* ch_cat = int_to_str(category);
-  char* ch_status = int_to_str(status);
+      char* ch_age = int_to_str(age);
+      char* ch_cat = int_to_str(category);
+      char* ch_status = int_to_str(status);
 
-  char *reqst = build_req_values(firstname, name, ch_age, ch_cat, ch_status);
-*/
-  
+      char *reqst = build_req_values(firstname, name, ch_age, ch_cat, ch_status);
+      */
+
 
 
   /*printf("début -d\n");
-  char *str = calloc(50, sizeof(char));
-  char *str1 = calloc(8,sizeof(char));
-  *str1 = *firstname;                                                        
-  char *str2 = calloc(6, sizeof(char));
-  *str2 = *name;
- // char *gui = "\'";
- // strcat(gui, str);  
+    char *str = calloc(50, sizeof(char));
+    char *str1 = calloc(8,sizeof(char));
+   *str1 = *firstname;                                                        
+   char *str2 = calloc(6, sizeof(char));
+   *str2 = *name;
+  // char *gui = "\'";
+  // strcat(gui, str);  
   strcat(str, firstname);
   strcat(str, ",");                                                             
   printf("début -dd\n");
@@ -352,36 +364,36 @@ int main()//int argc, char* argv[])
   //char *buf = calloc(3,sizeof(char));
   //sprintf(buf, ",%d,%d,%d", age, category, status);
   printf("début\n");
-*/
-/*  char *ch_age = malloc(2*sizeof(char)); 
-  sprintf(ch_age,"%d", age);
-  printf("début s\n");
-  strcat(ch_age, ",");
-  printf("%s\n", ch_age);
-  char *ch_cat = malloc(sizeof(char));
-  sprintf(ch_cat, "%d", category);
-  strcat(ch_cat, ",");
-  char *ch_status = malloc(sizeof(char));
-  sprintf(ch_status, "%d", status);
-*/
+  */
+  /*  char *ch_age = malloc(2*sizeof(char)); 
+      sprintf(ch_age,"%d", age);
+      printf("début s\n");
+      strcat(ch_age, ",");
+      printf("%s\n", ch_age);
+      char *ch_cat = malloc(sizeof(char));
+      sprintf(ch_cat, "%d", category);
+      strcat(ch_cat, ",");
+      char *ch_status = malloc(sizeof(char));
+      sprintf(ch_status, "%d", status);
+      */
 
-/*
-  char *q = calloc(100,sizeof(char));                                               
+  /*
+     char *q = calloc(100,sizeof(char));                                               
 
   //strcat(q, "(");
   strcat(q, "NULL,");
- // strcat(q, "\'");
+  // strcat(q, "\'");
   strcat(q, reqst);                                                      
   strcat(q, ch_age);
   strcat(q, ch_cat);
   strcat(q, ch_status);  
- // strcat(q, ")");                                                     
+  // strcat(q, ")");                                                     
 
-//query->table_name = "pik_user";                                               
+  //query->table_name = "pik_user";                                               
   req->insert_values = q;
 
   printf("Requete : %s\n", q);  
-*/
+  */
 
   req->server = "localhost";
   req->user = "adminPIK";
@@ -389,7 +401,7 @@ int main()//int argc, char* argv[])
   req->db = "projetpik";
   req->table_name = "pik_user";
   //req->insert_values = "NULL,\'Amine\',\'Ahmed Ali\',23,1,1";
-  
+
 
   check = connect_sql(req->con, req->server, req->user, req->password);
   if(check == 0)                                                                
@@ -398,12 +410,21 @@ int main()//int argc, char* argv[])
   //char *res = find_fields(req);
   //printf("RES MAIN : %s\n", res);
 
-/*  check = insert_table(req);
-  if(check == 0)
-    printf("Error while inserting\n");
-*/
+  /*  check = insert_table(req);
+      if(check == 0)
+      printf("Error while inserting\n");
+      */
 
   char *string = select_user(name, firstname, req);
   printf("Returned string : %s\n", string);
+ 
+
+/*  struct user *user = calloc(1,sizeof(struct user));
+
+  user = get_user(string, user);
+  printf("\nuser : %d  %s  %s  %d  %d  %d\n", user->id_user, user->name, user->firstname,
+      user->age, user->category, user->status);
+*/
+
   return 0;
 }
