@@ -5,86 +5,57 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "user.h"
+//#include "user.h"
+/*
+   struct user *menu(void){
 
-struct user *menu(void){
+   printf("Bonjour \nProjetPik \n");
 
-  printf("Bonjour \nProjetPik \n");
-
-  //scanf lecture de l'option dans x
-  int rep;
-  char *name = malloc (256 * sizeof(char));
-  char *firstname = malloc (50* sizeof (char));
-  struct user *user;
-  for(;;)
-  {
-    printf("Menu taper  : \n 1) Charger Profile\n 2) Creer Profile\n");
-    scanf("%d",&rep);
-    printf("vous avez entrer la valeur suivante : %d\n",rep);
-
-    if (rep == 1)
-    {
-      printf("Entrez votre nom :");
-      scanf("%s",name);
-
-      printf("Entrez votre prenom :");
-      scanf("%s",firstname);
-
-      if (find_user(name,firstname,&user) == 0)
-        printf("Utilisateur non trouve.\n\n");
-      else
-      {
-        printf("Bonjour %s\n",user->firstname);
-        break;
-      }
-    }
-    else if (rep == 2)
-    {
-      mcq_user(&user);
-      printf("Bonjour %s\n",user->firstname);
-      break;
-    }
-    else
-    {
-      printf("Valeur non reconnu, ressayez.\n\n");
-    }
-  }
-  return user;
-}
-
-void menu_level()
+//scanf lecture de l'option dans x
+int rep;
+char *name = malloc (256 * sizeof(char));
+char *firstname = malloc (50* sizeof (char));
+struct user *user;
+for(;;)
 {
+printf("Menu taper  : \n 1) Charger Profile\n 2) Creer Profile\n");
+scanf("%d",&rep);
+printf("vous avez entrer la valeur suivante : %d\n",rep);
 
-}
-
-void game(void)
+if (rep == 1)
 {
-  FILE *file = fopen("./data/dico1", "r+");
-  long fl_size;
-  char *buffer;
-  size_t res;
+printf("Entrez votre nom :");
+scanf("%s",name);
 
-  if (file==NULL) {
-    fprintf (stderr, "File error\n");
-    exit (1);
-  }
+printf("Entrez votre prenom :");
+scanf("%s",firstname);
 
-  fseek (file , 0 , SEEK_END);
-  fl_size = ftell (file);
-  rewind (file);
+if (find_user(name,firstname,&user) == 0)
+printf("Utilisateur non trouve.\n\n");
+else
+{
+printf("Bonjour %s\n",user->firstname);
+break;
+}
+}
+else if (rep == 2)
+{
+mcq_user(&user);
+printf("Bonjour %s\n",user->firstname);
+break;
+}
+else
+{
+printf("Valeur non reconnu, ressayez.\n\n");
+}
+}
+return user;
+}
+ */
 
-  buffer = (char*) malloc (sizeof(char)*fl_size);
-  if (buffer == NULL) {
-    fputs ("Memory error",stderr);
-    exit (2);
-  }
 
-  res = fread (buffer,1,fl_size,file);
-  if (res != (size_t)fl_size) {
-    fputs ("Reading error",stderr);
-    exit (3);
-  }
-  printf("%s",buffer);
+void game(char *lvl_dico )
+{
 
   /*
    ** TODO Do the user need to type the space?
@@ -110,15 +81,15 @@ void game(void)
   char r;
   int WBS;
   //char space = ' ';
-  while (i != strlen(buffer))
+  while (i != strlen(lvl_dico))
   {
-    printf("%c\n", buffer[i]);
-    if (buffer[i] == ' ')
+    printf("%c\n", lvl_dico[i]);
+    if (lvl_dico[i] == ' ')
       scanf("%c",&r);
     else
       scanf(" %c",&r);
 
-    if ((r == buffer[i]) || r == ' ')
+    if ((r == lvl_dico[i]) || r == ' ')
     {
       i++;
       WBS++;
@@ -129,16 +100,33 @@ void game(void)
       printf("               WBS = %d\n",WBS);
       WBS--;
     }
- }
+  }
 
-
-
-  fclose (file);
-  free (buffer);
+  free (lvl_dico);
 }
 
+void menu_level()
+{
+  printf("Choisissez le niveau :\n1) Niveau 1\n2) Niveau 2\n3) Niveau 3\n");
+  int rep;
+  char *lvl_title;
+  scanf("%d",&rep);
+  switch (rep) {
+    case 1:
+      lvl_title = "./dico/lvl1";
+      break;
+    case 2:
+      lvl_title = "./dico/lvl2";
+      break;
+    case 3:
+      lvl_title = "./dico/lvl3";
+      break;
+  }
+  char *lvl_dico = load_dico_lvl(lvl_title);
+  game(lvl_dico);
+}
 int main()
 {
-  game();
+  menu_level();
   return 0;
 }

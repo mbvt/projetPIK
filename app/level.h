@@ -59,4 +59,10 @@ int is_succeed(int score, long speed, struct level *level);
 **  Generate all the level and inserting them in the database.
 **  At the same moment generate also the dico for the level.
 */
+char  **get_args_from_file(char *f_title, size_t nbargs);
+
+char *build_random_str (char *chars, size_t size_wrd, size_t nb_wrd,
+    size_t size_chars);
+
+char *load_dico_lvl(char *lvltitle);
 #endif
