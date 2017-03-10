@@ -64,6 +64,11 @@ void on_Inscription_clicked()
   gtk_stack_set_visible_child_name(GTK_STACK(IHM), "InscriPage");
 }
 
+void on_qcm_clicked()
+{
+  gtk_stack_set_visible_child_name(GTK_STACK(IHM), "QcmPage");
+}
+
 void on_connback_clicked()
 {
   gtk_stack_set_visible_child_name(GTK_STACK(IHM), "MainPage");
@@ -74,9 +79,9 @@ void on_insback_clicked()
   gtk_stack_set_visible_child_name(GTK_STACK(IHM), "MainPage");
 }
 
-void on_qcm_clicked()
+void on_qcmback_clicked()
 {
-  gtk_stack_set_visible_child_name(GTK_STACK(IHM), "QcmPage");
+  gtk_stack_set_visible_child_name(GTK_STACK(IHM), "InscriPage");
 }
 
 
@@ -85,6 +90,8 @@ void on_CoEntry_clicked()
   const char *sText;
   sText = gtk_entry_get_text(GTK_ENTRY(entry));
   printf("Nom d'utilisateur saisi : %s\n", sText);
+  gtk_stack_set_visible_child_name(GTK_STACK(IHM), "TestCoPage");
+
 }
 
 /*-----------------------------QUIT BUTTON-------------------------------------
