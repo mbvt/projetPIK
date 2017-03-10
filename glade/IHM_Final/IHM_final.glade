@@ -249,11 +249,12 @@ Pedagogical Interactive Keyboard</property>
                             <property name="position_set">True</property>
                             <property name="wide_handle">True</property>
                             <child>
-                              <object class="GtkEntry" id="test">
-                                <property name="name">test</property>
+                              <object class="GtkEntry" id="entry">
+                                <property name="name">entry</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
-                                <signal name="activate" handler="on_test_activate" swapped="no"/>
+                                <property name="max_width_chars">30</property>
+                                <property name="input_purpose">alpha</property>
                               </object>
                               <packing>
                                 <property name="resize">False</property>
