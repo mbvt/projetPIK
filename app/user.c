@@ -26,7 +26,7 @@ struct user *init_user(char *name, char *firstname, int age, int status, int
    return  newuser;
 }
 
-int exist_user(char *name, char *firstname, S_MYSQL *smysql)
+int exist_user(char *name, char *firstname, struct S_MYSQL *smysql)
 {
 
   char *data = select_user(name, firstname, smysql);
@@ -172,7 +172,7 @@ int determine_category(int status, int handicap)
   return category;
 }
 
-int mcq_user(struct user **user)
+int mcq_user(struct user **user, struct S_MYSQL *smysql)
 {
   char name[50];
   char firstname[50];
@@ -202,11 +202,35 @@ int mcq_user(struct user **user)
     err(1, "error while determine category");
 
   // initialize the user
-  if( find_user(name,firstname, user) == 0)
+  if( exist_user(name, firstname, smysql) == 0)
   {
-    if ((*user = init_user(name,firstname,age,status,handicap,category)) == NULL)
+    if ((*user = insert_user(*name,firstname,age,status,handicap,category)) == NULL)
       err(1, "error while initialize user");
   }
 
   return 1;
 }
+
+int main()
+{
+  S_MYSQL *smysql = conn_init_sql();
+
+  struct user *newuser = calloc(1, sizeof(struct user));
+
+  int check = 0;
+
+  if(!exist_user(user->name, user->firstname, smysql))
+  {
+    check = insert_user(newuser, smysql);
+  }
+  else
+  {
+    find_user(user->name, user->firstname, user, smysql);
+  }
+
+  if(check)
+    printf("Insert réussi magl (ptet' fill en fait) !\n ID : %d\n", newuser->id);
+
+  return 0;
+}
+

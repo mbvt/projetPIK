@@ -35,20 +35,6 @@ int init_sql(MYSQL *mysql)
   return 1;
 }
 
-int connect_sql(MYSQL *mysql, char *host, char *user, char *pwd)
-{
-  char *db = "projetpik";
-
-  if(mysql_real_connect(mysql, host, user, pwd, db, 0, NULL, 0) == NULL)
-  {
-    printf("Failed to connect database %s.\nError : %s\n", db, mysql_error(mysql));
-    mysql_close(mysql);
-    return 0;
-  }
-
-  return 1;
-}
-
 
 /***** ADD QUOTES BEFORE AND AFTER THE WORD FOR INSERTION IN QUERY ********/
 char* insert_string(char *word)
@@ -84,6 +70,7 @@ char* concat_query(char* str1, char* str2, char* str3, char* str4, char* str5)
   return conc;
 }
 
+/****** CONVERT INT TO STRING ******/
 char* int_to_str(int nb)
 {
   char* str_int = calloc(3, sizeof(char));
@@ -181,6 +168,13 @@ struct S_MYSQL *conn_init_sql()
   smysql->password = "projetpik";
   smysql->db = "projetpik";
 
+  if(mysql_real_connect(smysql->con, smysql->server, smysql->user,
+        smysql->password, smysql->db, 0, 0) == NULL)
+  {
+    printf("Failed to connect database %s\n", smysql->db);
+    mysql_close(smysql->con);
+  }
+
   return smysql;
 }
 
@@ -275,10 +269,12 @@ char* select_user(char* name, char* firstname, S_MYSQL *smysql)
 /****** DELETE QUERY USER ******/
 void del_user(int id, S_MYSQL *smysql)
 {
+  char *id_str = int_to_str(id);
+
   char* req = calloc(300, sizeof(char));                                        
   strcat(req, "delete from pik_user ");                                       
   strcat(req, "where id_pik_user = ");                                        
-  strcat(req, id);                                                            
+  strcat(req, id_str);                                                            
   strcat(req, ";");
 
   mysql_query(smysql->con, "use projetpik;");

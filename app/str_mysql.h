@@ -45,13 +45,13 @@ char* concat_query(char* str1, char* str2, char* str3, char* str4, char* str5);
 char* build_req_values(char* str1, char* str2, char* str3, char* str4, char* str5);
 
 /* select all data user by name and firstname, returns string of concated data*/
-char* select_user(char* name, char* firstname, S_MYSQL *smysql);
+char* select_user(char* name, char* firstname, struct S_MYSQL *smysql);
 
 /* Store result from query in string */
 char *result_query(MYSQL *smysql);
 
 /* returns concated string of fields from table of smysql->table_name */
-char *find_fields(S_MYSQL *smysql);
+char *find_fields(struct S_MYSQL *smysql);
 
 
 #endif /* STR_MYSQL_H_ */
