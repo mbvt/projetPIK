@@ -5,30 +5,29 @@
 # include <SDL/SDL_image.h>
 
 
-GtkWidget *label;
-GtkWidget *Connexion;
-GtkWidget *Inscription;
-GtkWidget *MainWindow;
-GtkWidget *CoWindow;
-GtkWidget *InsWindow;
-GtkWidget *IHM;
-GtkWidget *CoEntry;
+GtkWidget  *label;
+GtkWidget  *Connexion;
+GtkWidget  *Inscription;
+GtkWidget  *MainWindow;
+GtkWidget  *CoWindow;
+GtkWidget  *InsWindow;
+GtkWidget  *IHM;
+GtkWidget  *CoEntry;
+GtkEntry   *entry;
 GtkBuilder *builder;
-GtkEntry *entry;
+
 
 void on_Connexion_clicked();
 void on_Inscription_clicked();
 void on_connback_clicked();
 void on_insback_clicked();
 void on_qcm_clicked();
-void on_CoEntry_clicked();//GtkButton *button, gpointer user_data);
+void on_CoEntry_clicked();
 
 /*----------------------------------MAIN---------------------------------------
  *---------------------------------------------------------------------------*/
 int main(int argc, char *argv[])
 {
-  //GtkBuilder *builder;
-
   gtk_init(&argc, &argv);
 
   builder = gtk_builder_new();
@@ -39,9 +38,7 @@ int main(int argc, char *argv[])
   IHM         = GTK_WIDGET(gtk_builder_get_object(builder, "IHM"));
   gtk_builder_connect_signals(builder, NULL);
 
-  g_object_unref(G_OBJECT(builder));
 
-  //CoEntry = gtk_entry_new();
   entry = GTK_ENTRY(gtk_builder_get_object(builder, "entry"));
   g_signal_connect(entry, "activate", G_CALLBACK(on_CoEntry_clicked), entry);
 
@@ -85,7 +82,6 @@ void on_qcm_clicked()
 void on_CoEntry_clicked()
 {
   const char *sText;
-
   sText = gtk_entry_get_text(GTK_ENTRY(entry));
   printf("Nom d'utilisateur saisi : %s\n", sText);
 }
@@ -116,33 +112,4 @@ void on_MainWindow_main_destroy()
 {
   gtk_main_quit();
 }
-
-
-
-
-
-
-
-
-/*
-void on_CoEntry_clicked(GtkWidget *pButton, gpointer data)
-{
-
-  GtkWidget *pTempEntry;
-  //GtkWidget *pTempLabel;
-  GList *pList;
-  const gchar *sText;
-
-  pList = gtk_container_get_children(GTK_CONTAINER((GtkWidget*)data));
-  pTempEntry = GTK_WIDGET(pList->data);
-  pList = g_list_next(pList);
-
-
-  sText = gtk_entry_get_text(GTK_ENTRY(pTempEntry));
-  printf("Nom d'utilisateur saisi : %s\n", sText);
-
-  g_list_free(pList);
-}
-*/
-
 
