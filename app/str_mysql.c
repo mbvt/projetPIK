@@ -272,6 +272,21 @@ char* select_user(char* name, char* firstname, S_MYSQL *smysql)
   return res_query;
 }
 
+/****** DELETE QUERY USER ******/
+void del_user(int id, S_MYSQL *smysql)
+{
+  char* req = calloc(300, sizeof(char));                                        
+  strcat(req, "delete from pik_user ");                                       
+  strcat(req, "where id_pik_user = ");                                        
+  strcat(req, id);                                                            
+  strcat(req, ";");
+
+  mysql_query(smysql->con, "use projetpik;");
+
+  if(mysql_query(smysql->con, req))
+    finish_success(smysql->con);
+}
+
 /****** INSERT QUERY IN TABLE GIVEN BY smysql->table_name ******/
 int insert_table(S_MYSQL *smysql)
 {
