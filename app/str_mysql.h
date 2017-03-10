@@ -11,44 +11,47 @@
 
 
 
-#define MAX_NAME_LENGTH   128
-#define MAX_QUERY_LENGTH  1024
-
 typedef struct S_MYSQL{
   MYSQL *con;
-  char *password;//[MAX_NAME_LENGTH];
-  char *root_password;//[MAX_NAME_LENGTH];
-  char *user;//[MAX_NAME_LENGTH];
-  char *server;//[MAX_NAME_LENGTH];
-  char *db;//[MAX_NAME_LENGTH];
-  char *table_name;//[MAX_NAME_LENGTH];
-  char *query_create_table;//[MAX_QUERY_LENGTH];
-  char *insert_values;//[MAX_QUERY_LENGTH];
-  char *query_data;//[MAX_QUERY_LENGTH];
+  char *password;
+  char *root_password;
+  char *user;
+  char *server;
+  char *db;
+  char *table_name;
+  char *query_create_table;
+  char *insert_values;
+  char *query_data;
 }S_MYSQL;
 
-
+/* Indicates wherever there is an error or success in MYSQL query */
 void finish_with_error(MYSQL *mysql);
 void finish_success(MYSQL *mysql);
+
+/* Init a new connection to MYSQL */
 int init_sql(MYSQL *mysql);
-int connect_sql(MYSQL *mysql, char *host, char *user, char *pwd);
-char* insert_string(char *word);
-char* int_to_str(int nb);
-char* concat_query(char* str1, char* str2, char* str3, char* str4, char* str5);
-char* build_req_values(char* str1, char* str2, char* str3, char* str4, char* str5);
-char* select_user(char* name, char* firstname, S_MYSQL *smysql);
-char *result_query(MYSQL *smysql);
 struct S_MYSQL *conn_init_sql();
+
+/* Add quotes to string for insert in query for database */
+char* insert_string(char *word);
+
+/* Convert int to string */
+char* int_to_str(int nb);
+
+/* Build query to fit this : CONCAT(STR1, ',', STR2, ',', ...) */
+char* concat_query(char* str1, char* str2, char* str3, char* str4, char* str5);
+
+/* Build query adding commas between values */
+char* build_req_values(char* str1, char* str2, char* str3, char* str4, char* str5);
+
+/* select all data user by name and firstname, returns string of concated data*/
+char* select_user(char* name, char* firstname, S_MYSQL *smysql);
+
+/* Store result from query in string */
+char *result_query(MYSQL *smysql);
+
+/* returns concated string of fields from table of smysql->table_name */
 char *find_fields(S_MYSQL *smysql);
 
 
-/*int s_mysql_init(S_MYSQL *mysql);
-int s_mysql_connect(S_MYSQL *mysql);
-int s_mysql_disconnect(S_MYSQL *mysql);
-//int s_mysql_createdb(S_MYSQL *mysql);
-int s_mysql_createtable(S_MYSQL *mysql);
-int s_mysql_setdb(S_MYSQL *mysql);
-int s_mysql_insertdata(S_MYSQL *mysql);
-int s_mysql_quickinsert(S_MYSQL *mysql);
-*/
 #endif /* STR_MYSQL_H_ */

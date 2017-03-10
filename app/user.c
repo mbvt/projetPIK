@@ -26,10 +26,10 @@ struct user *init_user(char *name, char *firstname, int age, int status, int
    return  newuser;
 }
 
-int exist_user(char *name, char *firstname)
+int exist_user(char *name, char *firstname, S_MYSQL *smysql)
 {
 
-  char *data = select_user(name, firstname);
+  char *data = select_user(name, firstname, smysql);
 
   return strlen(data) != 0;
 }
@@ -104,16 +104,23 @@ struct user *get_user(char *string, struct user *user)
   return user;
 }
 
-int find_user(char *name, char *firstname, struct user **user){
+int find_user(char *name, char *firstname, struct user *user, S_MYSQL *smysql)
+{
 
   /*  TODO Query select user
    **  then initialize a user
    **  return 1 on sucess or 0;
    */
+  int check = 0;
 
+  //need to init init struct S_MYSQL *smysql before
+  char *data = select_user(name, firstname, smysql);
+
+  user = get_user(string, user);
+
+  check = user->id_user;
   
-
-  return 0;
+  return check > 0;
 }
 
 int modify_user(char *name, char *firstname, int age, int status, int handicap,
@@ -125,12 +132,17 @@ int modify_user(char *name, char *firstname, int age, int status, int handicap,
   return 1;
 }
 
-int delete_user(struct user *user)
+int delete_user(struct user *user, S_MYSQL *smysql)
 {
   /*  TODO Querry to delete user
    **  Check if everything is ok return 1 or 0
    */
-  return 1;
+  int check = 0;
+  
+  del_user(user->id_user, smysql);
+  check = exist_user(user->name, user->firstname, smysql);
+  
+  return check;
 }
 
 int determine_category(int status, int handicap)
