@@ -1,4 +1,5 @@
 # include <stdlib.h>
+# include <stdio.h>
 # include <gtk/gtk.h>
 # include <SDL/SDL.h>
 # include <SDL/SDL_image.h>
@@ -12,21 +13,21 @@ GtkWidget *CoWindow;
 GtkWidget *InsWindow;
 GtkWidget *IHM;
 GtkWidget *CoEntry;
-
+GtkBuilder *builder;
+GtkEntry *entry;
 
 void on_Connexion_clicked();
 void on_Inscription_clicked();
 void on_connback_clicked();
 void on_insback_clicked();
 void on_qcm_clicked();
-void on_CoEntry_clicked();
-
+void on_CoEntry_clicked();//GtkButton *button, gpointer user_data);
 
 /*----------------------------------MAIN---------------------------------------
  *---------------------------------------------------------------------------*/
 int main(int argc, char *argv[])
 {
-  GtkBuilder *builder;
+  //GtkBuilder *builder;
 
   gtk_init(&argc, &argv);
 
@@ -40,8 +41,10 @@ int main(int argc, char *argv[])
 
   g_object_unref(G_OBJECT(builder));
 
-  CoEntry = gtk_entry_new();
-  CoEntry = malloc(sizeof(char));
+  //CoEntry = gtk_entry_new();
+  entry = GTK_ENTRY(gtk_builder_get_object(builder, "entry"));
+  g_signal_connect(entry, "activate", G_CALLBACK(on_CoEntry_clicked), entry);
+
 
   gtk_widget_show(MainWindow);
   gtk_main();
@@ -78,31 +81,14 @@ void on_qcm_clicked()
   gtk_stack_set_visible_child_name(GTK_STACK(IHM), "QcmPage");
 }
 
-void on_test_ativate(GtkWidget *pEntry, gpointer data)
+
+void on_CoEntry_clicked()
 {
-  const gchar *sText;
-  sText = gtk_entry_get_text(GTK_ENTRY(pEntry));
-}
+  const char *sText;
 
-void on_CoEntry_clicked(GtkWidget *pButton, gpointer data)
-{
-
-  GtkWidget *pTempEntry;
-  //GtkWidget *pTempLabel;
-  GList *pList;
-  const gchar *sText;
-
-  pList = gtk_container_get_children(GTK_CONTAINER((GtkWidget*)data));
-  pTempEntry = GTK_WIDGET(pList->data);
-  pList = g_list_next(pList);
-
-
-  sText = gtk_entry_get_text(GTK_ENTRY(pTempEntry));
+  sText = gtk_entry_get_text(GTK_ENTRY(entry));
   printf("Nom d'utilisateur saisi : %s\n", sText);
-
-  g_list_free(pList);
 }
-
 
 /*-----------------------------QUIT BUTTON-------------------------------------
  *---------------------------------------------------------------------------*/
@@ -130,4 +116,33 @@ void on_MainWindow_main_destroy()
 {
   gtk_main_quit();
 }
+
+
+
+
+
+
+
+
+/*
+void on_CoEntry_clicked(GtkWidget *pButton, gpointer data)
+{
+
+  GtkWidget *pTempEntry;
+  //GtkWidget *pTempLabel;
+  GList *pList;
+  const gchar *sText;
+
+  pList = gtk_container_get_children(GTK_CONTAINER((GtkWidget*)data));
+  pTempEntry = GTK_WIDGET(pList->data);
+  pList = g_list_next(pList);
+
+
+  sText = gtk_entry_get_text(GTK_ENTRY(pTempEntry));
+  printf("Nom d'utilisateur saisi : %s\n", sText);
+
+  g_list_free(pList);
+}
+*/
+
 
