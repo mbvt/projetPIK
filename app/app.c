@@ -57,51 +57,30 @@ return user;
 void game(char *lvl_dico )
 {
 
-  /*
-   ** TODO Do the user need to type the space?
-   */
-  /*
-     char *strtok_res;
-     strtok_res = strtok(buffer, " ");
-     while (strtok_res != NULL)
-     {
-     printf ("%s\n", strtok_res);
-     size_t i =0;
-     while (i != strlen(strtok_res))
-     {
-     printf("%c\n", strtok_res[i]);
-     i++;
-     }
-     printf("----------\n");
-     strtok_res = strtok (NULL, " ");
-     }
-   */
-
   size_t i =0;
   char r;
   int WBS;
-  //char space = ' ';
-  while (i != strlen(lvl_dico))
+  while (i < strlen(lvl_dico))
   {
     printf("%c\n", lvl_dico[i]);
-    if (lvl_dico[i] == ' ')
-      scanf("%c",&r);
-    else
+    if (lvl_dico[i] != ' ')
       scanf(" %c",&r);
-
-    if ((r == lvl_dico[i]) || r == ' ')
-    {
-      i++;
-      WBS++;
-      printf("               WBS = %d\n",WBS);
-    }
     else
-    {
-      printf("               WBS = %d\n",WBS);
-      WBS--;
-    }
-  }
+      WBS++;
 
+    if (((r==' ') || (r == lvl_dico[i])) && lvl_dico[i] != '\n')
+    {
+      WBS++;
+    }
+    else if ((lvl_dico[i] != ' ') && (r != lvl_dico[i]) )
+    {
+      WBS--;
+      i--;
+    }
+    i++;
+    printf("               WBS = %d\n",WBS);
+  }
+  printf("Votre socre : %d/%zu\n",WBS,i);
   free (lvl_dico);
 }
 
@@ -125,6 +104,8 @@ void menu_level()
   char *lvl_dico = load_dico_lvl(lvl_title);
   game(lvl_dico);
 }
+
+
 int main()
 {
   menu_level();
