@@ -33,7 +33,6 @@ int main(int argc, char *argv[])
   builder = gtk_builder_new();
   gtk_builder_add_from_file (builder, "IHM_final.glade", NULL);
 
-
   MainWindow  = GTK_WIDGET(gtk_builder_get_object(builder, "MainWindow"));
   IHM         = GTK_WIDGET(gtk_builder_get_object(builder, "IHM"));
   gtk_builder_connect_signals(builder, NULL);
@@ -43,6 +42,8 @@ int main(int argc, char *argv[])
   g_signal_connect(entry, "activate", G_CALLBACK(on_CoEntry_clicked), entry);
 
 
+  g_object_unref (G_OBJECT (builder));
+  
   gtk_widget_show(MainWindow);
   gtk_main();
 
