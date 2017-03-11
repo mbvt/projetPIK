@@ -11,7 +11,7 @@
 
 
 
-typedef struct S_MYSQL{
+struct S_MYSQL{
   MYSQL *con;
   char *password;
   char *root_password;
@@ -22,7 +22,7 @@ typedef struct S_MYSQL{
   char *query_create_table;
   char *insert_values;
   char *query_data;
-}S_MYSQL;
+};
 
 /* Indicates wherever there is an error or success in MYSQL query */
 void finish_with_error(MYSQL *mysql);
@@ -50,8 +50,12 @@ char* select_user(char* name, char* firstname, struct S_MYSQL *smysql);
 /* Store result from query in string */
 char *result_query(MYSQL *smysql);
 
+void del_user(int id, struct S_MYSQL *smysql);
+
+int insert_table(struct S_MYSQL *smysql);
+
 /* returns concated string of fields from table of smysql->table_name */
-char *find_fields(struct S_MYSQL *smysql);
+//char *find_fields(struct S_MYSQL *smysql);
 
 
 #endif /* STR_MYSQL_H_ */

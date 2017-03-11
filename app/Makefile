@@ -1,14 +1,14 @@
 # Makefile
 
 CC=gcc
-CPPFLAGS= -MMD -D_XOPEN_SOURCE=600
-#CPPFLAGS= -MMD
+CPPFLAGS= -MMD -D_XOPEN_SOURCE=600 
 CFLAGS= -Wall -Wextra -std=c99 -O0 -g
 LDFLAGS=
-LDLIBS=
+LDLIBS= `mysql_config --cflags --libs`
+
 
 #SRC= app.c user.c stat.c level.c str_mysql.c
-SRC= app.c level.c
+SRC= app.c user.c level.c str_mysql.c
 OBJ= ${SRC:.c=.o}
 DEP= ${SRC:.c=.d}
 

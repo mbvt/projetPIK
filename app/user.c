@@ -5,6 +5,7 @@
 # include <string.h>
 
 # include "user.h"
+//# include "str_mysql.h"
 
 struct user *init_user(char *name, char *firstname, int age, int status, int
     handicap, int category){
@@ -36,6 +37,9 @@ int exist_user(char *name, char *firstname, struct S_MYSQL *smysql)
 
 int insert_user(struct user *newuser, struct S_MYSQL *query)
 {
+    char *firstname = newuser->firstname;
+    char *name = newuser->name;
+  
     firstname = insert_string(newuser->firstname);
     name = insert_string(newuser->name);
 
@@ -53,19 +57,23 @@ int insert_user(struct user *newuser, struct S_MYSQL *query)
     query->insert_values = q;
 
     int id_user = insert_table(query);
-
+    printf("id_user ! %d\n", id_user);
     newuser->id_user = id_user;
 
-    return id_user != 0;
+    return id_user;
 }
 
-struct user *get_user(char *string, struct user *user)
+struct user *get_user(char *name, char *firstname, struct S_MYSQL *smysql)
 {  
+  struct user *user = calloc(1, sizeof(struct user));
+  
+  char *data = select_user(name, firstname, smysql);
+
   char *s = ",";
   char *token;
   int cpt = 0;
   int tmp = 0; 
-  token = strtok(string, s);
+  token = strtok(data, s);
 
   while(token != NULL)
   {
@@ -104,35 +112,16 @@ struct user *get_user(char *string, struct user *user)
   return user;
 }
 
-int find_user(char *name, char *firstname, struct user *user, S_MYSQL *smysql)
-{
-
-  /*  TODO Query select user
-   **  then initialize a user
-   **  return 1 on sucess or 0;
-   */
-  int check = 0;
-
-  //need to init init struct S_MYSQL *smysql before
-  char *data = select_user(name, firstname, smysql);
-
-  user = get_user(string, user);
-
-  check = user->id_user;
-  
-  return check > 0;
-}
-
-int modify_user(char *name, char *firstname, int age, int status, int handicap,
-    int category, struct user **user)
-{
+//int modify_user(char *name, char *firstname, int age, int status, int handicap,
+  //  int category, struct user **user)
+//{
   /*  TODO Querry to modify user
    **  Check if everything is ok return 1 or 0
    */
-  return 1;
-}
+ // return 1;
+//}
 
-int delete_user(struct user *user, S_MYSQL *smysql)
+int delete_user(struct user *user, struct S_MYSQL *smysql)
 {
   /*  TODO Querry to delete user
    **  Check if everything is ok return 1 or 0
@@ -171,7 +160,7 @@ int determine_category(int status, int handicap)
 
   return category;
 }
-
+/*
 int mcq_user(struct user **user, struct S_MYSQL *smysql)
 {
   char name[50];
@@ -210,27 +199,31 @@ int mcq_user(struct user **user, struct S_MYSQL *smysql)
 
   return 1;
 }
-
+*/
+/*
 int main()
 {
-  S_MYSQL *smysql = conn_init_sql();
+  struct S_MYSQL *smysql = conn_init_sql();
 
   struct user *newuser = calloc(1, sizeof(struct user));
+  newuser->firstname = "Brandon";
+  newuser->name = "QUINNE";
+
 
   int check = 0;
 
-  if(!exist_user(user->name, user->firstname, smysql))
+  if(!exist_user(newuser->name, newuser->firstname, smysql))
   {
     check = insert_user(newuser, smysql);
   }
   else
   {
-    find_user(user->name, user->firstname, user, smysql);
+    get_user(newuser->name, newuser->firstname, smysql);
   }
 
   if(check)
-    printf("Insert réussi magl (ptet' fill en fait) !\n ID : %d\n", newuser->id);
+    printf("Insert réussi magl (ptet' fill en fait) !\n ID : %d\n", newuser->id_user);
 
   return 0;
 }
-
+*/

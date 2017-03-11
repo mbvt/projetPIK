@@ -28,7 +28,7 @@ int exist_user(char *name, char *firstname, struct S_MYSQL *smysql);
 
 int insert_user(struct user *newuser, struct S_MYSQL *query);
 
-struct user *get_user(char *string, struct user *user);
+struct user *get_user(char *name, char *firstname, struct S_MYSQL *smysql);
 
 
 /*
@@ -36,7 +36,8 @@ struct user *get_user(char *string, struct user *user);
  **  store it in the struct user given in args,
  **  return 1 if success or 0.
  */
-int find_user(char *name, char *firstname, struct user *user, struct S_MYSQL *smysql);
+
+//int find_user(char *name, char *firstname, struct user *user, struct S_MYSQL *smysql);
 
 /*
  **  Modify the user's data with name, firstname, age, status, handicap, profile
