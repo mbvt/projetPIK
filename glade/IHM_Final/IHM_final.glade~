@@ -30,11 +30,6 @@
     <property name="can_focus">False</property>
     <property name="stock">gtk-cancel</property>
   </object>
-  <object class="GtkImage" id="TCPQuit">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="stock">gtk-cancel</property>
-  </object>
   <object class="GtkImage" id="coback">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -739,34 +734,16 @@ Pedagogical Interactive Keyboard</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="orientation">vertical</property>
-            <property name="spacing">198</property>
             <child>
-              <object class="GtkButton" id="TCPQui">
+              <object class="GtkLabel">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="halign">end</property>
-                <property name="valign">end</property>
-                <property name="image">TCPQuit</property>
-                <property name="always_show_image">True</property>
-                <signal name="clicked" handler="on_TCPQui_clicked" swapped="no"/>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">Pour la connexion</property>
               </object>
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
                 <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="label" translatable="yes">connexion réussie</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">1</property>
               </packing>
             </child>
           </object>
