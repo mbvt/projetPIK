@@ -103,6 +103,7 @@ char *build_random_str(char *chars, size_t size_wrd, size_t nb_wrd,
   printf("string get : %s\n",str);
   return str;
 }
+
 // FOR NOW just return the char text of a level
 // but later it will fill the level->text
 char *load_dico_lvl(char *lvltitle)
@@ -117,6 +118,7 @@ char *load_dico_lvl(char *lvltitle)
 
   return text;
 }
+
 /*
  **  Generate all the level and inserting them in the database.
  **  At the same moment generate also the dico for the level.

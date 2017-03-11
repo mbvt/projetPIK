@@ -6,53 +6,53 @@
 #include <stdlib.h>
 #include <string.h>
 //#include "user.h"
-/*
-   struct user *menu(void){
 
-   printf("Bonjour \nProjetPik \n");
+/*struct user *menu(void){
 
-//scanf lecture de l'option dans x
-int rep;
-char *name = malloc (256 * sizeof(char));
-char *firstname = malloc (50* sizeof (char));
-struct user *user;
-for(;;)
-{
-printf("Menu taper  : \n 1) Charger Profile\n 2) Creer Profile\n");
-scanf("%d",&rep);
-printf("vous avez entrer la valeur suivante : %d\n",rep);
+  printf("Bonjour \nProjetPik \n");
 
-if (rep == 1)
-{
-printf("Entrez votre nom :");
-scanf("%s",name);
+  //scanf lecture de l'option dans x
+  int rep;
+  char *name = malloc (256 * sizeof(char));
+  char *firstname = malloc (50* sizeof (char));
+  struct user *user;
+  for(;;)
+  {
+    printf("Menu taper  : \n 1) Charger Profile\n 2) Creer Profile\n");
+    scanf("%d",&rep);
+    printf("vous avez entrer la valeur suivante : %d\n",rep);
 
-printf("Entrez votre prenom :");
-scanf("%s",firstname);
+    if (rep == 1)
+    {
+      printf("Entrez votre nom :");
+      scanf("%s",name);
 
-if (find_user(name,firstname,&user) == 0)
-printf("Utilisateur non trouve.\n\n");
-else
-{
-printf("Bonjour %s\n",user->firstname);
-break;
-}
-}
-else if (rep == 2)
-{
-mcq_user(&user);
-printf("Bonjour %s\n",user->firstname);
-break;
-}
-else
-{
-printf("Valeur non reconnu, ressayez.\n\n");
-}
-}
-return user;
-}
- */
+      printf("Entrez votre prenom :");
+      scanf("%s",firstname);
 
+      if (find_user(name,firstname,&user) == 0)
+        printf("Utilisateur non trouve.\n\n");
+      else
+      {
+        printf("Bonjour %s\n",user->firstname);
+        break;
+      }
+    }
+    else if (rep == 2)
+    {
+      mcq_user(&user);
+      printf("Bonjour %s\n",user->firstname);
+      break;
+    }
+    else
+    {
+      printf("Valeur non reconnu, ressayez.\n\n");
+    }
+  }
+  menu_level();
+  return user;
+}
+*/
 
 void game(char *lvl_dico )
 {
