@@ -8,53 +8,75 @@
 #include "user.h"
 #include "str_mysql.h"
 
+void menu_level();
 
-/*struct user *menu(void){
+
+struct user *menu(struct S_MYSQL *smysql){
 
   printf("Bonjour \nProjetPik \n");
 
-//scanf lecture de l'option dans x
-int rep;
-char *name = malloc (256 * sizeof(char));
-char *firstname = malloc (50* sizeof (char));
-struct user *user;
-for(;;)
-{
-printf("Menu taper  : \n 1) Charger Profile\n 2) Creer Profile\n");
-scanf("%d",&rep);
-printf("vous avez entrer la valeur suivante : %d\n",rep);
+  //scanf lecture de l'option dans x
+  int rep;
+  char *name = malloc (256 * sizeof(char));
+  char *firstname = malloc (50* sizeof (char));
+  struct user *user = NULL;
+  for(;;)
+  {
+    printf("Menu taper  : \n 1) Charger Profil\n 2) Creer Profil\n");
+    scanf("%d",&rep);
+    printf("vous avez entrer la valeur suivante : %d\n",rep);
 
-if (rep == 1)
-{
-printf("Entrez votre nom :");
-scanf("%s",name);
+    if (rep == 1)
+    {
+      printf("Entrez votre nom :");
+      scanf("%s",name);
 
-printf("Entrez votre prenom :");
-scanf("%s",firstname);
+      printf("Entrez votre prenom :");
+      scanf("%s",firstname);
 
-if (find_user(name,firstname,&user) == 0)
-printf("Utilisateur non trouve.\n\n");
-else
-{
-printf("Bonjour %s\n",user->firstname);
-break;
+      if (!exist_user(name,firstname,smysql))
+        printf("Utilisateur non trouve.\n\n");
+      else
+      {
+        /*user->firstname = firstname;
+        user->name = name;
+        */
+        user = get_user(name, firstname, smysql);
+        printf("Bonjour %s\n",user->firstname);
+        
+        break;
+      }
+    }
+    else if (rep == 2)
+    {
+      //mcq_user(&user);
+      printf("Entrez votre nom :");
+      scanf("%s",name);
+
+      printf("Entrez votre prenom :");
+      scanf("%s",firstname);
+      
+      user->firstname = firstname;
+      user->name = name;
+      user->age = 12;
+      user->category = 1;
+      user->status = 1;
+
+      user->id_user = insert_user(user, smysql);
+
+      printf("Bonjour %s\n",user->firstname);
+      break;
+    }
+    else
+    {
+      printf("Valeur non reconnue, re-essayez.\n\n");
+    }
+  }
+  printf("FINI !\n");
+  //menu_level();
+  return user;
 }
-}
-else if (rep == 2)
-{
-mcq_user(&user);
-printf("Bonjour %s\n",user->firstname);
-break;
-}
-else
-{
-printf("Valeur non reconnu, ressayez.\n\n");
-}
-}
-menu_level();
-return user;
-}
-*/
+
 
 void game(char *lvl_dico )
 {
@@ -85,7 +107,7 @@ void game(char *lvl_dico )
   printf("Votre socre : %d/%zu\n",WBS,i);
   free (lvl_dico);
 }
-
+/*
 void menu_level()
 {
   printf("Choisissez le niveau :\n1) Niveau 1\n2) Niveau 2\n3) Niveau 3\n");
@@ -107,16 +129,18 @@ void menu_level()
   game(lvl_dico);
 }
 
-
+*/
 int main()
 {
-  struct S_MYSQL *smysql = conn_init_sql();                                     
 
-  char *name = "BOUVETOTI";
-  char *firstname = "Morganeee"; 
-  
+  struct S_MYSQL *smysql = conn_init_sql();                                     
+  //char *name = "BOUVETOTI";
+  //char *firstname = "Morganeee"; 
+
   struct user *newuser = NULL;                        
-  if(!exist_user(name,firstname, smysql))                    
+  
+  newuser = menu(smysql);
+  /*if(!exist_user(name,firstname, smysql))                    
   {                                                                              
     newuser = calloc(1, sizeof(struct user));                        
     newuser->firstname = firstname;                                               
@@ -127,12 +151,12 @@ int main()
     printf("id insert %d\n", newuser->id_user);    
   }                                                                             
   else                                                                          
-  {                                                                             
-    newuser = get_user(name, firstname, smysql);                        
-  }                                                                             
+  {   */                                                                          
+    newuser = get_user(newuser->name, newuser->firstname, smysql);                        
+ // }                                                                            
 
   if(newuser != NULL)                                                                     
-    printf("Insert réussi magl (ptet' fill en fait) !\n ID : %d\n", newuser->id_user);
+    printf("Ca marche : %s, %s\n ID : %d\n", newuser->firstname, newuser->name, newuser->id_user);
 
   //menu_level();
   return 0;
