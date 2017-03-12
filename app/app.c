@@ -8,10 +8,12 @@
 #include "user.h"
 #include "str_mysql.h"
 
+void game(char *lvl_dico);
+
 void menu_level();
 
 
-struct user *menu(struct S_MYSQL *smysql){
+struct user *menu(struct user *user, struct S_MYSQL *smysql){
 
   printf("Bonjour \nProjetPik \n");
 
@@ -19,7 +21,7 @@ struct user *menu(struct S_MYSQL *smysql){
   int rep;
   char *name = malloc (256 * sizeof(char));
   char *firstname = malloc (50* sizeof (char));
-  struct user *user = NULL;
+  //struct user *user = NULL;
   for(;;)
   {
     printf("Menu taper  : \n 1) Charger Profil\n 2) Creer Profil\n");
@@ -37,10 +39,7 @@ struct user *menu(struct S_MYSQL *smysql){
       if (!exist_user(name,firstname,smysql))
         printf("Utilisateur non trouve.\n\n");
       else
-      {
-        /*user->firstname = firstname;
-        user->name = name;
-        */
+      {     
         user = get_user(name, firstname, smysql);
         printf("Bonjour %s\n",user->firstname);
         
@@ -73,7 +72,7 @@ struct user *menu(struct S_MYSQL *smysql){
     }
   }
   printf("FINI !\n");
-  //menu_level();
+  menu_level();
   return user;
 }
 
@@ -107,7 +106,7 @@ void game(char *lvl_dico )
   printf("Votre socre : %d/%zu\n",WBS,i);
   free (lvl_dico);
 }
-/*
+
 void menu_level()
 {
   printf("Choisissez le niveau :\n1) Niveau 1\n2) Niveau 2\n3) Niveau 3\n");
@@ -129,7 +128,7 @@ void menu_level()
   game(lvl_dico);
 }
 
-*/
+
 int main()
 {
 
@@ -137,9 +136,10 @@ int main()
   //char *name = "BOUVETOTI";
   //char *firstname = "Morganeee"; 
 
-  struct user *newuser = NULL;                        
+  struct user *newuser = calloc(1,sizeof(struct user)); 
+  //newuser = NULL;  
   
-  newuser = menu(smysql);
+  newuser = menu(newuser, smysql);
   /*if(!exist_user(name,firstname, smysql))                    
   {                                                                              
     newuser = calloc(1, sizeof(struct user));                        
