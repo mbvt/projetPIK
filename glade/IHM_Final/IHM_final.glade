@@ -30,7 +30,7 @@
     <property name="can_focus">False</property>
     <property name="stock">gtk-cancel</property>
   </object>
-  <object class="GtkImage" id="TCPQuit">
+  <object class="GtkImage" id="TCPquit">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="stock">gtk-cancel</property>
@@ -292,6 +292,17 @@ Pedagogical Interactive Keyboard</property>
                 <property name="position">2</property>
               </packing>
             </child>
+            <child>
+              <object class="GtkLabel" id="errCo">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">3</property>
+              </packing>
+            </child>
           </object>
           <packing>
             <property name="name">ConnPage</property>
@@ -357,7 +368,7 @@ Pedagogical Interactive Keyboard</property>
                     <property name="can_focus">False</property>
                     <property name="left_padding">12</property>
                     <child>
-                      <object class="GtkEntry">
+                      <object class="GtkEntry" id="name">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                       </object>
@@ -391,7 +402,7 @@ Pedagogical Interactive Keyboard</property>
                     <property name="can_focus">False</property>
                     <property name="left_padding">12</property>
                     <child>
-                      <object class="GtkEntry">
+                      <object class="GtkEntry" id="firstname">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                       </object>
@@ -425,7 +436,7 @@ Pedagogical Interactive Keyboard</property>
                     <property name="can_focus">False</property>
                     <property name="left_padding">12</property>
                     <child>
-                      <object class="GtkEntry">
+                      <object class="GtkEntry" id="age">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                       </object>
@@ -739,17 +750,17 @@ Pedagogical Interactive Keyboard</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="orientation">vertical</property>
-            <property name="spacing">198</property>
+            <property name="spacing">40</property>
             <child>
-              <object class="GtkButton" id="TCPQui">
+              <object class="GtkButton" id="TCPQuit">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="halign">end</property>
                 <property name="valign">end</property>
-                <property name="image">TCPQuit</property>
+                <property name="image">TCPquit</property>
                 <property name="always_show_image">True</property>
-                <signal name="clicked" handler="on_TCPQui_clicked" swapped="no"/>
+                <signal name="clicked" handler="on_TCPQuit_clicked" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -761,12 +772,28 @@ Pedagogical Interactive Keyboard</property>
               <object class="GtkLabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">connexion réussie</property>
+                <property name="label" translatable="yes">Connexion réussie
+
+
+
+
+Nom d'utilisateur : </property>
               </object>
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
                 <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="testCo">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">2</property>
               </packing>
             </child>
           </object>
