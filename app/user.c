@@ -57,7 +57,7 @@ int insert_user(struct user *newuser, struct S_MYSQL *query)
     query->insert_values = q;
 
     int id_user = insert_table(query);
-    printf("id_user ! %d\n", id_user);
+   // printf("id_user ! %d\n", id_user);
     newuser->id_user = id_user;
 
     return id_user;
@@ -161,21 +161,24 @@ int determine_category(int status, int handicap)
   return category;
 }
 
-int mcq_user(struct user *user, struct S_MYSQL *smysql)
+struct user *mcq_user(struct user *user, struct S_MYSQL *smysql)
 {
   char name[50];
   char firstname[50];
   int age;
-  int handicap = 0;
-  int category;
+  //int handicap = 0;
+  int category = 1;
   int status;
 
   printf("Entrez votre nom:\n");
   scanf("%s",name);
+  printf("\n");
   printf("Entrez votre prenom:\n");
   scanf("%s",firstname);
+  printf("\n");
   printf("Entrez votre age:\n");
   scanf("%d",&age);
+  printf("\n\n");
 
   //TODO Query select to get all the handicap possible
   // then loop printf ( handicapname, i)
@@ -198,7 +201,7 @@ int mcq_user(struct user *user, struct S_MYSQL *smysql)
     user->name = name;
     user->age = age;
     user->status = status;
-    user->category = 1;
+    user->category = category;
 
     if ((id_user = insert_user(user, smysql))==0)
     {
@@ -216,9 +219,10 @@ int mcq_user(struct user *user, struct S_MYSQL *smysql)
   else
   {
     printf("User already exists\n");
+    user = get_user(name, firstname, smysql);
   }
 
-  return 1;
+  return user;
 }
 
 /*

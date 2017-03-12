@@ -7,6 +7,7 @@
 #include <string.h>
 #include "user.h"
 #include "str_mysql.h"
+#include "level.h"
 
 void game(char *lvl_dico);
 
@@ -21,7 +22,7 @@ struct user *menu(struct user *user, struct S_MYSQL *smysql){
   int rep;
   char *name = malloc (256 * sizeof(char));
   char *firstname = malloc (50* sizeof (char));
-  //struct user *user = NULL;
+  
   for(;;)
   {
     printf("Menu taper  : \n 1) Charger Profil\n 2) Creer Profil\n");
@@ -48,21 +49,7 @@ struct user *menu(struct user *user, struct S_MYSQL *smysql){
     }
     else if (rep == 2)
     {
-      mcq_user(user, smysql);
-      /*printf("Entrez votre nom :");
-      scanf("%s",name);
-
-      printf("Entrez votre prenom :");
-      scanf("%s",firstname);
-      
-      user->firstname = firstname;
-      user->name = name;
-      user->age = 12;
-      user->category = 1;
-      user->status = 1;
-
-      user->id_user = insert_user(user, smysql);
-*/
+      user = mcq_user(user, smysql);
       printf("Bonjour %s\n",user->firstname);
       break;
     }
@@ -71,7 +58,6 @@ struct user *menu(struct user *user, struct S_MYSQL *smysql){
       printf("Valeur non reconnue, re-essayez.\n\n");
     }
   }
-  printf("FINI !\n");
   menu_level();
   return user;
 }
@@ -103,7 +89,7 @@ void game(char *lvl_dico )
     i++;
     printf("               WBS = %d\n",WBS);
   }
-  printf("Votre socre : %d/%zu\n",WBS,i);
+  printf("Votre score : %d/%zu\n",WBS,i);
   free (lvl_dico);
 }
 
@@ -124,7 +110,8 @@ void menu_level()
       lvl_title = "./dico/lvl3";
       break;
   }
-  char *lvl_dico = load_dico_lvl(lvl_title);
+  char *lvl_dico = "";
+  lvl_dico = load_dico_lvl(lvl_title);
   game(lvl_dico);
 }
 
@@ -133,31 +120,13 @@ int main()
 {
 
   struct S_MYSQL *smysql = conn_init_sql();                                     
-  //char *name = "BOUVETOTI";
-  //char *firstname = "Morganeee"; 
 
   struct user *newuser = calloc(1,sizeof(struct user)); 
-  //newuser = NULL;  
   
-  newuser = menu(newuser, smysql);
-  /*if(!exist_user(name,firstname, smysql))                    
-  {                                                                              
-    newuser = calloc(1, sizeof(struct user));                        
-    newuser->firstname = firstname;                                               
-    newuser->name = name;   
-    newuser->category = 1;
-    newuser->status = 1;    
-    newuser->id_user = insert_user(newuser, smysql);
-    printf("id insert %d\n", newuser->id_user);    
-  }                                                                             
-  else                                                                          
-  {   */                                                                          
-    newuser = get_user(newuser->name, newuser->firstname, smysql);                        
- // }                                                                            
-
-  if(newuser != NULL)                                                                     
+  newuser = menu(newuser, smysql);                        
+                                                                           
+ /* if(newuser != NULL)                                                                     
     printf("Ca marche : %s, %s\n ID : %d\n", newuser->firstname, newuser->name, newuser->id_user);
-
-  //menu_level();
+*/
   return 0;
 }

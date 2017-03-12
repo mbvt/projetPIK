@@ -20,9 +20,8 @@ void finish_with_error(MYSQL *mysql){
   mysql_close(mysql);
 }
 
-void finish_success(MYSQL *mysql){
-  printf("Success !\n");
-  //mysql_close(mysql);
+void finish_success(struct S_MYSQL *smysql){
+  printf("Success query :\n %s\n", smysql->query_data);
 }
 
 int init_sql(MYSQL *mysql)
@@ -93,7 +92,7 @@ char* build_req_values(char* str1, char* str2, char* str3, char* str4, char* str
   strcat(str1, ",");
   strcat(str1, str5);
 
-  printf("builded req_val : %s\n", str1);
+  //printf("builded req_val : %s\n", str1);
 
   return str1;
 }
@@ -189,7 +188,7 @@ char *result_query(MYSQL *mysql_con)
   if((res_store = mysql_store_result(mysql_con))!=NULL)
   {
     //finish_success(mysql_con);
-    printf("Result stored\n");
+   // printf("Result stored\n");
   }
   else
   {
@@ -205,7 +204,7 @@ char *result_query(MYSQL *mysql_con)
   {
     for(; i < num_fields; ++i)
     {
-      printf("%s", row[i] ? row[i] : "NULL");
+      //printf("%s", row[i] ? row[i] : "NULL");
       strcat(res, row[i]);
       if( i < num_fields)
         strcat(res, ",");
@@ -214,8 +213,8 @@ char *result_query(MYSQL *mysql_con)
   }
 
   char *query_res = res;
-  size_t len = strlen(query_res);
-  printf("len res : %s\n", query_res);
+  //size_t len = strlen(query_res);
+  //printf("len res : %s\n", query_res);
   mysql_free_result(res_store);
 
   return query_res;
@@ -253,16 +252,19 @@ char* select_user(char* name, char* firstname, struct S_MYSQL *smysql)
   strcat(req, firstname);
   strcat(req, ";");
 
-  printf("select_user = %s\n", req);
+  printf("Getting user :\n %s\n", req);
 
   //S_MYSQL *smysql = conn_init_sql();
 
   mysql_query(smysql->con, "use projetpik;");
 
-  printf("use proj\n");
+  //printf("use proj\n");
 
   if(mysql_query(smysql->con, req))
-    finish_success(smysql->con);
+  {
+    smysql->query_data = req;
+    finish_success(smysql);
+  }
 
   char *res_query = result_query(smysql->con);
 
@@ -283,7 +285,10 @@ void del_user(int id, struct S_MYSQL *smysql)
   mysql_query(smysql->con, "use projetpik;");
 
   if(mysql_query(smysql->con, req))
-    finish_success(smysql->con);
+  {
+    smysql->query_data = req;
+    finish_success(smysql);
+  }
 }
 
 /****** INSERT QUERY IN TABLE GIVEN BY smysql->table_name ******/
@@ -309,19 +314,22 @@ int insert_table(struct S_MYSQL *smysql)
   strcat(query, values);
   strcat(query, end);
 
-  printf("Query Ins: %s\n", query);
+  printf("Inserting user :\n %s\n", query);
 
   mysql_query(smysql->con, "use projetpik;");
 
   if(mysql_query(smysql->con, query))
-    finish_success(smysql->con);
-
+  {
+    smysql->query_data = query;
+    finish_success(smysql);
+  }
   int id_u;
 
-  if((id_u = mysql_insert_id(smysql->con)))
-    finish_success(smysql->con);
+  if(!(id_u = mysql_insert_id(smysql->con)))
+    printf("Error with last inserted ID");
+    //finish_success(smysql->con);
 
-  printf("id user: %d\n", id_u);
+  //printf("id user: %d\n", id_u);
 
   return id_u;
 }

@@ -26,7 +26,7 @@ struct S_MYSQL{
 
 /* Indicates wherever there is an error or success in MYSQL query */
 void finish_with_error(MYSQL *mysql);
-void finish_success(MYSQL *mysql);
+void finish_success(struct S_MYSQL *smysql);
 
 /* Init a new connection to MYSQL */
 int init_sql(MYSQL *mysql);
