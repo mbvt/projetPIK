@@ -5,17 +5,11 @@
 # include <SDL/SDL_image.h>
 
 
-GtkWidget  *label;
-GtkWidget  *Connexion;
-GtkWidget  *Inscription;
-GtkWidget  *MainWindow;
-GtkWidget  *CoWindow;
-GtkWidget  *InsWindow;
-GtkWidget  *IHM;
-GtkWidget  *CoEntry;
-GtkEntry   *entry;
+GtkWidget  *Connexion, *Inscription, *MainWindow;
+GtkWidget  *CoWindow, *InsWindow, *IHM, *CoEntry;
+GtkEntry   *entry, *name, *firstname, *age;
 GtkBuilder *builder;
-
+GtkLabel   *testCo, *errCo;
 
 void on_Connexion_clicked();
 void on_Inscription_clicked();
@@ -41,9 +35,19 @@ int main(int argc, char *argv[])
   entry = GTK_ENTRY(gtk_builder_get_object(builder, "entry"));
   g_signal_connect(entry, "activate", G_CALLBACK(on_CoEntry_clicked), entry);
 
+  testCo = GTK_LABEL(gtk_builder_get_object(builder, "testCo"));
+  errCo  = GTK_LABEL(gtk_builder_get_object(builder, "errCo"));
+
+  name      = GTK_ENTRY(gtk_builder_get_object(builder, "name"));
+  firstname = GTK_ENTRY(gtk_builder_get_object(builder, "firstname"));
+  age       = GTK_ENTRY(gtk_builder_get_object(builder, "age"));
+
+  g_signal_connect(entry, "activate", G_CALLBACK(on_qcm_clicked), name);
+  g_signal_connect(entry, "activate", G_CALLBACK(on_qcm_clicked), firstname);
+  g_signal_connect(entry, "activate", G_CALLBACK(on_qcm_clicked), age);
 
   g_object_unref (G_OBJECT (builder));
-  
+
   gtk_widget_show(MainWindow);
   gtk_main();
 
@@ -66,6 +70,13 @@ void on_Inscription_clicked()
 
 void on_qcm_clicked()
 {
+  const char *n = gtk_entry_get_text(GTK_ENTRY(name));
+  const char *f = gtk_entry_get_text(GTK_ENTRY(firstname));
+  const char *a = gtk_entry_get_text(GTK_ENTRY(age));
+  printf("Nom    : %s\n", n);
+  printf("Prénom : %s\n", f);
+  printf("Age    : %s\n", a);
+
   gtk_stack_set_visible_child_name(GTK_STACK(IHM), "QcmPage");
 }
 
@@ -84,13 +95,25 @@ void on_qcmback_clicked()
   gtk_stack_set_visible_child_name(GTK_STACK(IHM), "InscriPage");
 }
 
-
 void on_CoEntry_clicked()
 {
   const char *sText;
+  char *te = "Morgan";
+
   sText = gtk_entry_get_text(GTK_ENTRY(entry));
-  printf("Nom d'utilisateur saisi : %s\n", sText);
-  gtk_stack_set_visible_child_name(GTK_STACK(IHM), "TestCoPage");
+
+
+  if(*sText == *te)
+  {
+    gtk_label_set_text(testCo, sText);
+    printf("Nom d'utilisateur saisi : %s\n", sText);
+    gtk_stack_set_visible_child_name(GTK_STACK(IHM), "TestCoPage");
+  }
+
+  else
+  {
+    gtk_label_set_text(errCo, "Nom d'utilisateur non trouvé");
+  }
 
 }
 
@@ -116,8 +139,12 @@ void on_QcmQuit_clicked()
   gtk_main_quit();
 }
 
-void on_MainWindow_main_destroy()
+void on_TCPQuit_clicked()
 {
   gtk_main_quit();
 }
 
+void on_MainWindow_main_destroy()
+{
+  gtk_main_quit();
+}
