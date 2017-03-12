@@ -74,5 +74,5 @@ int determine_category(int status, int handicap);
  **  store the user created in the user given in arg and
  **  return 1 on success or 0.
  */
-int mcq_user(struct user **user);
+int mcq_user(struct user *user, struct S_MYSQL *smysql);
 #endif

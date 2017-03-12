@@ -160,8 +160,8 @@ int determine_category(int status, int handicap)
 
   return category;
 }
-/*
-int mcq_user(struct user **user, struct S_MYSQL *smysql)
+
+int mcq_user(struct user *user, struct S_MYSQL *smysql)
 {
   char name[50];
   char firstname[50];
@@ -179,27 +179,48 @@ int mcq_user(struct user **user, struct S_MYSQL *smysql)
 
   //TODO Query select to get all the handicap possible
   // then loop printf ( handicapname, i)
-  printf("Avez vous un handicap ? 0/1\n");
+  /*printf("Avez vous un handicap ? 0/1\n");
   scanf("%d",&handicap);
   if (handicap == 1)
   {
     printf("Lequel : Daltonien(1) Moteur(2)\n");
     scanf("%d",&handicap);
-  }
+  }*/
   status = (age > 16)?  1 :  2; // if age > 16 ? adulte : child
-  if ((category = determine_category(status, handicap)) == -1)
+  /*if ((category = determine_category(status, handicap)) == -1)
     err(1, "error while determine category");
-
+*/
   // initialize the user
-  if( exist_user(name, firstname, smysql) == 0)
+  if(!exist_user(name, firstname, smysql))
   {
-    if ((*user = insert_user(*name,firstname,age,status,handicap,category)) == NULL)
-      err(1, "error while initialize user");
+    int id_user = 0;
+    user->firstname = firstname;
+    user->name = name;
+    user->age = age;
+    user->status = status;
+    user->category = 1;
+
+    if ((id_user = insert_user(user, smysql))==0)
+    {
+      err(1, "error while inserting user");
+    }
+    else
+    {
+      user = get_user(user->name, user->firstname, smysql);
+      printf("User correctly inserted :\n");
+      printf("ID : %d\nFirstname : %s\n", user->id_user, user->firstname);
+      printf("Name : %s\nAge : %d\n", user->name, user->age);
+      printf("Status : %d\nCategory : %d\n", user->status, user->category);
+    }
+  }
+  else
+  {
+    printf("User already exists\n");
   }
 
   return 1;
 }
-*/
+
 /*
 int main()
 {

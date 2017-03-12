@@ -48,8 +48,8 @@ struct user *menu(struct user *user, struct S_MYSQL *smysql){
     }
     else if (rep == 2)
     {
-      //mcq_user(&user);
-      printf("Entrez votre nom :");
+      mcq_user(user, smysql);
+      /*printf("Entrez votre nom :");
       scanf("%s",name);
 
       printf("Entrez votre prenom :");
@@ -62,7 +62,7 @@ struct user *menu(struct user *user, struct S_MYSQL *smysql){
       user->status = 1;
 
       user->id_user = insert_user(user, smysql);
-
+*/
       printf("Bonjour %s\n",user->firstname);
       break;
     }
