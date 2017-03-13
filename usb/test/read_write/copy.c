@@ -1,49 +1,25 @@
-/*
- * generic_hid.c
- *
- *  Created on: Apr 22, 2011
- *      Author: Jan Axelson
- *
- * Demonstrates communicating with a device designed for use with a generic HID-class USB device.
- * Sends and receives 2-byte reports.
- * Requires: an attached HID-class device that supports 2-byte
- * Input, Output, and Feature reports.
- * The device firmware should respond to a received report by sending a report.
- * Change VENDOR_ID and PRODUCT_ID to match your device's Vendor ID and Product ID.
- * See Lvr.com/winusb.htm for example device firmware.
- * This firmware is adapted from code provided by Xiaofan.
- * Note: libusb error codes are negative numbers.
- 
-The application uses the libusb 1.0 API from libusb.org.
-Compile the application with the -lusb-1.0 option. 
-Use the -I option if needed to specify the path to the libusb.h header file. For example:
--I/usr/local/angstrom/arm/arm-angstrom-linux-gnueabi/usr/include/libusb-1.0 
-
- */
-
-#include <errno.h>
-#include <string.h>
-#include <stdio.h>
 #include <stdlib.h>
-#include <libusb.h>
+#include <stdio.h>
+#include <string.h>
+#include <libusb-1.0/libusb.h>
 
+//-----------------------------------------------------------------------------------------------------------------------------//
 // Values for bmRequestType in the Setup transaction's Data packet.
-
 static const int CONTROL_REQUEST_TYPE_IN = LIBUSB_ENDPOINT_IN | LIBUSB_REQUEST_TYPE_CLASS | LIBUSB_RECIPIENT_INTERFACE;
 static const int CONTROL_REQUEST_TYPE_OUT = LIBUSB_ENDPOINT_OUT | LIBUSB_REQUEST_TYPE_CLASS | LIBUSB_RECIPIENT_INTERFACE;
 
+//-----------------------------------------------------------------------------------------------------------------------------//
 // From the HID spec:
-
 static const int HID_GET_REPORT = 0x01;
 static const int HID_SET_REPORT = 0x09;
 static const int HID_REPORT_TYPE_INPUT = 0x01;
 static const int HID_REPORT_TYPE_OUTPUT = 0x02;
 static const int HID_REPORT_TYPE_FEATURE = 0x03;
 
+//-----------------------------------------------------------------------------------------------------------------------------//
 // With firmware support, transfers can be > the endpoint's max packet size.
-
-static const int MAX_CONTROL_IN_TRANSFER_SIZE = 2;
-static const int MAX_CONTROL_OUT_TRANSFER_SIZE = 2;
+static const int MAX_CONTROL_IN_TRANSFER_SIZE = 8;
+static const int MAX_CONTROL_OUT_TRANSFER_SIZE = 8;
 
 static const int INTERFACE_NUMBER = 0;
 static const int TIMEOUT_MS = 5000;
@@ -52,17 +28,82 @@ int exchange_feature_reports_via_control_transfers(libusb_device_handle *devh);
 int exchange_input_and_output_reports_via_control_transfers(libusb_device_handle *devh);
 int exchange_input_and_output_reports_via_interrupt_transfers(libusb_device_handle *devh);
 
-int main(void)
+int fonct_found_dev(struct libusb_device_descriptor devDesc, uint16_t productId, uint16_t ventorId)
 {
+	libusb_device                    **devList = NULL;
+	libusb_device                    *devPtr = NULL;
+	libusb_device_handle             *devHandle = NULL;
+	
+        struct libusb_control_setup  Setup;
+
+	
+	int 			   device_found =0;
+	ssize_t                    idx = 0;
+	ssize_t                    numUsbDevs = 0;
+	int                        retVal;
+
+	numUsbDevs = libusb_get_device_list(NULL, &devList);
+
+	while((devDesc.idVendor != ventorId) && (devDesc.idProduct != productId) && (idx < numUsbDevs))
+	{
+
+		devPtr = devList[idx];
+		retVal = libusb_open (devPtr, &devHandle);
+		retVal = libusb_get_device_descriptor (devPtr, &devDesc);
+		idx ++;
+		if((devDesc.idVendor == ventorId) && (devDesc.idProduct == productId))
+		{
+			device_found = 1;
+			break;
+		}
+	}
+	//------- TEMPORAIRE --------//
+	      printf(" bmRequestType = 0x%02x\n",Setup.bmRequestType);
+        printf(" bRequest = 0x%02x\n",Setup.bRequest);
+        printf(" wValue = 0x%04x\n",Setup.wValue);
+        printf(" wIndex = 0x%04x\n",Setup.wIndex);
+        printf(" wLength = 0x%02x\n",Setup.wLength);
+	//---------------------------//
+	(void)retVal;
+	return device_found;
+} 
+
+int main ()
+{
+/*	libusb_device                    **devList = NULL;
+	libusb_device                    *devPtr = NULL;
+	libusb_device_handle             *devHandle = NULL;
+
+	struct libusb_device_descriptor  devDesc;
+//	struct libusb_control_setup	 Setup;
+
+//	int			   device_found = 0;
+//	int			   retVal;
+	//---------------------------------------------------------------------//
+//	uint16_t		   productId = 0xa086; // 0x8060   //id= 4 
+//	uint16_t		   ventorId = 0x04d9; // 0x0c45
+	//---------------------------------------------------------------------//
+
+//	retVal = libusb_init (NULL);
+	if(fonct_found_dev(devDesc, productId, ventorId))
+		printf("device found\n");
+	else
+		printf("device not found\n");
+	
+	(void)retVal;
+	libusb_close (devHandle);
+	devHandle = NULL;
+	libusb_exit (NULL);
+	return 0;
+	*/
 	// Change these as needed to match idVendor and idProduct in your device's device descriptor.
 
-	static const int VENDOR_ID = 0x0925;
-	static const int PRODUCT_ID = 0x7001;
+	static const int VENDOR_ID = 0x04d9;
+	static const int PRODUCT_ID = 0xa086;
 
 	struct libusb_device_handle *devh = NULL;
-	int device_ready = 0;
 	int result;
-
+	int device_ready = 0;
 	result = libusb_init(NULL);
 	if (result >= 0)
 	{
@@ -79,6 +120,12 @@ int main(void)
 				if (result >= 0)
 				{
 					device_ready = 1;
+					struct libusb_control_setup  Setup;
+					printf(" bmRequestType = 0x%02x\n",Setup.bmRequestType);
+				        printf(" bRequest = 0x%02x\n",Setup.bRequest);
+        				printf(" wValue = 0x%04x\n",Setup.wValue);
+        				printf(" wIndex = 0x%04x\n",Setup.wIndex);
+        				printf(" wLength = 0x%02x\n",Setup.wLength);
 				}
 				else
 				{
@@ -121,8 +168,8 @@ int exchange_feature_reports_via_control_transfers(libusb_device_handle *devh)
 {
 	int bytes_received;
 	int bytes_sent;
-	char data_in[MAX_CONTROL_IN_TRANSFER_SIZE];
-	char data_out[MAX_CONTROL_OUT_TRANSFER_SIZE];	int i = 0;
+	unsigned char data_in[MAX_CONTROL_IN_TRANSFER_SIZE];
+	unsigned char data_out[MAX_CONTROL_OUT_TRANSFER_SIZE];	int i = 0;
 	int result = 0;
 
 	// Store example data in the output buffer for sending.
@@ -130,7 +177,7 @@ int exchange_feature_reports_via_control_transfers(libusb_device_handle *devh)
 
 	for (i=0;i < MAX_CONTROL_OUT_TRANSFER_SIZE; i++)
 	{
-		data_out[i]=0x30+i;
+		data_out[i]=0x00+i;
 	}
 
 	// Send data to the device.
@@ -197,8 +244,8 @@ int exchange_input_and_output_reports_via_control_transfers(libusb_device_handle
 {
 	int bytes_received;
 	int bytes_sent;
-	char data_in[MAX_CONTROL_IN_TRANSFER_SIZE];
-	char data_out[MAX_CONTROL_OUT_TRANSFER_SIZE];	int i = 0;
+	unsigned char data_in[MAX_CONTROL_IN_TRANSFER_SIZE];
+	unsigned char data_out[MAX_CONTROL_OUT_TRANSFER_SIZE];	int i = 0;
 	int result = 0;
 
 	// Store example data in the output buffer for sending.
@@ -206,7 +253,7 @@ int exchange_input_and_output_reports_via_control_transfers(libusb_device_handle
 
 	for (i=0;i < MAX_CONTROL_OUT_TRANSFER_SIZE; i++)
 	{
-		data_out[i]=0x40+i;
+		data_out[i]=0x00;
 	}
 
 	// Send data to the device.
@@ -278,21 +325,21 @@ int exchange_input_and_output_reports_via_interrupt_transfers(libusb_device_hand
 
 	// With firmware support, transfers can be > the endpoint's max packet size.
 
-	static const int MAX_INTERRUPT_IN_TRANSFER_SIZE = 2;
-	static const int MAX_INTERRUPT_OUT_TRANSFER_SIZE = 2;
+	static const int MAX_INTERRUPT_IN_TRANSFER_SIZE = 8;
+	static const int MAX_INTERRUPT_OUT_TRANSFER_SIZE = 8;
 
 	int bytes_transferred;
 	int i = 0;
 	int result = 0;;
 
- 	char data_in[MAX_INTERRUPT_IN_TRANSFER_SIZE];
-	char data_out[MAX_INTERRUPT_OUT_TRANSFER_SIZE];
+ 	unsigned char data_in[MAX_INTERRUPT_IN_TRANSFER_SIZE];
+	unsigned char data_out[MAX_INTERRUPT_OUT_TRANSFER_SIZE];
 
 	// Store data in a buffer for sending.
 
 	for (i=0;i < MAX_INTERRUPT_OUT_TRANSFER_SIZE; i++)
 	{
-		data_out[i]=0x40+i;
+		data_out[i]=0x00;
 	}
 	// Write data to the device.
 
@@ -312,9 +359,7 @@ int exchange_input_and_output_reports_via_interrupt_transfers(libusb_device_hand
 	  		printf("%02x ",data_out[i]);
 	  	}
 	  	printf("\n");
-
 		// Read data from the device.
-
 		result = libusb_interrupt_transfer(
 				devh,
 				INTERRUPT_IN_ENDPOINT,
@@ -352,4 +397,4 @@ int exchange_input_and_output_reports_via_interrupt_transfers(libusb_device_hand
 		return result;
 	}
   	return 0;
- }
+}

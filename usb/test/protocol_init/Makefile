@@ -1,6 +1,6 @@
 CC =gcc
 CPPFLAGS= `pkg-config libusb-1.0 --libs --cflags`
-CFLAGS= -Wall -Wextra -std=c99 -O2
+CFLAGS= -Wall -Wextra -std=c99 -O0 -g
 LDFLAGS=
 LDLIBS= `pkg-config libusb-1.0 --libs --cflags`
 
