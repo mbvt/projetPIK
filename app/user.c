@@ -5,7 +5,7 @@
 # include <string.h>
 
 # include "user.h"
-//# include "str_mysql.h"
+
 
 struct user *init_user(char *name, char *firstname, int age, int status, int
     handicap, int category){
@@ -171,13 +171,16 @@ struct user *mcq_user(struct user *user, struct S_MYSQL *smysql)
   int status;
 
   printf("Entrez votre nom:\n");
-  scanf("%s",name);
+  if(scanf("%s",name)==EOF)
+    err(3,"error while get attribut");
   printf("\n");
   printf("Entrez votre prenom:\n");
-  scanf("%s",firstname);
+  if(scanf("%s",firstname)==EOF)
+    err(3,"error while get attribut");
   printf("\n");
   printf("Entrez votre age:\n");
-  scanf("%d",&age);
+  if(scanf("%d",&age)==EOF)
+    err(3,"error while get attribut");
   printf("\n\n");
 
   //TODO Query select to get all the handicap possible

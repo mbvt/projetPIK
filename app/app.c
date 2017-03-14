@@ -1,6 +1,8 @@
 /* app.c */
 /* Main program */
 
+#include <err.h>
+#include <errno.h>
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -15,20 +17,19 @@ void menu_level();
 
 
 struct user *menu(struct user *user, struct S_MYSQL *smysql){
- printf("   ____________________________________________________________\n");
- printf("  |                                                            |\n");
- printf("  |                      BIENVENUE SUR LE                      |\n");
- printf("  |____________________________________________________________|\n");
- printf("  |                                                            |\n");
- printf("  |                         PROJET PIK                         |\n");                   
- printf("  |____________________________________________________________|\n");
- printf("\n");
+  printf("   ____________________________________________________________\n");
+  printf("  |                                                            |\n");
+  printf("  |                 BIENVENUE SUR LE PROJET PIK                |\n");
+  printf("  |____________________________________________________________|\n");
+  printf("  |                                                            |\n");
+  printf("  |                                         --  by ChocAPI-K   |\n");                   
+  printf("  |____________________________________________________________|\n");
+  printf("\n");
 
   //scanf lecture de l'option dans x
   int rep;
   char *name = malloc (256 * sizeof(char));
   char *firstname = malloc (50* sizeof (char));
-  
   for(;;)
   {
     printf("   ____________________________________________________________\n");
@@ -37,16 +38,22 @@ struct user *menu(struct user *user, struct S_MYSQL *smysql){
     printf("  |____________________________________________________________|\n");
     printf("\n");
     printf("\nVeuillez taper : \n 1) Charger Profil\n 2) Creer Profil\n");
-    scanf("%d",&rep);
-    printf("vous avez entrer la valeur suivante : %d\n",rep);
+
+    if (scanf("%d",&rep) == EOF)
+      err(3,"Issue while get values from typing");
 
     if (rep == 1)
     {
       printf("Entrez votre nom :\n");
-      scanf("%s",name);
+      if (scanf("%s",name) == EOF)
+        err(3,"Issue while get values from typing");
+
 
       printf("Entrez votre prenom :\n");
-      scanf("%s",firstname);
+
+      if (scanf("%s",firstname) == EOF)
+        err(3,"Issue while get values from typing");
+      printf("\n");
 
       if (!exist_user(name,firstname,smysql))
         printf("Utilisateur non trouve.\n\n");
@@ -54,7 +61,7 @@ struct user *menu(struct user *user, struct S_MYSQL *smysql){
       {     
         user = get_user(name, firstname, smysql);
         printf("Bonjour %s\n",user->firstname);
-        
+
         break;
       }
     }
@@ -79,12 +86,16 @@ void game(char *lvl_dico )
 
   size_t i =0;
   char r;
-  int WBS = 0;
+  int WBS;
   while (i < strlen(lvl_dico))
   {
     printf("%c\n", lvl_dico[i]);
     if (lvl_dico[i] != ' ')
-      scanf(" %c",&r);
+    {
+      if (scanf("%c",&r) == EOF)
+        err(3,"Issue while get values from typing");
+
+    }  
     else
       WBS++;
 
@@ -109,7 +120,9 @@ void menu_level()
   printf("Choisissez le niveau :\n1) Niveau 1\n2) Niveau 2\n3) Niveau 3\n");
   int rep;
   char *lvl_title = "";
-  scanf("%d",&rep);
+  if (scanf("%d",&rep) == EOF)
+    err(3,"Issue while get values from typing");
+
   switch (rep) {
     case 1:
       lvl_title = "./dico/lvl1";
@@ -133,11 +146,11 @@ int main()
   struct S_MYSQL *smysql = conn_init_sql();                                     
 
   struct user *newuser = calloc(1,sizeof(struct user)); 
-  
+
   newuser = menu(newuser, smysql);                        
-                                                                           
- /* if(newuser != NULL)                                                                     
-    printf("Ca marche : %s, %s\n ID : %d\n", newuser->firstname, newuser->name, newuser->id_user);
-*/
+
+  /* if(newuser != NULL)                                                                     
+     printf("Ca marche : %s, %s\n ID : %d\n", newuser->firstname, newuser->name, newuser->id_user);
+     */
   return 0;
 }
