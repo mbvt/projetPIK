@@ -15,8 +15,14 @@ void menu_level();
 
 
 struct user *menu(struct user *user, struct S_MYSQL *smysql){
-
-  printf("Bonjour \nProjetPik \n");
+ printf("   ____________________________________________________________\n");
+ printf("  |                                                            |\n");
+ printf("  |                      BIENVENUE SUR LE                      |\n");
+ printf("  |____________________________________________________________|\n");
+ printf("  |                                                            |\n");
+ printf("  |                         PROJET PIK                         |\n");                   
+ printf("  |____________________________________________________________|\n");
+ printf("\n");
 
   //scanf lecture de l'option dans x
   int rep;
@@ -25,16 +31,21 @@ struct user *menu(struct user *user, struct S_MYSQL *smysql){
   
   for(;;)
   {
-    printf("Menu taper  : \n 1) Charger Profil\n 2) Creer Profil\n");
+    printf("   ____________________________________________________________\n");
+    printf("  |                                                            |\n");
+    printf("  |                        -- MENU --                          |\n");
+    printf("  |____________________________________________________________|\n");
+    printf("\n");
+    printf("\nVeuillez taper : \n 1) Charger Profil\n 2) Creer Profil\n");
     scanf("%d",&rep);
     printf("vous avez entrer la valeur suivante : %d\n",rep);
 
     if (rep == 1)
     {
-      printf("Entrez votre nom :");
+      printf("Entrez votre nom :\n");
       scanf("%s",name);
 
-      printf("Entrez votre prenom :");
+      printf("Entrez votre prenom :\n");
       scanf("%s",firstname);
 
       if (!exist_user(name,firstname,smysql))
@@ -68,7 +79,7 @@ void game(char *lvl_dico )
 
   size_t i =0;
   char r;
-  int WBS;
+  int WBS = 0;
   while (i < strlen(lvl_dico))
   {
     printf("%c\n", lvl_dico[i]);
@@ -97,7 +108,7 @@ void menu_level()
 {
   printf("Choisissez le niveau :\n1) Niveau 1\n2) Niveau 2\n3) Niveau 3\n");
   int rep;
-  char *lvl_title;
+  char *lvl_title = "";
   scanf("%d",&rep);
   switch (rep) {
     case 1:
