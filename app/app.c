@@ -35,9 +35,13 @@ struct user *menu(struct user *user, struct S_MYSQL *smysql){
     printf("   ____________________________________________________________\n");
     printf("  |                                                            |\n");
     printf("  |                        -- MENU --                          |\n");
+    printf("  |                                                            |\n");
+    printf("  |     1) Charger un profil                                   |\n");
+    printf("  |     2) Creer un profil                                     |\n");
     printf("  |____________________________________________________________|\n");
     printf("\n");
-    printf("\nVeuillez taper : \n 1) Charger Profil\n 2) Creer Profil\n");
+
+    //printf("\nVeuillez taper : \n 1) Charger Profil\n 2) Creer Profil\n");
 
     if (scanf("%d",&rep) == EOF)
       err(3,"Issue while get values from typing");
@@ -87,6 +91,8 @@ void game(char *lvl_dico )
   size_t i =0;
   char r;
   int WBS=0;
+
+  printf("\nTapez les caracteres suivants :\n\n");
   while (i < strlen(lvl_dico))
   {
     printf("%c\n", lvl_dico[i]);
@@ -117,7 +123,16 @@ void game(char *lvl_dico )
 
 void menu_level()
 {
-  printf("Choisissez le niveau :\n1) Niveau 1\n2) Niveau 2\n3) Niveau 3\n");
+    printf("   ____________________________________________________________\n");
+    printf("  |                                                            |\n");
+    printf("  |                    Choisissez le niveau :                  |\n");
+    printf("  |                                                            |\n");
+    printf("  |     1) Niveau 1                                            |\n");
+    printf("  |     2) Niveau 2                                            |\n");
+    printf("  |     3) Niveau 3                                            |\n");
+    printf("  |____________________________________________________________|\n");
+    printf("\n");
+//printf("Choisissez le niveau :\n1) Niveau 1\n2) Niveau 2\n3) Niveau 3\n");
   int rep;
   char *lvl_title = "";
   if (scanf("%d",&rep) == EOF)
@@ -142,14 +157,20 @@ void menu_level()
 
 int main()
 {
-  menu_level();
-  //struct S_MYSQL *smysql = conn_init_sql();                                     
+  struct S_MYSQL *smysql = conn_init_sql();                                     
 
-  //struct user *newuser = calloc(1,sizeof(struct user)); 
+  struct user *newuser = calloc(1,sizeof(struct user)); 
 
-  //newuser = menu(newuser, smysql);                        
+  newuser = menu(newuser, smysql);                        
 
-  /* if(newuser != NULL)                                                                     
+/*  char *s = NULL;
+  char *lvl_title = "./dico/lvl2";
+
+
+  s = load_dico_lvl(lvl_title);
+
+   printf("%s\n", s);
+*/  /* if(newuser != NULL)                                                                     
      printf("Ca marche : %s, %s\n ID : %d\n", newuser->firstname, newuser->name, newuser->id_user);
    */
   return 0;

@@ -35,19 +35,19 @@ int generate_idlvl (int category, int difficulty, int stage )
 }
 
 /*int get_level(int id_lvl, struct level **lvl)
-{
-  //TODO select * from lvl where id_lvl = id_lvl
-  // store data in level
-  // return 1 on sucess or 0
-  return 1;
+  {
+//TODO select * from lvl where id_lvl = id_lvl
+// store data in level
+// return 1 on sucess or 0
+return 1;
 }*/
 /*
-struct level *actual_level (int user_id)
-{
-  struct level *level = NULL;
-  //  TODO QUERY select last level with the user_id
-  //  store it in the struct level *level.
-  return level;
+   struct level *actual_level (int user_id)
+   {
+   struct level *level = NULL;
+//  TODO QUERY select last level with the user_id
+//  store it in the struct level *level.
+return level;
 }*/
 
 int is_succeed(int score, long speed, struct level *level)
@@ -67,7 +67,7 @@ char **get_args_from_file(char *f_title , size_t nbargs)
     while ( fgets ( line, 50, file ) != NULL ) /* read a line */
     {
       regex[i]=line;
-      printf("Ligne %d : %s",i ,regex[i]); /* write the line */
+      //printf("Ligne %d : %s",i ,regex[i]); /* write the line */
       i++;
       line = malloc(50 *sizeof(char));
     }
@@ -100,7 +100,7 @@ char *build_random_str(char *chars, size_t size_wrd, size_t nb_wrd,
     }
     strcat(str," ");
   }
-  printf("string get : %s\n",str);
+  //printf("string get : %s\n",str);
   return str;
 }
 
@@ -115,6 +115,18 @@ char *load_dico_lvl(char *lvltitle)
   char *var = *(args_from_file+3);
 
   char *text = build_random_str(var,s_word,n_word,t_word);
+  printf("  ______________________________________________________________\n");
+  printf("                                                              \n");
+  printf("                   -- Parametres du Niveau --                 \n");
+  printf("                                                              \n");
+  printf("       Taille des mots  : %zu                                   \n", s_word);
+  printf("       Nombre de mots   : %zu                                   \n", n_word);
+  printf("       Taille du t_char : %zu                                  \n", t_word);
+  printf("       t_char           : %-s", var);
+  printf("                                                              \n");
+  printf("       Chaine generee   : %s                \n", text);
+  printf("  ______________________________________________________________\n");
+  printf("\n"); 
 
   return text;
 }
