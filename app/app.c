@@ -86,28 +86,28 @@ void game(char *lvl_dico )
 
   size_t i =0;
   char r;
-  int WBS;
+  int WBS=0;
   while (i < strlen(lvl_dico))
   {
     printf("%c\n", lvl_dico[i]);
     if (lvl_dico[i] != ' ')
     {
-      if (scanf("%c",&r) == EOF)
+      if (scanf(" %c",&r) == EOF)
         err(3,"Issue while get values from typing");
+      if ( r == lvl_dico[i])
+      {
+        WBS++;
+      }
+      else
+      {
+        WBS--;
+        i--;
+      }
 
     }  
     else
       WBS++;
 
-    if (((r==' ') || (r == lvl_dico[i])) && lvl_dico[i] != '\n')
-    {
-      WBS++;
-    }
-    else if ((lvl_dico[i] != ' ') && (r != lvl_dico[i]) )
-    {
-      WBS--;
-      i--;
-    }
     i++;
     printf("               WBS = %d\n",WBS);
   }
@@ -142,15 +142,15 @@ void menu_level()
 
 int main()
 {
+  menu_level();
+  //struct S_MYSQL *smysql = conn_init_sql();                                     
 
-  struct S_MYSQL *smysql = conn_init_sql();                                     
+  //struct user *newuser = calloc(1,sizeof(struct user)); 
 
-  struct user *newuser = calloc(1,sizeof(struct user)); 
-
-  newuser = menu(newuser, smysql);                        
+  //newuser = menu(newuser, smysql);                        
 
   /* if(newuser != NULL)                                                                     
      printf("Ca marche : %s, %s\n ID : %d\n", newuser->firstname, newuser->name, newuser->id_user);
-     */
+   */
   return 0;
 }

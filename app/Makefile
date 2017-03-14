@@ -2,7 +2,7 @@
 
 CC=gcc
 CPPFLAGS= -MMD -D_XOPEN_SOURCE=600 
-CFLAGS= -Wall -Werror -Wextra -std=c99 -O0 -g
+CFLAGS= -Wall -Werror -Wextra -std=c99 -O2 -g
 LDFLAGS=
 LDLIBS= `mysql_config --cflags --libs`
 
