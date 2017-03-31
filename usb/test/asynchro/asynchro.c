@@ -2,7 +2,7 @@
 #include <stdlib.h>    
 #include <sys/types.h>    
 #include <string.h>    
-#include </usr/local/include/libusb-1.0/libusb.h>    
+#include <libusb-1.0/libusb.h>    
 
 
 #define BULK_EP_OUT     0x82    
@@ -13,10 +13,10 @@ int alt_interface,interface_number;
 
 int print_configuration(struct libusb_device_handle *hDevice,struct libusb_config_descriptor *config)    
 {    
-    char *data;    
+    unsigned char *data;    
     int index;    
 
-    data = (char *)malloc(512);    
+    data = (unsigned char *)malloc(512);    
     memset(data,0,512);    
 
     index = config->iConfiguration;    
@@ -28,7 +28,7 @@ int print_configuration(struct libusb_device_handle *hDevice,struct libusb_confi
     printf("\n\tLength : %d",config->bLength);    
     printf("\n\tDesc_Type : %d",config->bDescriptorType);    
     printf("\n\tConfig_index : %d",config->iConfiguration);    
-    printf("\n\tTotal length : %lu",config->wTotalLength);    
+    printf("\n\tTotal length : %d",config->wTotalLength);    
     printf("\n\tConfiguration Value  : %d",config->bConfigurationValue);    
     printf("\n\tConfiguration Attributes : %d",config->bmAttributes);    
     printf("\n\tMaxPower(mA) : %d\n",config->MaxPower);    
@@ -93,7 +93,7 @@ int main(void)
 
     ssize_t cnt;    
     int e = 0,config2;    
-    int i = 0,index;    
+    int i = 0;    
     char str1[64], str2[64];    
     char found = 0;    
 
@@ -248,7 +248,7 @@ int main(void)
     int transferred = 0;    
     int received = 0;    
     int length = 0;    
-
+    int nbytes = 8;
     my_string = (char *)malloc(nbytes + 1);    
     my_string1 = (char *)malloc(nbytes + 1);    
 
