@@ -186,31 +186,6 @@ void save_info_device(struct libusb_device_descriptor
   fclose(file);
 }
 
-//---------------------------------------------------------------------------//
-
-/*void init_tranfer(struct libusb_transfer *transfer,struct libusb_control_setup  
- *Setup,  libusb_device_handle *devHandle)                       
- {                                                                               
- unsigned char                 buffer[10];                   
- int                           completed = 0;                                      
- libusb_transfer_cb_fn         &callback;
-
- libusb_fill_control_setup(buffer,                                             
- Setup->bmRequestType,                               
- Setup->bRequest,                                    
- Setup->wValue,                                      
- Setup->wIndex,                                      
- Setup->wLength);                                    
-
-
- libusb_fill_control_transfer(transfer, devHandle, buffer, callback, &completed,
- 1000);
-
- libusb_submit_transfer(transfer);                                             
- }                                                   
- */
-//---------------------------------------------------------------------------//
-
 int main ()
 {
   //  libusb_device                    **devList = NULL;
