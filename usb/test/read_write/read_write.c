@@ -13,10 +13,7 @@
 
 #define ACM_CTRL_DTR    0x01
 #define ACM_CTRL_RTS    0x02
-#define protocolByte    0x0d
-#define part            0xff
 
-#define speed           0
 /* We use a global variable to keep the device handle
  */
 static struct libusb_device_handle *devh = NULL;
@@ -43,14 +40,11 @@ void write_char(unsigned char c)
 //-------------------------------------------------------------
 void read_chars(unsigned char * data, int size)
 {
-  /* To receive characters from the device initiate a bulk_transfer to the
-   * Endpoint with address ep_in_addr.
-   */
   int actual_length = 0;
   int rc;
 for (int i=0;i<size;data[i++]=0);;
-  rc = libusb_bulk_transfer(devh, ep_in_addr, data, 16, &actual_length,
-      1000);
+  rc = libusb_bulk_transfer(devh, ep_in_addr, data, 32, &actual_length,
+      500);
   if(actual_length >0)
   {
     for(int i = 0; i < actual_length +2; i++)
@@ -83,42 +77,33 @@ for (int i=0;i<size;data[i++]=0);;
 void keybordcolor()
 {
   int rc = 0;
-  unsigned char data1 [] = { 0x11, 0xff, protocolByte, 0x5a,
-                        0x00, 0x01,0x00, 0x00, 
-                        0x00, 0x00, 0x00, 0x00, 
-                        0x00, 0x00, 0x00, 0x00,
-                        0x00 , 0x00, 0x00 , 0x00,
-                        0x00 , 0x00, 0x00 , 0x00,
-                        0x00 , 0x00, 0x00 , 0x00,
-                        0x00 , 0x00, 0x00 , 0x00
+  unsigned char data1 [] = { 0x11, 0xff, 0x0d, 0x3c,
+                             0x00, 0x01, 0xFF, 0xFF, 
+                             0xFF, 0x00, 0x00, 0x00, 
+                             0x00, 0x00, 0x00, 0x00,
+                             0x00, 0x00, 0x00, 0x00,
               };
 
-  unsigned char data2 [] = { 0x11, 0xff, protocolByte, 0x3c,
-                        0xff, 0x02, 0x30, 0x30, 
-                        0x30, 0x40, 0x10, 0x00, 
+  unsigned char data2 [] = { 0x11, 0xff, 0x0d, 0x3c,
+                        0x00, 0x04, 0xFF, 0xFF, 
+                        0xFF, 0x40, 0x10, 0x00, 
                         0x64, 0x00, 0x00, 0x00, 
                         0x00 , 0x00, 0x00 , 0x00,
-                        0x00 , 0x00, 0x00 , 0x00,
-                        0x00 , 0x00, 0x00 , 0x00,
-                        0x00 , 0x00, 0x00 , 0x00
               };
 
-  unsigned char commit [] = { 0x11, 0xff, 0x3c, (uint8_t)part,
-                        0x04 , protocolByte , 0x00 , 0x00, 
+  unsigned char commit [] = { 0x11, 0xff, 0x3c, 0x5a,
+                        0x04 , 0x00 , 0x00 , 0x00, 
                         0x00 , 0x00 , 0x00 , 0x88, 
-                        0x01 , 0x64 , speed , 0x00,
+                        0x01 , 0x64 , 0x00 , 0x00,
                         0x00 , 0x00 , 0x00 , 0x00,
-                        0x00 , 0x00 , 0x00 , 0x00,
-                        0x00 , 0x00 , 0x00 , 0x00,
-                        0x00 , 0x00 , 0x00 , 0x00
               };
 
-rc = libusb_control_transfer(devh, 0x21, 0x09, 0x0212, 1, 
-  data1, sizeof(data1), 2000); 
+rc = libusb_control_transfer(devh, 0x21, 0x09, 0x0211, 1, 
+  data1, sizeof(data2), 2000); 
   printf(" rc = %d \n", rc);
   sleep(5); 
-  
-  rc = libusb_control_transfer(devh, 0x21, 0x09, 0x0212, 1,data2,
+ 
+  rc = libusb_control_transfer(devh, 0x21, 0x09, 0x0211, 1,data1,
   sizeof(data2),2000); 
   printf(" rc = %d \n", rc);
   sleep(5);
@@ -167,22 +152,7 @@ int main()
   }
 
   keybordcolor();
-  /* Start configuring the device:
-   * - set line state
-   */
-  // 0010 0001       0x21
-  // 0 
-  /*
-     int libusb_control_transfer   (   libusb_device_handle *    dev_handle,
-     uint8_t   bmRequestType,
-     uint8_t   bRequest,
-     uint16_t    wValue,
-     uint16_t    wIndex,
-     unsigned char *   data,
-     uint16_t    wLength,
-     unsigned int    timeout 
-     )   
-   */
+  
   /* unsigned char data_status [32];
 
      rc = libusb_control_transfer(devh, 0x80, 0x06 , 0x00, 0,
@@ -218,16 +188,12 @@ int main()
   // We can now start sending or receiving data to the device
    */
   unsigned char data_read[65];
-  int i = 30;
+  int i = 40;
   while(i < 20)
   {
-    //   write_char('t');
     read_chars(data_read, 64);
-    //data_read[len] = 0;
-    //      fprintf(stdout, "Received: \" %s \" \n", data_read);
     sleep(1);
     i++;
-    //      printf("i = %d ", i);
   }
 
   libusb_release_interface(devh, 0);
