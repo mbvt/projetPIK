@@ -1,16 +1,20 @@
 CC =gcc
 CPPFLAGS= `pkg-config libusb-1.0 --libs --cflags`
-CFLAGS= -Wall -Wextra -std=c99 -O0 -g
+CFLAGS= -Wall -Wextra -std=c99 -O2
 LDFLAGS=
 LDLIBS= `pkg-config libusb-1.0 --libs --cflags`
 
-SRC= fd.c
+SRC= read_write.c
 DEP= ${SRC:.c=.d}
-OBJ= ${SRC:.c=.o}
+PRG= ${SRC:.c=}
 
-fd: ${OBJ}
+read_write: ${PRG}
+
+read_write: ${OBJ}
 
 clean:
-	rm -f *.o *.txt
+	rm -f *.o
 	rm -f ${DEP}
 	rm -f ${PRG}
+
+

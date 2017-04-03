@@ -4,7 +4,7 @@
 #include <libusb-1.0/libusb.h>
 
 void save_info_device(struct libusb_device_descriptor
-    devDesc,libusb_device_handle *devHandle,struct libusb_control_setup *Setup)
+    devDesc, libusb_device_handle *devHandle,struct libusb_control_setup *Setup)
 {
   unsigned char              strDesc[256];
   int retVal = 0;
@@ -185,10 +185,34 @@ void save_info_device(struct libusb_device_descriptor
   (void)retVal;
   fclose(file);
 }
+//---------------------------------------------------------------------------//
+
+/*void init_tranfer(struct libusb_transfer *transfer,struct libusb_control_setup  
+ *Setup,  libusb_device_handle *devHandle)                       
+ {                                                                               
+ unsigned char                 buffer[10];                   
+ int                           completed = 0;                                      
+ libusb_transfer_cb_fn         &callback;
+
+ libusb_fill_control_setup(buffer,                                             
+ Setup->bmRequestType,                               
+ Setup->bRequest,                                    
+ Setup->wValue,                                      
+ Setup->wIndex,                                      
+ Setup->wLength);                                    
+
+
+ libusb_fill_control_transfer(transfer, devHandle, buffer, callback, &completed,
+ 1000);
+
+ libusb_submit_transfer(transfer);                                             
+ }                                                   
+ */
+//---------------------------------------------------------------------------//
 
 int main ()
 {
-  //  libusb_device                    **devList = NULL;
+//  libusb_device                    **devList = NULL;
   //libusb_device                    *devPtr = NULL;
   libusb_device_handle             *devHandle = NULL;
 
@@ -199,9 +223,15 @@ int main ()
   int                               kernelDriverDetached = 0;
   //                Clavier
   //---------------------------------------------------------------------//
-  uint16_t		   productId = 0xc330;  
-  uint16_t		   ventorId = 0x046d;
+  //uint16_t		   productId = 0x8060;  
+  //uint16_t		   ventorId = 0x0c45;
   //---------------------------------------------------------------------//
+
+//                Clavier                                                     
+//---------------------------------------------------------------------//     
+uint16_t       productId = 0xa086;                                          
+uint16_t       ventorId = 0x04d9;                                           
+//---------------------------------------------------------------------// 
 
   //                Souris
   //---------------------------------------------------------------------//     
@@ -211,11 +241,8 @@ int main ()
 
   result = libusb_init (NULL);
 
-  struct          libusb_control_setup          *Setup;
-  struct          libusb_transfer               *transfer;               
-  const struct    libusb_endpoint_descriptor    *endpoint;
-
-
+  struct libusb_control_setup       *Setup;
+  struct libusb_transfer            *transfer;                                      
   transfer = libusb_alloc_transfer(60);
   transfer->buffer = malloc( 128 * sizeof (unsigned char));
 
@@ -259,4 +286,5 @@ int main ()
   devHandle = NULL;
   libusb_exit (NULL);
   return 0;
+
 }

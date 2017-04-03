@@ -15,6 +15,5 @@ read_write: ${OBJ}
 clean:
 	rm -f *.o
 	rm -f ${DEP}
-	rm -f ${PRG}
-
+	rm -f ${PRG} 
 

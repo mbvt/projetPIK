@@ -4,13 +4,15 @@ CFLAGS= -Wall -Wextra -std=c99 -O0 -g
 LDFLAGS=
 LDLIBS= `pkg-config libusb-1.0 --libs --cflags`
 
-SRC= fd.c
+SRC= syncho.c
 DEP= ${SRC:.c=.d}
 OBJ= ${SRC:.c=.o}
 
-fd: ${OBJ}
+syncho: ${OBJ}
 
 clean:
 	rm -f *.o *.txt
 	rm -f ${DEP}
 	rm -f ${PRG}
+
+
