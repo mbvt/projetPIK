@@ -8,7 +8,7 @@ LDLIBS= `mysql_config --cflags --libs`
 
 
 #SRC= app.c user.c stat.c level.c str_mysql.c
-SRC= app.c user.c level.c str_mysql.c
+SRC= app.c level.c
 OBJ= ${SRC:.c=.o}
 DEP= ${SRC:.c=.d}
 

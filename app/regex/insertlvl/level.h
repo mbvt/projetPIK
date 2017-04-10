@@ -64,4 +64,6 @@ char  **get_args_from_file(char *f_title, size_t nbargs);
 char *build_random_str (char *chars, size_t size_wrd, size_t nb_wrd);
 
 char *load_dico_lvl(char *lvltitle);
+
+int insert_lvl_1_12();
 #endif

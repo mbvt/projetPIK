@@ -123,22 +123,26 @@ void game(char *lvl_dico )
 
 void menu_level()
 {
-    printf("   ____________________________________________________________\n");
-    printf("  |                                                            |\n");
-    printf("  |                    Choisissez le niveau :                  |\n");
-    printf("  |                                                            |\n");
-    printf("  |     1) Niveau 1                                            |\n");
-    printf("  |     2) Niveau 2                                            |\n");
-    printf("  |     3) Niveau 3                                            |\n");
-    printf("  |____________________________________________________________|\n");
-    printf("\n");
+  printf("   ____________________________________________________________\n");
+  printf("  |                                                            |\n");
+  printf("  |                    Choisissez le niveau :                  |\n");
+  printf("  |                                                            |\n");
+  printf("  |     1) Niveau 1                                            |\n");
+  printf("  |     2) Niveau 2                                            |\n");
+  printf("  |     3) Niveau 3                                            |\n");
+  printf("  |____________________________________________________________|\n");
+  printf("\n");
 //printf("Choisissez le niveau :\n1) Niveau 1\n2) Niveau 2\n3) Niveau 3\n");
-  int rep;
-  char *lvl_title = "";
-  if (scanf("%d",&rep) == EOF)
+  char *rep = calloc (5,sizeof(char));
+  char *lvl_title = calloc (12,sizeof(char));
+  
+  strcat(lvl_title,"./dico/lvl");
+  if (scanf("%s",rep) == EOF)
     err(3,"Issue while get values from typing");
-
-  switch (rep) {
+  
+  strcat(lvl_title,rep);
+  
+  /*switch (rep) {
     case 1:
       lvl_title = "./dico/lvl1";
       break;
@@ -148,7 +152,8 @@ void menu_level()
     case 3:
       lvl_title = "./dico/lvl3";
       break;
-  }
+  } */
+
   char *lvl_dico = "";
   lvl_dico = load_dico_lvl(lvl_title);
   game(lvl_dico);
@@ -157,21 +162,13 @@ void menu_level()
 
 int main()
 {
+/*
   struct S_MYSQL *smysql = conn_init_sql();                                     
 
   struct user *newuser = calloc(1,sizeof(struct user)); 
 
   newuser = menu(newuser, smysql);                        
-
-/*  char *s = NULL;
-  char *lvl_title = "./dico/lvl2";
-
-
-  s = load_dico_lvl(lvl_title);
-
-   printf("%s\n", s);
-*/  /* if(newuser != NULL)                                                                     
-     printf("Ca marche : %s, %s\n ID : %d\n", newuser->firstname, newuser->name, newuser->id_user);
-   */
+  */
+  menu_level();
   return 0;
 }

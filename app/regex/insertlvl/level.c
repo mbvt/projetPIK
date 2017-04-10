@@ -34,26 +34,11 @@ int generate_idlvl (int category, int difficulty, int stage )
   return id_lvl;
 }
 
-/*int get_level(int id_lvl, struct level **lvl)
-  {
-//TODO select * from lvl where id_lvl = id_lvl
-// store data in level
-// return 1 on sucess or 0
-return 1;
-}*/
-/*
-   struct level *actual_level (int user_id)
-   {
-   struct level *level = NULL;
-//  TODO QUERY select last level with the user_id
-//  store it in the struct level *level.
-return level;
-}*/
-
 int is_succeed(int score, long speed, struct level *level)
 {
   return (score > level->score_expected) && (speed < level->speed_expected);
 }
+
 /*
 ** This function get the arguments from a level file from wich we will
 ** the options for the level and store them in a tab of char.
@@ -65,14 +50,14 @@ char **get_args_from_file(char *f_title , size_t nbargs)
   char **regex= malloc( nbargs * sizeof (char*));
   if ( file != NULL )
   {
-    char *line = malloc(50 *sizeof(char)); /* or other suitable maximum line si    ze */
+    char *line = malloc(256 *sizeof(char)); /* or other suitable maximum line si    ze */
     int i = 0;
-    while ( fgets ( line, 50, file ) != NULL ) /* read a line */
+    while ( fgets ( line, 256, file ) != NULL ) /* read a line */
     {
       regex[i]=line;
       //printf("Ligne %d : %s",i ,regex[i]); /* write the line */
       i++;
-      line = malloc(50 *sizeof(char));
+      line = malloc(256 *sizeof(char));
     }
     fclose ( file );
     free(line);
@@ -141,3 +126,32 @@ char *load_dico_lvl(char *lvltitle)
  **  Generate all the level and inserting them in the database.
  **  At the same moment generate also the dico for the level.
  */
+
+int insert_lvl_1_12()
+{
+  for (size_t i = 1 ; i < 13 ; i++)
+  {
+    char *lvl_dico = calloc (15,sizeof(char));
+    
+    sprintf(lvl_dico,"./dico/lvl%zu",i);
+    
+    char **args = get_args_from_file(lvl_dico,7);
+    /*
+    pos for each args:
+      text  : 2
+      speed : 3
+      score : 4
+      id_diff : 5
+      id_world : 6
+  
+    usage : 
+      char *text = args+3
+    */  
+    printf("Label : lvl%zu\n\ntext : %s\nspeed : %s\nscore : %s\nid_diff : %s\nid_world : %s\n"
+    ,i, *(args+2),*(args+3),*(args+4),*(args+5),*(args+6));
+    printf("_____________________________ \n\n"); 
+    free(lvl_dico);
+  }
+  return 0;
+}
+
