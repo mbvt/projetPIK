@@ -60,6 +60,7 @@
           <object class="GtkBox" id="MainPage">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="margin_bottom">60</property>
             <property name="orientation">vertical</property>
             <property name="spacing">10</property>
             <child>
@@ -560,12 +561,13 @@ Pedagogical Interactive Keyboard</property>
                         <property name="can_focus">True</property>
                         <property name="orientation">vertical</property>
                         <child>
-                          <object class="GtkCheckButton">
+                          <object class="GtkCheckButton" id="UCO">
                             <property name="label" translatable="yes">Oui</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
                             <property name="draw_indicator">True</property>
+                            <signal name="clicked" handler="on_UCO_clicked" swapped="no"/>
                           </object>
                           <packing>
                             <property name="resize">False</property>
@@ -573,12 +575,13 @@ Pedagogical Interactive Keyboard</property>
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkCheckButton">
+                          <object class="GtkCheckButton" id="UCN">
                             <property name="label" translatable="yes">Non</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
                             <property name="draw_indicator">True</property>
+                            <signal name="clicked" handler="on_UCN_clicked" swapped="no"/>
                           </object>
                           <packing>
                             <property name="resize">False</property>
@@ -620,12 +623,13 @@ Pedagogical Interactive Keyboard</property>
                         <property name="can_focus">True</property>
                         <property name="orientation">vertical</property>
                         <child>
-                          <object class="GtkCheckButton">
+                          <object class="GtkCheckButton" id="HO">
                             <property name="label" translatable="yes">Oui</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
                             <property name="draw_indicator">True</property>
+                            <signal name="clicked" handler="on_HO_clicked" swapped="no"/>
                           </object>
                           <packing>
                             <property name="resize">False</property>
@@ -633,12 +637,13 @@ Pedagogical Interactive Keyboard</property>
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkCheckButton">
+                          <object class="GtkCheckButton" id="HN">
                             <property name="label" translatable="yes">Non</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
                             <property name="draw_indicator">True</property>
+                            <signal name="clicked" handler="on_HN_clicked" swapped="no"/>
                           </object>
                           <packing>
                             <property name="resize">True</property>
@@ -680,12 +685,13 @@ Pedagogical Interactive Keyboard</property>
                         <property name="can_focus">True</property>
                         <property name="orientation">vertical</property>
                         <child>
-                          <object class="GtkCheckButton">
+                          <object class="GtkCheckButton" id="Dalt">
                             <property name="label" translatable="yes">Daltonien</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
                             <property name="draw_indicator">True</property>
+                            <signal name="clicked" handler="on_Dalt_clicked" swapped="no"/>
                           </object>
                           <packing>
                             <property name="resize">False</property>
@@ -693,12 +699,13 @@ Pedagogical Interactive Keyboard</property>
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkCheckButton">
+                          <object class="GtkCheckButton" id="Mot">
                             <property name="label" translatable="yes">Moteur</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
                             <property name="draw_indicator">True</property>
+                            <signal name="clicked" handler="on_Mot_clicked" swapped="no"/>
                           </object>
                           <packing>
                             <property name="resize">True</property>
@@ -731,6 +738,7 @@ Pedagogical Interactive Keyboard</property>
                 <property name="receives_default">True</property>
                 <property name="halign">center</property>
                 <property name="valign">center</property>
+                <signal name="clicked" handler="on_Game_clicked" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -812,7 +820,7 @@ Nom d'utilisateur : </property>
               <object class="GtkLabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Pour l'inscription</property>
+                <property name="label" translatable="yes">Vous êtes bien inscrit !</property>
               </object>
               <packing>
                 <property name="expand">False</property>

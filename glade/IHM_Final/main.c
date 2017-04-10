@@ -1,22 +1,13 @@
-# include <stdlib.h>
-# include <stdio.h>
-# include <gtk/gtk.h>
-# include <SDL/SDL.h>
-# include <SDL/SDL_image.h>
+# include "main.h"
+/*
+void on_UCO_clicked();
+void on_UCN_clicked();
+void on_HO_clicked();
+void on_HN_clicked();
+void on_Dalt_clicked();
+void on_Mot_clicked();
+*/
 
-
-GtkWidget  *Connexion, *Inscription, *MainWindow;
-GtkWidget  *CoWindow, *InsWindow, *IHM, *CoEntry;
-GtkEntry   *entry, *name, *firstname, *age;
-GtkBuilder *builder;
-GtkLabel   *testCo, *errCo;
-
-void on_Connexion_clicked();
-void on_Inscription_clicked();
-void on_connback_clicked();
-void on_insback_clicked();
-void on_qcm_clicked();
-void on_CoEntry_clicked();
 
 /*----------------------------------MAIN---------------------------------------
  *---------------------------------------------------------------------------*/
@@ -45,6 +36,20 @@ int main(int argc, char *argv[])
   g_signal_connect(entry, "activate", G_CALLBACK(on_qcm_clicked), name);
   g_signal_connect(entry, "activate", G_CALLBACK(on_qcm_clicked), firstname);
   g_signal_connect(entry, "activate", G_CALLBACK(on_qcm_clicked), age);
+
+  UCO  = GTK_TOGGLE_BUTTON(gtk_builder_get_object(builder, "UCO"));
+  UCN  = GTK_TOGGLE_BUTTON(gtk_builder_get_object(builder, "UCN"));
+  HO   = GTK_TOGGLE_BUTTON(gtk_builder_get_object(builder, "HO"));
+  HN   = GTK_TOGGLE_BUTTON(gtk_builder_get_object(builder, "HN"));
+  Dalt = GTK_TOGGLE_BUTTON(gtk_builder_get_object(builder, "UCO"));
+  Mot  = GTK_TOGGLE_BUTTON(gtk_builder_get_object(builder, "UCO"));
+
+  g_signal_connect(entry, "activate", G_CALLBACK(on_Game_clicked), UCO);
+  g_signal_connect(entry, "activate", G_CALLBACK(on_Game_clicked), UCN);
+  g_signal_connect(entry, "activate", G_CALLBACK(on_Game_clicked), HO);
+  g_signal_connect(entry, "activate", G_CALLBACK(on_Game_clicked), HN);
+  g_signal_connect(entry, "activate", G_CALLBACK(on_Game_clicked), Dalt);
+  g_signal_connect(entry, "activate", G_CALLBACK(on_Game_clicked), Mot);
 
   g_object_unref (G_OBJECT (builder));
 
@@ -75,7 +80,7 @@ void on_qcm_clicked()
   const char *a = gtk_entry_get_text(GTK_ENTRY(age));
   printf("Nom    : %s\n", n);
   printf("Prénom : %s\n", f);
-  printf("Age    : %s\n", a);
+  printf("Age    : %s ans\n", a);
 
   gtk_stack_set_visible_child_name(GTK_STACK(IHM), "QcmPage");
 }
@@ -116,6 +121,49 @@ void on_CoEntry_clicked()
   }
 
 }
+
+void on_Game_clicked()
+{
+  int ok = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(UCO));
+  if(ok == 1)
+    printf("Ca marhce");
+  gtk_stack_set_visible_child_name(GTK_STACK(IHM), "TestInsPage");
+}
+
+
+/*
+void on_UCO_clicked()
+{
+  if(UCO)
+    printf("J'ai déjà utilisé un clavier\n");
+}
+
+void on_UCN_clicked()
+{
+  if(UCN)
+    printf("Je n'ai pas utilisé un clavier\n");
+}
+void on_HO_clicked()
+{
+  if(HO)
+    printf("J'ai un Handicape\n");
+}
+void on_HN_clicked()
+{
+  if(HN)
+    printf("Je n'ai pas d'Hanidcape\n");
+}
+void on_Dalt_clicked()
+{
+  if(Dalt)
+    printf("Je suis daltonien\n");
+}
+void on_Mot_clicked()
+{
+  if(Mot)
+    printf("J'ai des problèmes de motricité \n");
+}
+*/
 
 /*-----------------------------QUIT BUTTON-------------------------------------
  *---------------------------------------------------------------------------*/
