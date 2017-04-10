@@ -1,13 +1,4 @@
 # include "main.h"
-/*
-void on_UCO_clicked();
-void on_UCN_clicked();
-void on_HO_clicked();
-void on_HN_clicked();
-void on_Dalt_clicked();
-void on_Mot_clicked();
-*/
-
 
 /*----------------------------------MAIN---------------------------------------
  *---------------------------------------------------------------------------*/
@@ -41,15 +32,15 @@ int main(int argc, char *argv[])
   UCN  = GTK_TOGGLE_BUTTON(gtk_builder_get_object(builder, "UCN"));
   HO   = GTK_TOGGLE_BUTTON(gtk_builder_get_object(builder, "HO"));
   HN   = GTK_TOGGLE_BUTTON(gtk_builder_get_object(builder, "HN"));
-  Dalt = GTK_TOGGLE_BUTTON(gtk_builder_get_object(builder, "UCO"));
-  Mot  = GTK_TOGGLE_BUTTON(gtk_builder_get_object(builder, "UCO"));
+  Dalt = GTK_TOGGLE_BUTTON(gtk_builder_get_object(builder, "Dalt"));
+  Mot  = GTK_TOGGLE_BUTTON(gtk_builder_get_object(builder, "Mot"));
 
-  g_signal_connect(entry, "activate", G_CALLBACK(on_Game_clicked), UCO);
-  g_signal_connect(entry, "activate", G_CALLBACK(on_Game_clicked), UCN);
-  g_signal_connect(entry, "activate", G_CALLBACK(on_Game_clicked), HO);
-  g_signal_connect(entry, "activate", G_CALLBACK(on_Game_clicked), HN);
-  g_signal_connect(entry, "activate", G_CALLBACK(on_Game_clicked), Dalt);
-  g_signal_connect(entry, "activate", G_CALLBACK(on_Game_clicked), Mot);
+  g_signal_connect(UCO, "activate", G_CALLBACK(on_Game_clicked), UCO);
+  g_signal_connect(UCN, "activate", G_CALLBACK(on_Game_clicked), UCN);
+  g_signal_connect(HO, "activate", G_CALLBACK(on_Game_clicked), HO);
+  g_signal_connect(HN, "activate", G_CALLBACK(on_Game_clicked), HN);
+  g_signal_connect(Dalt, "activate", G_CALLBACK(on_Game_clicked), Dalt);
+  g_signal_connect(Mot, "activate", G_CALLBACK(on_Game_clicked), Mot);
 
   g_object_unref (G_OBJECT (builder));
 
@@ -83,6 +74,11 @@ void on_qcm_clicked()
   printf("Age    : %s ans\n", a);
 
   gtk_stack_set_visible_child_name(GTK_STACK(IHM), "QcmPage");
+  
+  gtk_entry_set_text(name, "");
+  gtk_entry_set_text(firstname, "");
+  gtk_entry_set_text(age, "");
+  
 }
 
 void on_connback_clicked()
@@ -124,49 +120,38 @@ void on_CoEntry_clicked()
 
 void on_Game_clicked()
 {
-  int ok = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(UCO));
-  if(ok == 1)
-    printf("Ca marhce");
-  gtk_stack_set_visible_child_name(GTK_STACK(IHM), "TestInsPage");
-}
-
-
-/*
-void on_UCO_clicked()
-{
-  if(UCO)
+  if( gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(UCO)) ) 
     printf("J'ai déjà utilisé un clavier\n");
+  if( gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(UCN)) )
+    printf("Je n'utilise pas souvent de clavier\n");
+  if( gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(HO)) ) 
+    printf("Je suis handicapé\n"); 
+  if( gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(HN)) ) 
+    printf("Je n'ai pas d'handicape\n");
+  if( gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(Dalt)) ) 
+    printf("Je suis daltonien\n");
+  if( gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(Mot)) ) 
+    printf("J'ai des problèmes de motricité\n");
+ 
+  gtk_stack_set_visible_child_name(GTK_STACK(IHM), "TestInsPage");
+
+  
+  gtk_toggle_button_set_active(UCO, FALSE);
+  gtk_toggle_button_set_active(UCN, FALSE);
+  gtk_toggle_button_set_active(HO, FALSE);
+  gtk_toggle_button_set_active(HN, FALSE);
+  gtk_toggle_button_set_active(Dalt, FALSE);
+  gtk_toggle_button_set_active(Mot, FALSE);
 }
 
-void on_UCN_clicked()
+void on_gameback_clicked()
 {
-  if(UCN)
-    printf("Je n'ai pas utilisé un clavier\n");
+  gtk_stack_set_visible_child_name(GTK_STACK(IHM), "QcmPage");
 }
-void on_HO_clicked()
-{
-  if(HO)
-    printf("J'ai un Handicape\n");
-}
-void on_HN_clicked()
-{
-  if(HN)
-    printf("Je n'ai pas d'Hanidcape\n");
-}
-void on_Dalt_clicked()
-{
-  if(Dalt)
-    printf("Je suis daltonien\n");
-}
-void on_Mot_clicked()
-{
-  if(Mot)
-    printf("J'ai des problèmes de motricité \n");
-}
-*/
 
 /*-----------------------------QUIT BUTTON-------------------------------------
  *---------------------------------------------------------------------------*/
+
 void on_quit_clicked()
 {
   gtk_main_quit();
@@ -193,6 +178,11 @@ void on_TCPQuit_clicked()
 }
 
 void on_MainWindow_main_destroy()
+{
+  gtk_main_quit();
+}
+
+void on_gameQuit_clicked()
 {
   gtk_main_quit();
 }
