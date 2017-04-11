@@ -43,7 +43,7 @@
   <object class="GtkImage" id="gameQui">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="stock">gtk-stop</property>
+    <property name="stock">gtk-cancel</property>
   </object>
   <object class="GtkImage" id="gamebac">
     <property name="visible">True</property>
