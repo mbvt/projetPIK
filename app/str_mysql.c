@@ -334,6 +334,8 @@ int insert_table(struct S_MYSQL *smysql)
   return id_u;
 }
 
+//====> void insert_level_dico(char *text, 
+
 
 
 /*int main()//int argc, char* argv[])
