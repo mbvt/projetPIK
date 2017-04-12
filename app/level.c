@@ -90,9 +90,8 @@ char *build_random_str(char *chars, size_t size_wrd, size_t nb_wrd)
 {
   size_t size_str = (size_wrd+1) * nb_wrd;
   char *str = calloc( size_str , sizeof (char));
-  size_t cpt = 0;
   char *tmp = calloc (1,sizeof (char));
-  size_t size_chars = strlen(chars);
+  size_t size_chars = strlen(chars)-1;
   for (size_t i = 0; i < nb_wrd ; i++)
   {
     for (size_t y = 0; y < size_wrd ; y++)
@@ -100,7 +99,6 @@ char *build_random_str(char *chars, size_t size_wrd, size_t nb_wrd)
       size_t tmpcpt = rand()%size_chars;
       tmp[0] = chars[tmpcpt];
       strcat(str,tmp);
-      cpt += size_wrd+1;
       tmp = calloc (1,sizeof (char));
     }
     strcat(str," ");
@@ -115,12 +113,13 @@ char *load_dico_lvl(char *lvltitle)
 {
   // Load the options of the level
   char **args_from_file = get_args_from_file(lvltitle,3);
-  
+
   // store the option in each apropriate var
   size_t s_word = (size_t)atoi(*args_from_file);
   size_t n_word = (size_t)atoi(*(args_from_file+1));
   char *var = *(args_from_file+2);
 
+  printf("       Chaine generee   : %s                \n", var);
   char *text = build_random_str(var,s_word,n_word);
   printf("  ______________________________________________________________\n");
   printf("                                                              \n");
@@ -128,11 +127,11 @@ char *load_dico_lvl(char *lvltitle)
   printf("                                                              \n");
   printf("       Taille des mots  : %zu                                   \n", s_word);
   printf("       Nombre de mots   : %zu                                   \n", n_word);
-  printf("       t_char           : %-s", var);
+  printf("       t_char           : %s", var);
   printf("                                                              \n");
   printf("       Chaine generee   : %s                \n", text);
   printf("  ______________________________________________________________\n");
-  printf("\n"); 
+  printf("\n");
 
   return text;
 }
