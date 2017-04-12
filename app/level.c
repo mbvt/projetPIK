@@ -107,6 +107,27 @@ char *build_random_str(char *chars, size_t size_wrd, size_t nb_wrd)
   return str;
 }
 
+char *build_random_words_str(char *chars, size_t size_wrd, size_t nb_wrd)
+{
+  size_t size_str = (size_wrd+1) * nb_wrd;
+  char *str = calloc( size_str , sizeof (char));
+  char *tmp = calloc (1,sizeof (char));
+  size_t size_chars = strlen(chars)-1;
+  for (size_t i = 0; i < nb_wrd ; i++)
+  {
+    for (size_t y = 0; y < size_wrd ; y++)
+    {
+      size_t tmpcpt = rand()%size_chars;
+      tmp[0] = chars[tmpcpt];
+      strcat(str,tmp);
+      tmp = calloc (1,sizeof (char));
+    }
+    strcat(str," ");
+  }
+  //printf("string get : %s\n",str);
+  return str;
+}
+
 // FOR NOW just return the char text of a level
 // but later it will fill the level->text
 char *load_dico_lvl(char *lvltitle)
