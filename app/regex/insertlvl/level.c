@@ -51,8 +51,8 @@ char **get_args_from_file(char *f_title , size_t nbargs)
   if ( file != NULL )
   {
     char *line = malloc(256 *sizeof(char)); /* or other suitable maximum line si    ze */
-    int i = 0;
-    while ( fgets ( line, 256, file ) != NULL ) /* read a line */
+    size_t i = 0;
+    while ( (fgets ( line, 256, file ) != NULL) && i < nbargs ) /* read a line */
     {
       regex[i]=line;
       //printf("Ligne %d : %s",i ,regex[i]); /* write the line */
@@ -67,6 +67,48 @@ char **get_args_from_file(char *f_title , size_t nbargs)
     perror ( "regexfile" ); /* why didn't the file open? */
   }
   return regex;
+}
+
+
+char *get_words_from_file(char *f_title)
+{
+
+  FILE *file = fopen(f_title,"r+");
+//  char **words = malloc( 100 * sizeof (char*));
+  char **args = get_args_from_file(f_title,6);
+  size_t s_word = (size_t)atoi(*args);
+  char *str = calloc (100 * s_word, sizeof(char));
+  if ( file != NULL )
+  {
+    char *line = malloc(256 *sizeof(char)); /* or other suitable maximum line
+    size */
+    int i = 0;
+    while ( (fgets ( line, 256, file ) != NULL) && i < 6 ) /* read a line */
+    {
+      i++;
+      line = malloc(256 *sizeof(char));
+    }
+
+    line[strlen(line)-1]='\0';
+    strcat(str,line);
+
+    while ( fgets ( line, 256, file ) != NULL) /* read a line */
+    {
+
+      strcat(str,"-");
+      line[strlen(line)-1]='\0';
+      strcat(str,line);
+
+      line = malloc(256 *sizeof(char));
+    }
+    fclose ( file );
+    free(line);
+  }
+  else
+  {
+    perror ( "regexfile" ); /* why didn't the file open? */
+  }
+  return str;
 }
 /*
 ** Build a random string with the arguments and store in a single string
@@ -94,17 +136,39 @@ char *build_random_str(char *chars, size_t size_wrd, size_t nb_wrd)
   return str;
 }
 
+// KEEP this func to build random words in one string
+/*
+char *build_one_str_from_words(char *f_title)
+{
+  char **args = get_args_words_from_file(f_title,6);
+  char **tab_words = get_words_from_file(f_title);
+  size_t s_word = (size_t)atoi(*args);
+  char *str = calloc (100 * s_word,sizeof(char));
+  strcat(str,tab_words[0]);
+  size_t i = 1;
+  printf("words : %s\n",*tab_words[i]);
+  while (*tab_words[i] != NULL )
+  {
+    strcat(str,"-");
+    strcat(str,tab_words[i]);
+    i++;
+  }
+  printf("string genrated : %s",str);
+  return str;
+}
+
+*/
 // FOR NOW just return the char text of a level
 // but later it will fill the level->text
 char *load_dico_lvl(char *lvltitle)
 {
   // Load the options of the level
   char **args_from_file = get_args_from_file(lvltitle,3);
-  
+
   // store the option in each apropriate var
   size_t s_word = (size_t)atoi(*args_from_file);
   size_t n_word = (size_t)atoi(*(args_from_file+1));
-  char *var = *(args_from_file+2);
+  char *var = *(args_from_file+6);
 
   char *text = build_random_str(var,s_word,n_word);
   printf("  ______________________________________________________________\n");
@@ -117,7 +181,7 @@ char *load_dico_lvl(char *lvltitle)
   printf("                                                              \n");
   printf("       Chaine generee   : %s                \n", text);
   printf("  ______________________________________________________________\n");
-  printf("\n"); 
+  printf("\n");
 
   return text;
 }
@@ -132,26 +196,50 @@ int insert_lvl_1_12()
   for (size_t i = 1 ; i < 13 ; i++)
   {
     char *lvl_dico = calloc (15,sizeof(char));
-    
+
     sprintf(lvl_dico,"./dico/lvl%zu",i);
-    
+
     char **args = get_args_from_file(lvl_dico,7);
     /*
     pos for each args:
-      text  : 2
-      speed : 3
-      score : 4
-      id_diff : 5
-      id_world : 6
-  
-    usage : 
-      char *text = args+3
-    */  
-    printf("Label : lvl%zu\n\ntext : %s\nspeed : %s\nscore : %s\nid_diff : %s\nid_world : %s\n"
-    ,i, *(args+2),*(args+3),*(args+4),*(args+5),*(args+6));
-    printf("_____________________________ \n\n"); 
+      speed : 2
+      score : 3
+      id_diff : 4
+      id_world : 5
+      text  : 6
+    usage :
+      char *text = args+6
+    */
+    printf("Label : lvl%zu\n\ntext : %s\nspeed : %s\nscore : %s\nid_diff : %s\nid_world : %s\n",i, *(args+6),*(args+2),*(args+3),*(args+4),*(args+5));
+    printf("_____________________________ \n\n");
     free(lvl_dico);
   }
   return 0;
 }
 
+int insert_lvl_13_15()
+{
+   for (size_t i = 13 ; i < 16 ; i++)
+  {
+    char *lvl_dico = calloc (15,sizeof(char));
+
+    sprintf(lvl_dico,"./dico/lvl%zu",i);
+
+    char **args = get_args_from_file(lvl_dico,6);
+    char *text = get_words_from_file(lvl_dico);
+    /*
+    pos for each args:
+      speed : 2
+      score : 3
+      id_diff : 4
+      id_world : 5
+      text  : *text
+    usage :
+      char *speed = args+2
+    */
+    printf("Label : lvl%zu\n\ntext : %s\nspeed : %s\nscore : %s\nid_diff : %s\nid_world : %s\n",i, text,*(args+2),*(args+3),*(args+4),*(args+5));
+    printf("_____________________________ \n\n");
+    free(lvl_dico);
+  }
+  return 0;
+}

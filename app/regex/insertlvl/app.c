@@ -38,7 +38,7 @@ void game(char *lvl_dico )
         i--;
       }
 
-    }  
+    }
     else
       WBS++;
 
@@ -79,6 +79,11 @@ void menu_level()
 int main()
 {
   int x = insert_lvl_1_12();
-  printf("%d",x);
+  printf("%d",x); 
+  x = insert_lvl_13_15();
+  printf("%d",x); 
+//  char *str = build_one_str_from_words("./dico/lvl13");
+ // char *str = get_words_from_file("./dico/lvl13");
+ // printf("string generated : %s",str);
   return 0;
 }
