@@ -1,5 +1,7 @@
 # include "main.h"
 
+
+
 /*----------------------------------MAIN---------------------------------------
  *---------------------------------------------------------------------------*/
 int main(int argc, char *argv[])
@@ -74,11 +76,11 @@ void on_qcm_clicked()
   printf("Age    : %s ans\n", a);
 
   gtk_stack_set_visible_child_name(GTK_STACK(IHM), "QcmPage");
-  
+
   gtk_entry_set_text(name, "");
   gtk_entry_set_text(firstname, "");
   gtk_entry_set_text(age, "");
-  
+
 }
 
 void on_connback_clicked()
@@ -120,22 +122,24 @@ void on_CoEntry_clicked()
 
 void on_Game_clicked()
 {
-  if( gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(UCO)) ) 
+  if( gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(UCO)) )
     printf("J'ai déjà utilisé un clavier\n");
   if( gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(UCN)) )
     printf("Je n'utilise pas souvent de clavier\n");
-  if( gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(HO)) ) 
-    printf("Je suis handicapé\n"); 
-  if( gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(HN)) ) 
+  if( gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(HO)) )
+    printf("Je suis handicapé\n");
+  if( gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(HN)) )
     printf("Je n'ai pas d'handicape\n");
-  if( gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(Dalt)) ) 
+  if( gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(Dalt)) )
     printf("Je suis daltonien\n");
-  if( gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(Mot)) ) 
+  if( gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(Mot)) )
     printf("J'ai des problèmes de motricité\n");
- 
+
   gtk_stack_set_visible_child_name(GTK_STACK(IHM), "TestInsPage");
 
-  
+  scanf()
+
+
   gtk_toggle_button_set_active(UCO, FALSE);
   gtk_toggle_button_set_active(UCN, FALSE);
   gtk_toggle_button_set_active(HO, FALSE);
