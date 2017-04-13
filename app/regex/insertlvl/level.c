@@ -50,12 +50,11 @@ char **get_args_from_file(char *f_title , size_t nbargs)
   char **regex= malloc( nbargs * sizeof (char*));
   if ( file != NULL )
   {
-    char *line = malloc(256 *sizeof(char)); /* or other suitable maximum line si    ze */
+    char *line = malloc(256 *sizeof(char));
     size_t i = 0;
     while ( (fgets ( line, 256, file ) != NULL) && i < nbargs ) /* read a line */
     {
       regex[i]=line;
-      //printf("Ligne %d : %s",i ,regex[i]); /* write the line */
       i++;
       line = malloc(256 *sizeof(char));
     }
@@ -136,28 +135,6 @@ char *build_random_str(char *chars, size_t size_wrd, size_t nb_wrd)
   return str;
 }
 
-// KEEP this func to build random words in one string
-/*
-char *build_one_str_from_words(char *f_title)
-{
-  char **args = get_args_words_from_file(f_title,6);
-  char **tab_words = get_words_from_file(f_title);
-  size_t s_word = (size_t)atoi(*args);
-  char *str = calloc (100 * s_word,sizeof(char));
-  strcat(str,tab_words[0]);
-  size_t i = 1;
-  printf("words : %s\n",*tab_words[i]);
-  while (*tab_words[i] != NULL )
-  {
-    strcat(str,"-");
-    strcat(str,tab_words[i]);
-    i++;
-  }
-  printf("string genrated : %s",str);
-  return str;
-}
-
-*/
 // FOR NOW just return the char text of a level
 // but later it will fill the level->text
 char *load_dico_lvl(char *lvltitle)

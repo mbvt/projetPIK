@@ -22,7 +22,7 @@ struct user *menu(struct user *user, struct S_MYSQL *smysql){
   printf("  |                 BIENVENUE SUR LE PROJET PIK                |\n");
   printf("  |____________________________________________________________|\n");
   printf("  |                                                            |\n");
-  printf("  |                                         --  by ChocAPI-K   |\n");                   
+  printf("  |                                         --  by ChocAPI-K   |\n"); 
   printf("  |____________________________________________________________|\n");
   printf("\n");
 
@@ -62,7 +62,7 @@ struct user *menu(struct user *user, struct S_MYSQL *smysql){
       if (!exist_user(name,firstname,smysql))
         printf("Utilisateur non trouve.\n\n");
       else
-      {     
+      {
         user = get_user(name, firstname, smysql);
         printf("Bonjour %s\n",user->firstname);
 
@@ -110,7 +110,7 @@ void game(char *lvl_dico )
         i--;
       }
 
-    }  
+    }
     else
       WBS++;
 
@@ -135,27 +135,14 @@ void menu_level()
 //printf("Choisissez le niveau :\n1) Niveau 1\n2) Niveau 2\n3) Niveau 3\n");
   char *rep = calloc (5,sizeof(char));
   char *lvl_title = calloc (12,sizeof(char));
-  
+
   strcat(lvl_title,"./dico/lvl");
   if (scanf("%s",rep) == EOF)
     err(3,"Issue while get values from typing");
-  
-  strcat(lvl_title,rep);
-  
-  /*switch (rep) {
-    case 1:
-      lvl_title = "./dico/lvl1";
-      break;
-    case 2:
-      lvl_title = "./dico/lvl2";
-      break;
-    case 3:
-      lvl_title = "./dico/lvl3";
-      break;
-  } */
 
+  strcat(lvl_title,rep);
   char *lvl_dico = "";
-  lvl_dico = load_dico_lvl(lvl_title);
+  lvl_dico = load_dico_lvl(lvl_title,atoi(rep));
   game(lvl_dico);
 }
 
@@ -170,5 +157,6 @@ int main()
   newuser = menu(newuser, smysql);                        
   */
   menu_level();
+  
   return 0;
 }
