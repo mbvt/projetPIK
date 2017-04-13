@@ -137,8 +137,6 @@ void on_Game_clicked()
 
   gtk_stack_set_visible_child_name(GTK_STACK(IHM), "TestInsPage");
 
-  scanf()
-
 
   gtk_toggle_button_set_active(UCO, FALSE);
   gtk_toggle_button_set_active(UCN, FALSE);
