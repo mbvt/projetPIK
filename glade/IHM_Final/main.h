@@ -5,7 +5,7 @@
 # include <SDL/SDL_image.h>
 
 
-GtkWidget  *Connexion, *Inscription, *MainWindow;
+GtkWidget  *Connexion, *Inscription, *MainWindow, *TestInsPage;
 GtkWidget  *CoWindow, *InsWindow, *IHM, *CoEntry;
 GtkEntry   *entry, *name, *firstname, *age;
 GtkToggleButton *UCO, *UCN, *HO, *HN, *Dalt, *Mot;
@@ -19,3 +19,4 @@ void on_insback_clicked();
 void on_qcm_clicked();
 void on_CoEntry_clicked();
 void on_Game_clicked();
+char *key_event(GtkWidget *widget, GdkEventKey *event);

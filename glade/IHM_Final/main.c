@@ -1,6 +1,8 @@
 # include "main.h"
 
 
+GtkLabel *typed;
+
 
 /*----------------------------------MAIN---------------------------------------
  *---------------------------------------------------------------------------*/
@@ -14,7 +16,9 @@ int main(int argc, char *argv[])
   MainWindow  = GTK_WIDGET(gtk_builder_get_object(builder, "MainWindow"));
   IHM         = GTK_WIDGET(gtk_builder_get_object(builder, "IHM"));
   gtk_builder_connect_signals(builder, NULL);
+  TestInsPage  = GTK_WIDGET(gtk_builder_get_object(builder, "TestInsPage"));
 
+  typed = GTK_LABEL(gtk_builder_get_object(builder, "typed"));
 
   entry = GTK_ENTRY(gtk_builder_get_object(builder, "entry"));
   g_signal_connect(entry, "activate", G_CALLBACK(on_CoEntry_clicked), entry);
@@ -52,7 +56,6 @@ int main(int argc, char *argv[])
   return 0;
 }
 
-//comm pour test
 
 /*-----------------------------STACK BUTTON-----------------------------------
  *---------------------------------------------------------------------------*/
@@ -122,6 +125,10 @@ void on_CoEntry_clicked()
 
 void on_Game_clicked()
 {
+
+  //GtkWidget *widget;
+  //GdkEventKey *event;
+
   if( gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(UCO)) )
     printf("J'ai déjà utilisé un clavier\n");
   if( gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(UCN)) )
@@ -137,6 +144,37 @@ void on_Game_clicked()
 
   gtk_stack_set_visible_child_name(GTK_STACK(IHM), "TestInsPage");
 
+  //char arrays[12];
+  //char *pointers= malloc(50*sizeof(char));
+  //scanf("%s",pointers);
+  //printf("%s\n",pointers);
+  //char *c = key_event(GtkWidget *widget, GdkEventKey *event);
+  //const gchar c = getchar();
+  //printf("%c", c);
+  //g_signal_connect(MainWindow, "key-release-event", G_CALLBACK(key_event), NULL);
+  //const gchar *c = key_event(GtkWidget *widget, GdkEventKey *event);
+
+  //char *array = malloc(10*sizeof(char));
+
+  gtk_label_set_text(typed, "");
+  gtk_container_add(GTK_CONTAINER(MainWindow), GTK_WIDGET(typed));
+
+  gchar *test = calloc(7, sizeof(gchar));
+  gchar *tmp = calloc(1, sizeof(gchar));
+  gchar *array = "Vincent";
+
+  for(int i = 0; i < 7; i++)
+  {
+    tmp[0] = array[i];
+    strcat(test, tmp);
+    printf("%s\n", test);
+    gtk_label_set_text(typed, test);
+    gtk_container_add(GTK_CONTAINER(TestInsPage), GTK_WIDGET(typed));
+    gtk_widget_queue_draw(TestInsPage);
+    tmp = calloc(1, sizeof(gchar));
+    sleep(2);
+  }
+
 
   gtk_toggle_button_set_active(UCO, FALSE);
   gtk_toggle_button_set_active(UCN, FALSE);
@@ -150,6 +188,15 @@ void on_gameback_clicked()
 {
   gtk_stack_set_visible_child_name(GTK_STACK(IHM), "QcmPage");
 }
+
+
+/*
+char *key_event(GtkWidget *widget, GdkEventKey *event)   {
+  char *c = gdk_keyval_name(event->keyval);
+  printf("%s\n", c);
+  return c;
+}
+*/
 
 /*-----------------------------QUIT BUTTON-------------------------------------
  *---------------------------------------------------------------------------*/
@@ -188,3 +235,7 @@ void on_gameQuit_clicked()
 {
   gtk_main_quit();
 }
+
+
+
+
