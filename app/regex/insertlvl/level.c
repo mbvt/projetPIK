@@ -74,7 +74,7 @@ char *get_words_from_file(char *f_title)
 
   FILE *file = fopen(f_title,"r+");
 //  char **words = malloc( 100 * sizeof (char*));
-  char **args = get_args_from_file(f_title,6);
+  char **args = get_args_from_file(f_title,7);
   size_t s_word = (size_t)atoi(*args);
   char *str = calloc (100 * s_word, sizeof(char));
   if ( file != NULL )
@@ -118,7 +118,7 @@ char *build_random_str(char *chars, size_t size_wrd, size_t nb_wrd)
   char *str = calloc( size_str , sizeof (char));
   size_t cpt = 0;
   char *tmp = calloc (1,sizeof (char));
-  size_t size_chars = strlen(chars);
+  size_t size_chars = strlen(chars)-1;
   for (size_t i = 0; i < nb_wrd ; i++)
   {
     for (size_t y = 0; y < size_wrd ; y++)
@@ -140,7 +140,7 @@ char *build_random_str(char *chars, size_t size_wrd, size_t nb_wrd)
 char *load_dico_lvl(char *lvltitle)
 {
   // Load the options of the level
-  char **args_from_file = get_args_from_file(lvltitle,3);
+  char **args_from_file = get_args_from_file(lvltitle,7);
 
   // store the option in each apropriate var
   size_t s_word = (size_t)atoi(*args_from_file);
@@ -193,6 +193,7 @@ int insert_lvl_1_12()
   }
   return 0;
 }
+
 
 int insert_lvl_13_15()
 {
