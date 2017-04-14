@@ -77,41 +77,64 @@ for (int i=0;i<size;data[i++]=0);;
 void keybordcolor()
 {
   int rc = 0;
-  unsigned char data1 [] = { 0x11, 0xff, 0x0d, 0x3c,
-                             0x00, 0x01, 0xFF, 0xFF, 
-                             0xFF, 0x00, 0x00, 0x00, 
+  // 0x11 0xff 0x0d 0x3c  
+  // 0x00 Touche Red Green Bleu 
+
+uint16_t speed = 0x01;
+uint16_t protocolByte = 0x0d;
+//------------------------------------------
+//uint16_t part = 0xff;     // ALL
+uint16_t part = 0x00;       // Keys
+//uint16_t part = 0x00;     // Logo
+//--------------------------------------------
+uint16_t red = 0x00;        // RED
+uint16_t green = 0x00;       // GREEN
+uint16_t blue = 0xff;       // BLUE
+//-----------------------------------------
+
+uint16_t keygame = 0x01;
+uint16_t key = 0x04;
+uint16_t ValueKey = 0x00; // BOOLEEN 
+  unsigned char data_commit [] = { 0x11, 0xff, 0x0c, 0x5a, 
+                                  0x00, 0x00, 0x00, 0x00,
+                                  0x00, 0x00, 0x00, 0x00,
+                                  0x00, 0x00, 0x00, 0x00,
+                                  0x00, 0x00, 0x00, 0x00
+                                  };
+
+  unsigned char data1 [] = { 0x12, 0xff, 0x0c , 0x3a,
+                             0x00, 0x01, 0x00, 0x0e, 
+                             key, red, green, blue, 
                              0x00, 0x00, 0x00, 0x00,
                              0x00, 0x00, 0x00, 0x00,
-              };
+                             0x00, 0x00, 0x00, 0x00,
+                             0x00, 0x00, 0x00, 0x00,
+                             0x00, 0x00, 0x00, 0x00,
+                             0x00, 0x00, 0x00, 0x00,
+                             0x00, 0x00, 0x00, 0x00,
+                             0x00, 0x00, 0x00, 0x00,
+                             0x00, 0x00, 0x00, 0x00,
+                             0x00, 0x00, 0x00, 0x00,
+                             0x00, 0x00, 0x00, 0x00,
+                             0x00, 0x00, 0x00, 0x00,
+                             0x00, 0x00, 0x00, 0x00
+                          };
 
-  unsigned char data2 [] = { 0x11, 0xff, 0x0d, 0x3c,
-                        0x00, 0x04, 0xFF, 0xFF, 
-                        0xFF, 0x40, 0x10, 0x00, 
-                        0x64, 0x00, 0x00, 0x00, 
-                        0x00 , 0x00, 0x00 , 0x00,
-              };
 
-  unsigned char commit [] = { 0x11, 0xff, 0x3c, 0x5a,
-                        0x04 , 0x00 , 0x00 , 0x00, 
-                        0x00 , 0x00 , 0x00 , 0x88, 
-                        0x01 , 0x64 , 0x00 , 0x00,
-                        0x00 , 0x00 , 0x00 , 0x00,
-              };
+rc = libusb_control_transfer(devh, 0x21, 0X09, 0x0212, 1, 
+  data1, sizeof(data1), 10); 
+  printf("rc = %d \n", rc );
 
 rc = libusb_control_transfer(devh, 0x21, 0x09, 0x0211, 1, 
-  data1, sizeof(data2), 2000); 
-  printf(" rc = %d \n", rc);
-  sleep(5); 
- 
-  rc = libusb_control_transfer(devh, 0x21, 0x09, 0x0211, 1,data1,
-  sizeof(data2),2000); 
-  printf(" rc = %d \n", rc);
-  sleep(5);
+  data_commit, sizeof(data_commit), 10); 
+  printf("rc = %d \n", rc );
+/*
 
-  rc = libusb_control_transfer(devh, 0x21, 0x09, 0x0212, 1,commit,
-  sizeof(commit),2000); 
-  printf(" rc = %d \n", rc);
-  sleep(5);
+rc = libusb_control_transfer(devh, 0x21, 0x09, 0x0211, 1, 
+  data4, sizeof(data3), 2000); 
+  printf("rc = %d \n", rc );
+  sleep(3);
+*/
 }
 
 //----------------------- M A I N ---------------------------
@@ -196,9 +219,13 @@ int main()
     i++;
   }
 
-  libusb_release_interface(devh, 0);
-  libusb_attach_kernel_driver(devh, 0);
-  libusb_attach_kernel_driver(devh, 1);
+libusb_release_interface(devh, 0);
+libusb_release_interface(devh, 1);
+libusb_release_interface(devh, 2);
+
+libusb_attach_kernel_driver(devh, 0);
+libusb_attach_kernel_driver(devh, 1);
+
 out:
   if (devh)
     libusb_close(devh);
