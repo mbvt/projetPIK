@@ -2,9 +2,9 @@
 
 CC=gcc
 CPPFLAGS= -MMD -D_XOPEN_SOURCE=600 
-CFLAGS= -Wall -Werror -Wextra -std=c99 -O2 -g
+CFLAGS= $(shell pkg-config --cflags sqlite3) -Wall -Werror -Wextra -std=c99 -O2 -g
 LDFLAGS=
-LDLIBS= `mysql_config --cflags --libs`
+LDLIBS= $(shell pkg-config --libs sqlite3)
 
 
 #SRC= app.c user.c stat.c level.c str_mysql.c
