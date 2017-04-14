@@ -201,6 +201,7 @@ struct user *mcq_user(struct user *user, struct S_MYSQL *smysql)
   {
     int id_user = 0;
     user->firstname = firstname;
+    printf("%s\n", user->firstname);
     user->name = name;
     user->age = age;
     user->status = status;

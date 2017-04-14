@@ -149,8 +149,14 @@ void menu_level()
 
 int main()
 {
+<<<<<<< HEAD
+  struct S_MYSQL *smysql = NULL;
+  smysql = connect_db(smysql);
+  smysql->table_name = "pik_user";
+=======
 /*
   struct S_MYSQL *smysql = conn_init_sql();                                     
+>>>>>>> 3d9160254bafab3633e968e4ea608a34343aa9a0
 
   struct user *newuser = calloc(1,sizeof(struct user)); 
 
