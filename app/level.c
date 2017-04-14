@@ -11,12 +11,15 @@ struct tab_chars {
   char **t_str;
   size_t len;
 };
+
+/*
+** Initialization of a level.
+*/
 struct level *init_level (int stage, int difficulty, int category,
     int score_expected, long speed_expected, char *text)
 {
   struct level *lvl = malloc(sizeof (struct level));
   int id_lvl = generate_idlvl(stage,difficulty,category);
-  // TODO Handle erro ??
   lvl->id_lvl = id_lvl;
   lvl->stage = stage;
   lvl->difficulty = difficulty;
@@ -24,10 +27,7 @@ struct level *init_level (int stage, int difficulty, int category,
   lvl->score_expected = score_expected;
   lvl->speed_expected = speed_expected;
   lvl->text = text;
-  /*
-   **  TODO insert data int database
-   **  get the id to store int lvl->id_lvl;
-   */
+ 
   return lvl;
 }
 
@@ -63,7 +63,7 @@ int is_succeed(int score, long speed, struct level *level)
 
 /*
 ** This function get the arguments from a level file from wich we will
-** the options for the level and store them in a tab of char.
+** get the options for the level and store them in a tab of char.
 */
 char **get_args_from_file(char *f_title , size_t nbargs)
 {
@@ -90,18 +90,20 @@ char **get_args_from_file(char *f_title , size_t nbargs)
   return regex;
 }
 
+/*
+** For the levels with multiple words, we using this function to concat
+** all the words in one string with a separator.
+*/
 char *get_words_from_file(char *f_title)
 {
 
   FILE *file = fopen(f_title,"r+");
-//  char **words = malloc( 100 * sizeof (char*));
   char **args = get_args_from_file(f_title,6);
   size_t s_word = (size_t)atoi(*args);
   char *str = calloc (100 * s_word, sizeof(char));
   if ( file != NULL )
   {
-    char *line = malloc(256 *sizeof(char)); /* or other suitable maximum line
-    size */
+    char *line = malloc(256 *sizeof(char));
     int i = 0;
     while ( (fgets ( line, 256, file ) != NULL) && i < 6 ) /* read a line */
     {
@@ -171,20 +173,24 @@ char *build_random_str(char *chars, size_t size_wrd, size_t nb_wrd)
     }
     strcat(str," ");
   }
-  //printf("string get : %s\n",str);
   return str;
 }
 
+/*
+** Get the string of all the words concatened and make a string 
+** with random words.
+*/
 char *build_random_words_str(char *chars, size_t size_wrd, size_t nb_wrd)
 {
 
+  /* Transform a str with words concatened to a tab of words */
   struct tab_chars *t_chars = str_to_tab_str(chars);
+  
   char **t_str = t_chars->t_str;
   size_t len_t = t_chars->len;
   size_t size_str = (size_wrd+1) * nb_wrd;
   char *str = calloc (size_str ,sizeof (char));
   char *tmp = calloc (size_wrd ,sizeof (char));
-//  size_t size_chars = strlen(chars)-1;
 
   for (size_t i = 0; i < nb_wrd ; i++)
   {
@@ -194,22 +200,23 @@ char *build_random_words_str(char *chars, size_t size_wrd, size_t nb_wrd)
       tmp = calloc (size_wrd,sizeof (char));
       strcat(str," ");
   }
-  //printf("string get : %s\n",str);
   return str;
 }
 
-// FOR NOW just return the char text of a level
-// but later it will fill the level->text
+/*
+** Load the dico with the level file appropriate
+*/
 char *load_dico_lvl(char *lvltitle,int i)
 {
-  // Load the options of the level
+  /* Load the options of the level */
   char **args_from_file = get_args_from_file(lvltitle,7);
 
-  // store the option in each apropriate var
+  /* store the option in each apropriate var */
   size_t s_word = (size_t)atoi(*args_from_file);
   size_t n_word = (size_t)atoi(*(args_from_file+1));
   char *var;
   char *text;
+
   if (i < 13)
   {
     var = *(args_from_file+6);
@@ -237,8 +244,3 @@ char *load_dico_lvl(char *lvltitle,int i)
   return text;
 }
 
-
-/*
- **  Generate all the level and inserting them in the database.
- **  At the same moment generate also the dico for the level.
- */
