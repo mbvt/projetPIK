@@ -19,4 +19,4 @@ void on_insback_clicked();
 void on_qcm_clicked();
 void on_CoEntry_clicked();
 void on_Game_clicked();
-char *key_event(GtkWidget *widget, GdkEventKey *event);
+static gboolean *key_event(GtkWidget *widget, GdkEventKey *event);

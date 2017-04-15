@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 #include "level.h"
 
 void game(char *lvl_dico);
@@ -19,7 +20,9 @@ void game(char *lvl_dico )
   size_t i =0;
   char r;
   int WBS=0;
-
+  struct timespec t0, t1;
+  
+  clock_gettime(CLOCK_MONOTONIC, &t0);
   printf("\nTapez les caracteres suivants :\n\n");
   while (i < strlen(lvl_dico))
   {
@@ -45,6 +48,13 @@ void game(char *lvl_dico )
     i++;
     printf("               WBS = %d\n",WBS);
   }
+  clock_gettime(CLOCK_MONOTONIC,&t1);
+  double sec = t1.tv_sec - t0.tv_sec ;
+  double nsec = (double)(t1.tv_nsec - t0.tv_nsec) / 1000000000;
+  double time = sec + nsec;
+  
+  printf("Time : %f\n",time);
+
   printf("Votre score : %d/%zu\n",WBS,i);
   free (lvl_dico);
 }
@@ -78,12 +88,13 @@ void menu_level()
 
 int main()
 {
-  int x = insert_lvl_1_12();
+/*  int x = insert_lvl_1_12();
   printf("%d",x); 
   x = insert_lvl_13_15();
-  printf("%d",x); 
+  printf("%d",x); */
 //  char *str = build_one_str_from_words("./dico/lvl13");
  // char *str = get_words_from_file("./dico/lvl13");
  // printf("string generated : %s",str);
+  menu_level();
   return 0;
 }
