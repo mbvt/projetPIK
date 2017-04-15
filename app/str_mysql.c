@@ -217,7 +217,6 @@ int insert_table(struct S_MYSQL *smysql)
   return id_insert;
 }
 
-<<<<<<< HEAD
 struct S_MYSQL *connect_db(struct S_MYSQL *smysql)
 {
   smysql = calloc(1, sizeof(struct S_MYSQL));
@@ -226,10 +225,8 @@ struct S_MYSQL *connect_db(struct S_MYSQL *smysql)
   char *db = "projetpik.db";
   //sqlite3_stmt *stmt;
   sqlite3 *handle;
-=======
-//====> void insert_level_dico(char *text, 
 
->>>>>>> 3d9160254bafab3633e968e4ea608a34343aa9a0
+//====> void insert_level_dico(char *text, 
 
   retval = sqlite3_open(db, &handle);
 

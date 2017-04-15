@@ -2,11 +2,7 @@
 
 CC=gcc
 CPPFLAGS= -MMD -D_XOPEN_SOURCE=600 
-<<<<<<< HEAD
 CFLAGS= $(shell pkg-config --cflags sqlite3) -Wall -Werror -Wextra -std=c99 -O2 -g
-=======
-CFLAGS= -Wall -Werror -Wextra -std=c99 -O0 -g
->>>>>>> 3d9160254bafab3633e968e4ea608a34343aa9a0
 LDFLAGS=
 LDLIBS= $(shell pkg-config --libs sqlite3)
 
