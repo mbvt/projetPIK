@@ -177,7 +177,10 @@ int insert_lvl_1_12()
     sprintf(lvl_dico,"./dico/lvl%zu",i);
 
     char **args = get_args_from_file(lvl_dico,7);
-    /*
+   
+  // insert_lvl(i, *(args+2), *(args+3), *(args+4), *(args+5), *(args+6)); 
+
+   /*
     pos for each args:
       speed : 2
       score : 3

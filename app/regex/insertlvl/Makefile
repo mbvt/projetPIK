@@ -4,7 +4,7 @@ CC=gcc
 CPPFLAGS= -MMD -D_XOPEN_SOURCE=600 
 CFLAGS= -Wall -Werror -Wextra -std=c99 -O0 -g
 LDFLAGS=
-LDLIBS= `mysql_config --cflags --libs`
+LDLIBS= 
 
 
 #SRC= app.c user.c stat.c level.c str_mysql.c

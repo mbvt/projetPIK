@@ -88,9 +88,9 @@ void menu_level()
 
 int main()
 {
-/*  int x = insert_lvl_1_12();
+  int x = insert_lvl_1_12();
   printf("%d",x); 
-  x = insert_lvl_13_15();
+/*  x = insert_lvl_13_15();
   printf("%d",x); */
 //  char *str = build_one_str_from_words("./dico/lvl13");
  // char *str = get_words_from_file("./dico/lvl13");
