@@ -168,7 +168,7 @@ char *load_dico_lvl(char *lvltitle)
  **  At the same moment generate also the dico for the level.
  */
 
-int insert_lvl_1_12()
+int insert_lvl_1_12(struct S_MYSQL *smysql)
 {
   for (size_t i = 1 ; i < 13 ; i++)
   {
@@ -180,7 +180,30 @@ int insert_lvl_1_12()
    
   // insert_lvl(i, *(args+2), *(args+3), *(args+4), *(args+5), *(args+6)); 
 
-   /*
+    int id = (int) i;
+    char *lab_lvl;
+    asprintf(lab_lvl, "\'Level %d\'", id);
+    
+    char *text = insert_string(*(args+6));
+    int speed = atoi(*(args+2));
+    int score = atoi(*(args+3));
+    int id_diff = atoi(*(args+4));
+    int id_world = atoi(*(args+5));
+
+    char *str_id_lvl = int_to_str(id);
+    smysql->insert_values = build_req_values(str_id_lvl, lab_lvl, text, *(args+2), *(args+3));
+    strcat(smysql->insert_values, ",");
+    strcat(smysql->insert_values, *(args+4));
+    strcat(smysql->insert_values, ",");
+    strcat(smysql->insert_values, *(args+5));
+
+    smysql->table = "level";
+
+    int check = insert_table(smysql);//, id, lab_lvl, text, speed, score, id_diff, id_world); 
+    if(check == 0)
+      printf("Error inserting level %d\n", i);
+
+    /*
     pos for each args:
       speed : 2
       score : 3
