@@ -5,57 +5,60 @@
 
 #include <libusb-1.0/libusb.h>
 
-/* You may want to change the VENDOR_ID and PRODUCT_ID
- * depending on your device.
- */
-#define VENDOR_ID       0x046d   // Arduino LLC
-#define PRODUCT_ID      0xc330   // Arduino Leonardo
+#define VENDOR_ID       0x046d   
+#define PRODUCT_ID      0xc330   
 
 #define ACM_CTRL_DTR    0x01
 #define ACM_CTRL_RTS    0x02
 
-/* We use a global variable to keep the device handle
- */
 static struct libusb_device_handle *devh = NULL;
 
-/* The Endpoint address are hard coded. You should use lsusb -v to find
- * the values corresponding to your device.
- */
-static int ep_in_addr  = 0x81;
-static int ep_out_addr = 0x02;
+struct struct_key {
+                  uint16_t   code_key;        //code en HEXA
+                  int        number_key;      //Nb touche appuier en meme temps
+                  int        num;             // Numero dans le tableau  
+                                              // de convertion // HEXA / touches
+                  int        position_bit;
+                  };
 
-//----------------------------------------------------------
-void write_char(unsigned char c)
+struct struct_key convert_read(struct struct_key key)
 {
-  /* To send a char to the device simply initiate a bulk_transfer to the
-   * Endpoint with address ep_out_addr.
-   */
-  int actual_length;
-  if (libusb_bulk_transfer(devh, ep_out_addr, &c, 8,
-        &actual_length, 0) < 0) {
-    fprintf(stderr, "Error while sending char\n");
-  }
+    
 }
 
+struct struct_key Convert_write(struct struct_key key)
+
 //-------------------------------------------------------------
-void read_chars(unsigned char * data, int size)
+struct struct_key  read_chars(unsigned char * data, int size, struct struct_key key)
 {
   int actual_length = 0;
   int rc;
-for (int i=0;i<size;data[i++]=0);;
-  rc = libusb_bulk_transfer(devh, ep_in_addr, data, 32, &actual_length,
-      500);
-  if(actual_length >0)
+  
+  //uint16_t struct_key.code_key;
+  
+  for (int i=0;i<size;data[i++]=0);;
+
+  rc = libusb_bulk_transfer(devh, 0x81, data, 8, &actual_length,
+      10);
+  if(actual_length > 0)
   {
-    for(int i = 0; i < actual_length +2; i++)
-    {
-      fprintf(stdout, " data read :   %d\n", (int)data[i]);
-    }
-    fprintf(stdout, "size bytes transferred (%d)\n", actual_length);
+        for(int i = 0; i < actual_length; i++)
+        {
+            if(data[i] != 0)
+            {
+                key.code_key = data[i];
+                key.position_bit = i;
+                fprintf(stdout, " code_key      : 0x%02x \n", key.code_key);
+                fprintf(stdout, " position_bit  : %d \n\n", key.position_bit);
+            }
+        }
+        fprintf(stdout, "----------------------  \n");
+        
   }
-  else
+
+ /*  else
   {
-    printf("no bytes recive \n ");
+   printf("no bytes recive \n ");
     switch (rc) 
     {
       case LIBUSB_ERROR_TIMEOUT:
@@ -72,6 +75,9 @@ for (int i=0;i<size;data[i++]=0);;
         fprintf(stderr, " LIBUSB_ERROR OTHER  !!! \n");
     }
   }
+  */
+  (void)rc;
+  return key;
 }
 
 void keybordcolor()
@@ -80,61 +86,45 @@ void keybordcolor()
   // 0x11 0xff 0x0d 0x3c  
   // 0x00 Touche Red Green Bleu 
 
-uint16_t speed = 0x01;
-uint16_t protocolByte = 0x0d;
-//------------------------------------------
-//uint16_t part = 0xff;     // ALL
-uint16_t part = 0x00;       // Keys
-//uint16_t part = 0x00;     // Logo
-//--------------------------------------------
-uint16_t red = 0x00;        // RED
-uint16_t green = 0x00;       // GREEN
-uint16_t blue = 0xff;       // BLUE
-//-----------------------------------------
-
-uint16_t keygame = 0x01;
-uint16_t key = 0x04;
-uint16_t ValueKey = 0x00; // BOOLEEN 
+  uint16_t speed = 0x01;
+  uint16_t red = 0x00;        // RED
+  uint16_t green = 0xff;       // GREEN
+  uint16_t blue = 0x00;       // BLUE
+  uint16_t key = 0x39;
+  
   unsigned char data_commit [] = { 0x11, 0xff, 0x0c, 0x5a, 
-                                  0x00, 0x00, 0x00, 0x00,
-                                  0x00, 0x00, 0x00, 0x00,
-                                  0x00, 0x00, 0x00, 0x00,
-                                  0x00, 0x00, 0x00, 0x00
-                                  };
+    0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00
+  };
 
   unsigned char data1 [] = { 0x12, 0xff, 0x0c , 0x3a,
-                             0x00, 0x01, 0x00, 0x0e, 
-                             key, red, green, blue, 
-                             0x00, 0x00, 0x00, 0x00,
-                             0x00, 0x00, 0x00, 0x00,
-                             0x00, 0x00, 0x00, 0x00,
-                             0x00, 0x00, 0x00, 0x00,
-                             0x00, 0x00, 0x00, 0x00,
-                             0x00, 0x00, 0x00, 0x00,
-                             0x00, 0x00, 0x00, 0x00,
-                             0x00, 0x00, 0x00, 0x00,
-                             0x00, 0x00, 0x00, 0x00,
-                             0x00, 0x00, 0x00, 0x00,
-                             0x00, 0x00, 0x00, 0x00,
-                             0x00, 0x00, 0x00, 0x00,
-                             0x00, 0x00, 0x00, 0x00
-                          };
+    0x00, speed, 0x00, 0x0e, 
+    key, red, green, blue, 
+    0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00
+  };
 
 
-rc = libusb_control_transfer(devh, 0x21, 0X09, 0x0212, 1, 
-  data1, sizeof(data1), 10); 
+  rc = libusb_control_transfer(devh, 0x21, 0X09, 0x0212, 1, 
+      data1, sizeof(data1), 10); 
   printf("rc = %d \n", rc );
 
-rc = libusb_control_transfer(devh, 0x21, 0x09, 0x0211, 1, 
-  data_commit, sizeof(data_commit), 10); 
+  rc = libusb_control_transfer(devh, 0x21, 0x09, 0x0211, 1, 
+      data_commit, sizeof(data_commit), 10); 
   printf("rc = %d \n", rc );
-/*
-
-rc = libusb_control_transfer(devh, 0x21, 0x09, 0x0211, 1, 
-  data4, sizeof(data3), 2000); 
-  printf("rc = %d \n", rc );
-  sleep(3);
-*/
 }
 
 //----------------------- M A I N ---------------------------
@@ -146,87 +136,51 @@ int main()
    */
   rc = libusb_init(NULL);
   if (rc < 0) {
-    fprintf(stderr, "Error initializing libusb: %s\n", libusb_error_name(rc));
+//    fprintf(stderr, "Error initializing libusb: %s\n", libusb_error_name(rc));
     exit(1);
   }
 
-  /* Set debugging output to max level.
-   */
-  libusb_set_debug(NULL, 3);
+  //libusb_set_debug(NULL, 3);
 
   /* Look for a specific device and open it.
    */
   devh = libusb_open_device_with_vid_pid(NULL, VENDOR_ID, PRODUCT_ID);
   if (!devh) {
-    fprintf(stderr, "Error finding USB device\n");
-    goto out;
+  //  fprintf(stderr, "Error finding USB device\n");
+    //goto out;
   }
-
-  for (int if_num = 0; if_num < 2; if_num++) {
-    if (libusb_kernel_driver_active(devh, if_num)) {
-      libusb_detach_kernel_driver(devh, if_num);
-    }
-    rc = libusb_claim_interface(devh, if_num);
-    if (rc < 0) {
-      fprintf(stderr, "Error claiming interface: %s\n",
-          libusb_error_name(rc));
-      goto out;
-    }
-  }
-
-  keybordcolor();
   
-  /* unsigned char data_status [32];
-
-     rc = libusb_control_transfer(devh, 0x80, 0x06 , 0x00, 0,
-     data_status, sizeof(data_status)  , 0);
-
-     if (rc < 0) {
-     fprintf(stderr, "Error during control transfer: %s\n",
-     libusb_error_name(rc));
-     }
-
-     else
+     for (int if_num = 0; if_num < 2; if_num++) 
      {
-     for ( unsigned int i = 0; i < sizeof ( data_status); i++)
-     {
-     printf(" %d \n", (char)data_status[i]);
+        if (libusb_kernel_driver_active(devh, if_num)) 
+              libusb_detach_kernel_driver(devh, if_num);
+        rc = libusb_claim_interface(devh, if_num);
+        if (rc < 0)
+        {
+    //        fprintf(stderr, "Error claiming interface: %s\n",
+     //       libusb_error_name(rc));
+    //        goto out;
+        }
      }
-     }
+   
+//   keybordcolor();
 
 
-  // - set line encoding: here 9600 8N1
-  // 9600 = 0x2580 ~> 0x80, 0x25 in little endian
-  //
-  unsigned char encoding[] = { 0x80, 0x25, 0x00, 0x00, 0x00, 0x00, 0x08 };
 
-  rc = libusb_control_transfer(devh, 0x80, 0x01, 0, 0, encoding,
-  sizeof(encoding), 0);
-  if (rc < 0) {
-  fprintf(stderr, "Error during control transfer: %s\n",
-  libusb_error_name(rc));
-  }
-
-
-  // We can now start sending or receiving data to the device
-   */
-  unsigned char data_read[65];
-  int i = 40;
-  while(i < 20)
+  unsigned char data_read[1024];
+  struct struct_key key;
+  while(1)
   {
-    read_chars(data_read, 64);
-    sleep(1);
-    i++;
-  }
+    key = read_chars(data_read, 64, key);
+    //sleep(0.1);
+}
 
-libusb_release_interface(devh, 0);
-libusb_release_interface(devh, 1);
-libusb_release_interface(devh, 2);
+  libusb_release_interface(devh, 0);
+  libusb_release_interface(devh, 1);
 
-libusb_attach_kernel_driver(devh, 0);
-libusb_attach_kernel_driver(devh, 1);
+  libusb_attach_kernel_driver(devh, 0);
+  libusb_attach_kernel_driver(devh, 1);
 
-out:
   if (devh)
     libusb_close(devh);
   libusb_exit(NULL);
