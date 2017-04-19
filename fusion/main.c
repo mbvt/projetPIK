@@ -1,13 +1,16 @@
 # include "main.h"
 
 
-GtkLabel *typed;
-
+struct S_GSQL *conn;
 
 /*----------------------------------MAIN---------------------------------------
  *---------------------------------------------------------------------------*/
 int main(int argc, char *argv[])
 {
+
+  //struct S_GSQL *conn = NULL;
+  //conn->smysql = connect_db(conn->smysql);
+
   gtk_init(&argc, &argv);
 
   builder = gtk_builder_new();
@@ -71,21 +74,7 @@ void on_Inscription_clicked()
 
 void on_qcm_clicked()
 {
-  /*
-  const char *n = gtk_entry_get_text(GTK_ENTRY(name));
-  const char *f = gtk_entry_get_text(GTK_ENTRY(firstname));
-  const char *a = gtk_entry_get_text(GTK_ENTRY(age));
-  printf("Nom    : %s\n", n);
-  printf("Prénom : %s\n", f);
-  printf("Age    : %s ans\n", a);
-	*/
   gtk_stack_set_visible_child_name(GTK_STACK(IHM), "QcmPage");
-
-/*
-  gtk_entry_set_text(name, "");
-  gtk_entry_set_text(firstname, "");
-  gtk_entry_set_text(age, "");
-*/
 }
 
 void on_connback_clicked()
@@ -125,16 +114,67 @@ void on_CoEntry_clicked()
 
 }
 
-void on_Game_clicked()
+void on_Game_clicked()//struct user *user, struct S_MYSQL *smysql)
 {
 
-  const char *n = gtk_entry_get_text(GTK_ENTRY(name));
-  const char *f = gtk_entry_get_text(GTK_ENTRY(firstname));
-  const char *a = gtk_entry_get_text(GTK_ENTRY(age));
-  printf("Nom    : %s\n", n);
-  printf("Prénom : %s\n", f);
-  printf("Age    : %s ans\n", a);
-  
+  struct S_MYSQL *smysql = NULL;
+  smysql = connect_db(smysql);
+  smysql->table_name = "pik_user";
+
+  struct user *user = calloc(1,sizeof(struct user));
+  user = calloc(1, sizeof(struct user));
+
+
+  int category = 1;
+  int status;
+
+
+  const char *na = gtk_entry_get_text(GTK_ENTRY(name));
+  const char *fa = gtk_entry_get_text(GTK_ENTRY(firstname));
+  const char *aa = gtk_entry_get_text(GTK_ENTRY(age));
+  printf("Nom    : %s\n", na);
+  printf("Prénom : %s\n", fa);
+  printf("Age    : %s ans\n", aa);
+
+  char *n = (char *)na;
+  char *f = (char *)fa;
+  int a = (int)aa;
+
+
+  status = (age > 16)?  1 :  2;
+
+  if(!exist_user(n, f, smysql))
+  {
+    int id_user = 0;
+    user->firstname = f;
+    printf("%s\n", user->firstname);
+    user->name = n;
+    user->age = a;
+    user->status = status;
+    user->category = category;
+
+    if ((id_user = insert_user(user, smysql)) == 0)
+    {
+      err(1, "error while inserting user");
+    }
+    else
+    {
+      user = get_user(user->name, user->firstname, smysql);
+      printf("User correctly inserted :\n");
+      printf("ID : %d\nFirstname : %s\n", user->id_user, user->firstname);
+      printf("Name : %s\nAge : %d\n", user->name, user->age);
+      printf("Status : %d\nCategory : %d\n", user->status, user->category);
+    }
+  }
+  else
+  {
+    printf("User already exists\n");
+    user = get_user(n, f, smysql);
+  }
+
+
+
+  /*
   if( gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(UCO)) )
     printf("J'ai déjà utilisé un clavier\n");
   if( gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(UCN)) )
@@ -147,6 +187,7 @@ void on_Game_clicked()
     printf("Je suis daltonien\n");
   if( gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(Mot)) )
     printf("J'ai des problèmes de motricité\n");
+  */
 
   gtk_stack_set_visible_child_name(GTK_STACK(IHM), "TestInsPage");
 
@@ -158,12 +199,14 @@ void on_Game_clicked()
   gtk_entry_set_text(firstname, "");
   gtk_entry_set_text(age, "");
 
+  /*
   gtk_toggle_button_set_active(UCO, FALSE);
   gtk_toggle_button_set_active(UCN, FALSE);
   gtk_toggle_button_set_active(HO, FALSE);
   gtk_toggle_button_set_active(HN, FALSE);
   gtk_toggle_button_set_active(Dalt, FALSE);
   gtk_toggle_button_set_active(Mot, FALSE);
+  */
 }
 
 void on_gameback_clicked()
@@ -174,8 +217,10 @@ void on_gameback_clicked()
 
 
 static gboolean *key_event(GtkWidget *widget, GdkEventKey *event)   {
-  gchar *c = gdk_keyval_name(event->keyval);
-  gtk_label_set_text(typed, c);
+  char *dst = calloc(20, sizeof(char));
+  char *c = gdk_keyval_name(event->keyval);
+  strcat(dst, c);
+  gtk_label_set_text(typed, dst);
   return FALSE;
 }
 

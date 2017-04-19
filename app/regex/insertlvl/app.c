@@ -9,6 +9,7 @@
 #include <string.h>
 #include <time.h>
 #include "level.h"
+#include "str_mysql.h"
 
 void game(char *lvl_dico);
 
@@ -88,10 +89,13 @@ void menu_level()
 
 int main()
 {
-  int x = insert_lvl_1_12();
+  struct S_MYSQL *conn = NULL;
+  conn = connect_db(conn);
+
+  int x = insert_lvl_1_19(conn);
   printf("%d",x); 
-/*  x = insert_lvl_13_15();
-  printf("%d",x); */
+  //int y = insert_lvl_13_19(conn);
+  //printf("%d",y);
 //  char *str = build_one_str_from_words("./dico/lvl13");
  // char *str = get_words_from_file("./dico/lvl13");
  // printf("string generated : %s",str);

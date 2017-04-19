@@ -5,6 +5,7 @@
 # include <string.h>
 
 # include "level.h"
+# include "str_mysql.h"
 
 struct level *init_level (int stage, int difficulty, int category,
     int score_expected, long speed_expected, char *text)
@@ -168,7 +169,7 @@ char *load_dico_lvl(char *lvltitle)
  **  At the same moment generate also the dico for the level.
  */
 
-int insert_lvl_1_12(struct S_MYSQL *smysql)
+int insert_lvl_1_19(struct S_MYSQL *smysql)
 {
   for (size_t i = 1 ; i < 13 ; i++)
   {
@@ -178,31 +179,32 @@ int insert_lvl_1_12(struct S_MYSQL *smysql)
 
     char **args = get_args_from_file(lvl_dico,7);
    
-  // insert_lvl(i, *(args+2), *(args+3), *(args+4), *(args+5), *(args+6)); 
-
     int id = (int) i;
-    char *lab_lvl;
-    asprintf(lab_lvl, "\'Level %d\'", id);
+    char *lab_lvl = calloc(9, sizeof(char));
+    sprintf(lab_lvl, "\'Level %d\'", id);
     
     char *text = insert_string(*(args+6));
-    int speed = atoi(*(args+2));
-    int score = atoi(*(args+3));
-    int id_diff = atoi(*(args+4));
-    int id_world = atoi(*(args+5));
 
     char *str_id_lvl = int_to_str(id);
-    smysql->insert_values = build_req_values(str_id_lvl, lab_lvl, text, *(args+2), *(args+3));
+    smysql->insert_values = build_req_values(str_id_lvl, lab_lvl, *args, *(args+1), *(args+2));
+    strcat(smysql->insert_values, ",");
+    strcat(smysql->insert_values, *(args+3));
+    strcat(smysql->insert_values, ",");
+    strcat(smysql->insert_values, text);
     strcat(smysql->insert_values, ",");
     strcat(smysql->insert_values, *(args+4));
     strcat(smysql->insert_values, ",");
     strcat(smysql->insert_values, *(args+5));
 
-    smysql->table = "level";
+    smysql->table_name = "level";
 
-    int check = insert_table(smysql);//, id, lab_lvl, text, speed, score, id_diff, id_world); 
+    int check = insert_table(smysql); 
     if(check == 0)
-      printf("Error inserting level %d\n", i);
-
+    {
+      printf("Error inserting level %zu\n", i);
+    } else {
+      printf("\nLevel %d inserted\n", id);
+    }
     /*
     pos for each args:
       speed : 2
@@ -216,14 +218,10 @@ int insert_lvl_1_12(struct S_MYSQL *smysql)
     printf("Label : lvl%zu\n\ntext : %s\nspeed : %s\nscore : %s\nid_diff : %s\nid_world : %s\n",i, *(args+6),*(args+2),*(args+3),*(args+4),*(args+5));
     printf("_____________________________ \n\n");
     free(lvl_dico);
+    free(text);
   }
-  return 0;
-}
 
-
-int insert_lvl_13_15()
-{
-   for (size_t i = 13 ; i < 16 ; i++)
+  for (size_t i = 13 ; i < 20 ; i++)
   {
     char *lvl_dico = calloc (15,sizeof(char));
 
@@ -231,19 +229,50 @@ int insert_lvl_13_15()
 
     char **args = get_args_from_file(lvl_dico,6);
     char *text = get_words_from_file(lvl_dico);
-    /*
-    pos for each args:
-      speed : 2
-      score : 3
-      id_diff : 4
+
+     int id = (int) i;
+    char *lab_lvl = calloc(9, sizeof(char));
+    sprintf(lab_lvl, "\'Level %d\'", id);
+    
+    char *text1 = insert_string(text);
+    
+    char *str_id_lvl = int_to_str(id);
+    smysql->insert_values = build_req_values(str_id_lvl, lab_lvl, *args, *(args+1), *(args+2));
+    strcat(smysql->insert_values, ",");
+    strcat(smysql->insert_values, *(args+3));
+    strcat(smysql->insert_values, ",");
+    strcat(smysql->insert_values, text1);
+    strcat(smysql->insert_values, ",");
+    strcat(smysql->insert_values, *(args+4));
+    strcat(smysql->insert_values, ",");
+    strcat(smysql->insert_values, *(args+5));
+
+    smysql->table_name = "level";
+
+    int check = insert_table(smysql);
+    if(check == 0)
+    {
+      printf("Error inserting level %zu\n", i);
+    } else {
+      printf("\nLevel %d inserted\n", id);
+    }
+
+
+/*  pos for each args:
+    speed : 2
+   score : 3
+    id_diff : 4
       id_world : 5
       text  : *text
     usage :
       char *speed = args+2
-    */
-    printf("Label : lvl%zu\n\ntext : %s\nspeed : %s\nscore : %s\nid_diff : %s\nid_world : %s\n",i, text,*(args+2),*(args+3),*(args+4),*(args+5));
+
+*/    printf("Label : lvl%zu\n\ntext : %s\nspeed : %s\nscore : %s\nid_diff : %s\nid_world : %s\n",i, text,*(args+2),*(args+3),*(args+4),*(args+5));
     printf("_____________________________ \n\n");
     free(lvl_dico);
+    //free(text1);
   }
+
   return 0;
 }
+

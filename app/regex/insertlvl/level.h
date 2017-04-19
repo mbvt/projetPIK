@@ -11,6 +11,8 @@
 **  TODO  text_key will be for later.
 **
 */
+# include "str_mysql.h"
+
 struct level {
   int id;
   int id_lvl;
@@ -71,7 +73,5 @@ char *load_dico_lvl(char *lvltitle);
 
 char *build_one_str_from_words(char *lvltitle);
 
-int insert_lvl_1_12();
-
-int insert_lvl_13_15();
+int insert_lvl_1_19(struct S_MYSQL *smysql);
 #endif
