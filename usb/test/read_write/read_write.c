@@ -2,39 +2,35 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <errno.h>
-
 #include <libusb-1.0/libusb.h>
 
-#define VENDOR_ID       0x046d   
-#define PRODUCT_ID      0xc330   
-
-#define ACM_CTRL_DTR    0x01
-#define ACM_CTRL_RTS    0x02
 
 static struct libusb_device_handle *devh = NULL;
 
-struct struct_key {
-                  uint16_t   code_key;        //code en HEXA
-                  int        number_key;      //Nb touche appuier en meme temps
-                  int        num;             // Numero dans le tableau  
-                                              // de convertion // HEXA / touches
-                  int        position_bit;
-                  };
+struct struct_key   {
+                      uint16_t   num_w;
+                      uint16_t   num_r;
+                      char       array_nom[100];
+                      int        number_key;
+                      int        bit;
+                      int        groupe;
+                    };
 
-struct struct_key convert_read(struct struct_key key)
-{
-    
-}
+struct write_struc {
+                      uint16_t speed;
+                      uint16_t red;
+                      uint16_t green;
+                      uint16_t blue;
+                      uint16_t key;
+                      libusb_device_handle *devh;
+                    };
 
-struct struct_key Convert_write(struct struct_key key)
 
-//-------------------------------------------------------------
+//____________________ R E A D ______________________________________
 struct struct_key  read_chars(unsigned char * data, int size, struct struct_key key)
 {
   int actual_length = 0;
   int rc;
-  
-  //uint16_t struct_key.code_key;
   
   for (int i=0;i<size;data[i++]=0);;
 
@@ -46,40 +42,20 @@ struct struct_key  read_chars(unsigned char * data, int size, struct struct_key 
         {
             if(data[i] != 0)
             {
-                key.code_key = data[i];
-                key.position_bit = i;
-                fprintf(stdout, " code_key      : 0x%02x \n", key.code_key);
-                fprintf(stdout, " position_bit  : %d \n\n", key.position_bit);
+                //key.code_key = data[i];
+                //key.position_bit = i;
+                //fprintf(stdout, " code_key      : 0x%02x \n", key.code_key);
+                //fprintf(stdout, " position_bit  : %d \n\n", key.position_bit);
             }
         }
         fprintf(stdout, "----------------------  \n");
         
   }
-
- /*  else
-  {
-   printf("no bytes recive \n ");
-    switch (rc) 
-    {
-      case LIBUSB_ERROR_TIMEOUT:
-        fprintf(stderr, " LIBUSB_ERROR_TIMEOUT !!! \n");
-        break;
-
-      case LIBUSB_ERROR_PIPE:
-        fprintf(stderr, " LIBUSB_ERROR_PIPE !!! \n");
-        break;
-      case LIBUSB_ERROR_OVERFLOW:
-        fprintf(stderr, " LIBUSB_ERROR_OVERFLOW !!! \n");
-        break;
-      default:
-        fprintf(stderr, " LIBUSB_ERROR OTHER  !!! \n");
-    }
-  }
-  */
   (void)rc;
   return key;
 }
 
+//________________________C O L O R__________________________
 void keybordcolor()
 {
   int rc = 0;
@@ -127,44 +103,47 @@ void keybordcolor()
   printf("rc = %d \n", rc );
 }
 
-//----------------------- M A I N ---------------------------
-int main()
+//_____________________ U S B  -  I N I T ________________________
+libusb_device_handle* USB_Init()
 {
-  int rc;
-
-  /* Initialize libusb
-   */
-  rc = libusb_init(NULL);
-  if (rc < 0) {
-//    fprintf(stderr, "Error initializing libusb: %s\n", libusb_error_name(rc));
-    exit(1);
-  }
-
-  //libusb_set_debug(NULL, 3);
-
-  /* Look for a specific device and open it.
-   */
-  devh = libusb_open_device_with_vid_pid(NULL, VENDOR_ID, PRODUCT_ID);
-  if (!devh) {
-  //  fprintf(stderr, "Error finding USB device\n");
-    //goto out;
-  }
-  
+    libusb_device_handle  *devh = NULL;
+    uint16_t  PRODUCT_ID = 0xc330;
+    uint16_t VENDOR_ID = 0x046d;
+    int res;
+    
+    res = libusb_init(NULL);
+    if(res < 0)
+     fprintf(stderr, "Error initializing libusb: %s\n", libusb_error_name(res));
+    devh = libusb_open_device_with_vid_pid(NULL, VENDOR_ID, PRODUCT_ID);
      for (int if_num = 0; if_num < 2; if_num++) 
      {
         if (libusb_kernel_driver_active(devh, if_num)) 
               libusb_detach_kernel_driver(devh, if_num);
-        rc = libusb_claim_interface(devh, if_num);
-        if (rc < 0)
-        {
-    //        fprintf(stderr, "Error claiming interface: %s\n",
-     //       libusb_error_name(rc));
-    //        goto out;
-        }
+        res = libusb_claim_interface(devh, if_num);
      }
-   
-//   keybordcolor();
+  return devh;
+}
 
+
+//_____________________ U S B  -  C L O S E  ________________________
+void USB_Close(libusb_device_handle *devh)
+{
+  libusb_release_interface(devh, 0);
+  libusb_release_interface(devh, 1);
+
+  libusb_attach_kernel_driver(devh, 0);
+  libusb_attach_kernel_driver(devh, 1);
+
+  if(devh)
+    libusb_close(devh);
+  libusb_exit(NULL);
+}
+//----------------------- M A I N ---------------------------
+int main()
+{
+
+    libusb_device_handle  *devh = NULL;
+    devh = USB_Init();
 
 
   unsigned char data_read[1024];
@@ -173,16 +152,6 @@ int main()
   {
     key = read_chars(data_read, 64, key);
     //sleep(0.1);
-}
-
-  libusb_release_interface(devh, 0);
-  libusb_release_interface(devh, 1);
-
-  libusb_attach_kernel_driver(devh, 0);
-  libusb_attach_kernel_driver(devh, 1);
-
-  if (devh)
-    libusb_close(devh);
-  libusb_exit(NULL);
-  return 1;
+  }
+  USB_Close(devh);
 } 
