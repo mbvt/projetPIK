@@ -117,6 +117,7 @@ void on_CoEntry_clicked()
 void on_Game_clicked()//struct user *user, struct S_MYSQL *smysql)
 {
 
+
   struct S_MYSQL *smysql = NULL;
   smysql = connect_db(smysql);
   smysql->table_name = "pik_user";
@@ -136,12 +137,12 @@ void on_Game_clicked()//struct user *user, struct S_MYSQL *smysql)
   printf("Prénom : %s\n", fa);
   printf("Age    : %s ans\n", aa);
 
+
   char *n = (char *)na;
   char *f = (char *)fa;
-  int a = (int)aa;
+  int a = (int)atoi(aa);
 
-
-  status = (age > 16)?  1 :  2;
+  status = (a > 16)?  1 :  2;
 
   if(!exist_user(n, f, smysql))
   {
@@ -173,8 +174,6 @@ void on_Game_clicked()//struct user *user, struct S_MYSQL *smysql)
   }
 
 
-
-  /*
   if( gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(UCO)) )
     printf("J'ai déjà utilisé un clavier\n");
   if( gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(UCN)) )
@@ -187,7 +186,7 @@ void on_Game_clicked()//struct user *user, struct S_MYSQL *smysql)
     printf("Je suis daltonien\n");
   if( gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(Mot)) )
     printf("J'ai des problèmes de motricité\n");
-  */
+
 
   gtk_stack_set_visible_child_name(GTK_STACK(IHM), "TestInsPage");
 
@@ -199,21 +198,19 @@ void on_Game_clicked()//struct user *user, struct S_MYSQL *smysql)
   gtk_entry_set_text(firstname, "");
   gtk_entry_set_text(age, "");
 
-  /*
+
   gtk_toggle_button_set_active(UCO, FALSE);
   gtk_toggle_button_set_active(UCN, FALSE);
   gtk_toggle_button_set_active(HO, FALSE);
   gtk_toggle_button_set_active(HN, FALSE);
   gtk_toggle_button_set_active(Dalt, FALSE);
   gtk_toggle_button_set_active(Mot, FALSE);
-  */
 }
 
 void on_gameback_clicked()
 {
   gtk_stack_set_visible_child_name(GTK_STACK(IHM), "QcmPage");
 }
-
 
 
 static gboolean *key_event(GtkWidget *widget, GdkEventKey *event)   {

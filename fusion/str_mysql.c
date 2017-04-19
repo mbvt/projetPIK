@@ -48,8 +48,10 @@ char* int_to_str(int nb)
 }
 
 /******* BUILD QUERY FOR smysql->query *******/
-char* build_req_values(char* str1, char* str2, char* str3, char* str4, char* str5)
+char* build_req_values(char* str, char* str2, char* str3, char* str4, char* str5)
 {
+  char *str1 = calloc(256, sizeof(char));
+  strcat(str1, str);
   strcat(str1, ",");
   strcat(str1, str2);
   strcat(str1, ",");
