@@ -16,7 +16,7 @@ struct struct_key   {
                       int        groupe;
                     };
 
-struct write_struc {
+struct struct_write {
                       uint16_t speed;
                       uint16_t red;
                       uint16_t green;
@@ -56,17 +56,16 @@ struct struct_key  read_chars(unsigned char * data, int size, struct struct_key 
 }
 
 //________________________C O L O R__________________________
-void keybordcolor()
+void keybordcolor(struct struct_write *str)
 {
   int rc = 0;
-  // 0x11 0xff 0x0d 0x3c  
-  // 0x00 Touche Red Green Bleu 
-
-  uint16_t speed = 0x01;
-  uint16_t red = 0x00;        // RED
-  uint16_t green = 0xff;       // GREEN
-  uint16_t blue = 0x00;       // BLUE
-  uint16_t key = 0x39;
+  
+  uint16_t speed = str->speed;
+  uint16_t red = str->red;
+  uint16_t green = str->green;
+  uint16_t blue = str->blue;       
+  uint16_t key = str->key;
+  libusb_device_handle *devh = str->devh; 
   
   unsigned char data_commit [] = { 0x11, 0xff, 0x0c, 0x5a, 
     0x00, 0x00, 0x00, 0x00,
@@ -109,7 +108,7 @@ libusb_device_handle* USB_Init()
     libusb_device_handle  *devh = NULL;
     uint16_t  PRODUCT_ID = 0xc330;
     uint16_t VENDOR_ID = 0x046d;
-    int res;
+    int res = 0;
     
     res = libusb_init(NULL);
     if(res < 0)
@@ -144,14 +143,23 @@ int main()
 
     libusb_device_handle  *devh = NULL;
     devh = USB_Init();
+    struct struct_write *str = malloc (sizeof (struct struct_write ));
+    str->speed = 0x01;
+    str->red = 0x00;
+    str->green = 0xFF;
+    str->blue = 0x00;
+    str->key = 0x04;
+    str->devh = devh;
+    
+    keybordcolor(str);
 
-
-  unsigned char data_read[1024];
+   printf("ici 3\n"); 
+  /*unsigned char data_read[1024];
   struct struct_key key;
   while(1)
   {
     key = read_chars(data_read, 64, key);
     //sleep(0.1);
-  }
+  }*/
   USB_Close(devh);
 } 
