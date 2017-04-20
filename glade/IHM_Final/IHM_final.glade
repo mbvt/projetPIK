@@ -876,6 +876,7 @@ Nom d'utilisateur : </property>
               <object class="GtkLabel" id="typed">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="label" translatable="yes">brandonquinne</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -884,14 +885,25 @@ Nom d'utilisateur : </property>
               </packing>
             </child>
             <child>
-              <object class="GtkEntry">
+              <object class="GtkLabel" id="ok">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">3</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkEntry" id="entryok">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">3</property>
+                <property name="position">4</property>
               </packing>
             </child>
           </object>

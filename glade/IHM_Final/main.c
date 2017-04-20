@@ -1,8 +1,12 @@
 # include "main.h"
 
 
-GtkLabel *typed;
+GtkLabel *typed, *ok;
+GtkEntry *entryok;
 
+//extern char dst[1024];
+int cpt = 0;
+int score = 0;
 
 /*----------------------------------MAIN---------------------------------------
  *---------------------------------------------------------------------------*/
@@ -19,7 +23,9 @@ int main(int argc, char *argv[])
   TestInsPage  = GTK_WIDGET(gtk_builder_get_object(builder, "TestInsPage"));
 
   typed = GTK_LABEL(gtk_builder_get_object(builder, "typed"));
+  ok = GTK_LABEL(gtk_builder_get_object(builder, "ok"));
 
+  entryok = GTK_ENTRY(gtk_builder_get_object(builder, "entryok"));
   entry = GTK_ENTRY(gtk_builder_get_object(builder, "entry"));
   g_signal_connect(entry, "activate", G_CALLBACK(on_CoEntry_clicked), entry);
 
@@ -72,20 +78,20 @@ void on_Inscription_clicked()
 void on_qcm_clicked()
 {
   /*
-  const char *n = gtk_entry_get_text(GTK_ENTRY(name));
-  const char *f = gtk_entry_get_text(GTK_ENTRY(firstname));
-  const char *a = gtk_entry_get_text(GTK_ENTRY(age));
-  printf("Nom    : %s\n", n);
-  printf("Prénom : %s\n", f);
-  printf("Age    : %s ans\n", a);
-	*/
+     const char *n = gtk_entry_get_text(GTK_ENTRY(name));
+     const char *f = gtk_entry_get_text(GTK_ENTRY(firstname));
+     const char *a = gtk_entry_get_text(GTK_ENTRY(age));
+     printf("Nom    : %s\n", n);
+     printf("Prénom : %s\n", f);
+     printf("Age    : %s ans\n", a);
+     */
   gtk_stack_set_visible_child_name(GTK_STACK(IHM), "QcmPage");
 
-/*
-  gtk_entry_set_text(name, "");
-  gtk_entry_set_text(firstname, "");
-  gtk_entry_set_text(age, "");
-*/
+  /*
+     gtk_entry_set_text(name, "");
+     gtk_entry_set_text(firstname, "");
+     gtk_entry_set_text(age, "");
+     */
 }
 
 void on_connback_clicked()
@@ -134,7 +140,7 @@ void on_Game_clicked()
   printf("Nom    : %s\n", n);
   printf("Prénom : %s\n", f);
   printf("Age    : %s ans\n", a);
-  
+
   if( gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(UCO)) )
     printf("J'ai déjà utilisé un clavier\n");
   if( gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(UCN)) )
@@ -152,7 +158,10 @@ void on_Game_clicked()
 
   g_signal_connect(MainWindow, "key-release-event", G_CALLBACK(key_event), NULL);
 
-  gtk_label_set_text(typed, "");
+  //gtk_label_set_text(typed, "Bonjour");
+
+
+  //gtk_label_set_text(typed, "");
 
   gtk_entry_set_text(name, "");
   gtk_entry_set_text(firstname, "");
@@ -173,9 +182,50 @@ void on_gameback_clicked()
 
 
 
-static gboolean *key_event(GtkWidget *widget, GdkEventKey *event)   {
-  gchar *c = gdk_keyval_name(event->keyval);
-  gtk_label_set_text(typed, c);
+static gboolean *key_event(GtkWidget *widget, GdkEventKey *event)
+{
+  //char *c = gdk_keyval_name(event->keyval);
+  //printf("%s\n", c);
+  const char *c = gtk_entry_get_text(GTK_ENTRY(entryok));
+  const gchar *str = gtk_label_get_text(typed);
+  size_t l = strlen(c) - 1;
+  char *pts = calloc(10, sizeof(char));
+  for(size_t i = 0; i < l; i++)
+  {
+    if(str[i] == c[i])
+      cpt++;
+  }
+
+  /*
+  int len = strlen(str);
+  char c2 = c[0];
+  int ascii = (int)(c2);
+  //printf("%d, %c, %s\n", ascii, c2, c);
+
+  if(cpt < len)
+  {
+    if(ascii != 66)
+    {
+      if (str[cpt] == *c)
+      {
+        score++;
+        cpt++;
+      }
+      else
+      {
+        score--;
+      }
+      //cpt++;
+    }
+    else
+    {
+      //score--;
+      cpt--;
+    }
+  }
+  */
+  sprintf(pts, "%d", score);
+  gtk_label_set_text(ok, pts);
   return FALSE;
 }
 
