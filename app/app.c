@@ -139,7 +139,11 @@ void menu_level()
   strcat(lvl_title,"./dico/lvl");
   if (scanf("%s",rep) == EOF)
     err(3,"Issue while get values from typing");
+  //int id_lvl=  compute_lvl_id(tab_int)
+  //strcat(lvl_title,"./dico/lvl");
+  //strcat(lvl_title,id_lvl);
 
+  //lvl_dico = load_dico_lvl(lvl_title,id_lvl);
   strcat(lvl_title,rep);
   char *lvl_dico = "";
   lvl_dico = load_dico_lvl(lvl_title,atoi(rep));

@@ -90,6 +90,13 @@ char **get_args_from_file(char *f_title , size_t nbargs)
   return regex;
 }
 
+
+int compute_lvl_id(int *lvl_id)
+{
+    int lvl = (lvl_id[0]-1) * 9 + (lvl_id[1] -1) * 3 + lvl_id[2];
+    return lvl;
+}
+
 /*
 ** For the levels with multiple words, we using this function to concat
 ** all the words in one string with a separator.
