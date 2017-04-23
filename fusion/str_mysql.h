@@ -8,15 +8,15 @@
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <err.h>
+
 
 
 struct S_MYSQL{
-  //  MYSQL *con;
-  //  char *password;
-  //  char *root_password;
-  //  char *user;
-  //  char *server;
+//  MYSQL *con;
+//  char *password;
+//  char *root_password;
+//  char *user;
+//  char *server;
   char *db;
   char *table_name;
   char *query_create_table;
@@ -48,6 +48,7 @@ char* build_req_values(char* str1, char* str2, char* str3, char* str4, char* str
 
 /* select all data user by name and firstname, returns string of concated data*/
 char *select_user(char* name, char* firstname, struct S_MYSQL *smysql);
+char *select_level(char* id_lvl, struct S_MYSQL *smysql);
 
 /* Store result from query in string */
 //char *result_query(MYSQL *smysql);
@@ -55,6 +56,8 @@ char *select_user(char* name, char* firstname, struct S_MYSQL *smysql);
 void del_user(int id, struct S_MYSQL *smysql);
 
 int insert_table(struct S_MYSQL *smysql);
+int insert_lvl(struct S_MYSQL *smysql);
+int insert_res(struct S_MYSQL *smysql, int score, int level, int id_user);
 
 /* INIT CONNECTION TO DB */
 struct S_MYSQL *connect_db(struct S_MYSQL *smysql);

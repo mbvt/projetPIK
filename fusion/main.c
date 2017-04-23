@@ -118,7 +118,8 @@ void on_qcmback_clicked()
 {
   gtk_stack_set_visible_child_name(GTK_STACK(IHM), "InscriPage");
 }
-
+/*----------------------------------------------------------------------------*
+ * --------------------------------Connexion---------------------------------*/
 void on_CoEntry_clicked()
 {
 
