@@ -7,7 +7,7 @@ GtkEntry *entryok;
 //extern char dst[1024];
 int cpt = 0;
 int score = 0;
-
+char *tmp;
 /*----------------------------------MAIN---------------------------------------
  *---------------------------------------------------------------------------*/
 int main(int argc, char *argv[])
@@ -180,50 +180,58 @@ void on_gameback_clicked()
   gtk_stack_set_visible_child_name(GTK_STACK(IHM), "QcmPage");
 }
 
+int compare(char *s1, char *s2)
+{
+  if(strlen(s1) != strlen(s2))
+    return 0;
 
+  for (size_t i = 0 ; i< strlen(s1) ; i++)
+  {
+    if (s1[i] != s2[i])
+      return 0;
+  }
+  return 1;
+}
 
 static gboolean *key_event(GtkWidget *widget, GdkEventKey *event)
 {
-  //char *c = gdk_keyval_name(event->keyval);
-  //printf("%s\n", c);
-  const char *c = gtk_entry_get_text(GTK_ENTRY(entryok));
+  char *c = gdk_keyval_name(event->keyval);
+  const gchar *cs1 = gtk_entry_get_text(GTK_ENTRY(entryok));
   const gchar *str = gtk_label_get_text(typed);
-  size_t l = strlen(c) - 1;
-  char *pts = calloc(10, sizeof(char));
-  for(size_t i = 0; i < l; i++)
-  {
-    if(str[i] == c[i])
-      cpt++;
-  }
 
-  /*
+  char *pts = calloc(10, sizeof(char));
+  char *cs = (char*)cs1;
+  size_t l = strlen(cs);
+  char *rep = calloc(l,sizeof(char));
+
+  rep = strncpy(rep,str,l);
+  int b = 0;
   int len = strlen(str);
   char c2 = c[0];
-  int ascii = (int)(c2);
-  //printf("%d, %c, %s\n", ascii, c2, c);
 
   if(cpt < len)
   {
-    if(ascii != 66)
+    if(c2 !=66)
     {
-      if (str[cpt] == *c)
+      b  = compare(rep,cs);
+      if (b ==1)
       {
         score++;
         cpt++;
       }
       else
       {
-        score--;
+        score -=1;
+        cpt--;
       }
-      //cpt++;
     }
     else
     {
-      //score--;
+      score--;
       cpt--;
     }
   }
-  */
+
   sprintf(pts, "%d", score);
   gtk_label_set_text(ok, pts);
   return FALSE;

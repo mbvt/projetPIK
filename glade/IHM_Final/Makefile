@@ -2,7 +2,7 @@
 CC=gcc
 
 CPPFLAGS=  `pkg-config --cflags gtk+-3.0` `pkg-config --cflags sdl`  -export-dynamic
-CFLAGS= -Wall -Wextra -std=c99 -O3 -g
+CFLAGS= -Wall -Wextra -std=c99 -O0 -g
 LDFLAGS=
 LDLIBS= `pkg-config --libs gtk+-3.0` `pkg-config --libs sdl`  -lSDL_image -export-dynamic -lm
 
