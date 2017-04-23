@@ -1,7 +1,7 @@
 /* level.h */
 # ifndef _PROJETPIK_LEVEL_H
 # define _PROJETPIK_LEVEL_H
-
+#include "str_mysql.h"
 /*  TODO
 **  This file need to include all the game's functions:
 **    - load the game with the parameters appropriate (dico with the id_lvl,
@@ -63,5 +63,5 @@ char  **get_args_from_file(char *f_title, size_t nbargs);
 
 char *build_random_str (char *chars, size_t size_wrd, size_t nb_wrd);
 
-char *load_dico_lvl(char *lvltitle, int i);
+char *load_dico_lvl(char *lvltitle, int i,int bd,struct S_MYSQL *smysql);
 #endif

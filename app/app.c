@@ -146,7 +146,7 @@ void menu_level()
   //lvl_dico = load_dico_lvl(lvl_title,id_lvl);
   strcat(lvl_title,rep);
   char *lvl_dico = "";
-  lvl_dico = load_dico_lvl(lvl_title,atoi(rep));
+  lvl_dico = load_dico_lvl(lvl_title,atoi(rep),0,NULL);
   game(lvl_dico);
 }
 

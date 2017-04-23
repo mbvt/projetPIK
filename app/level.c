@@ -6,6 +6,7 @@
 # include <err.h>
 
 # include "level.h"
+# include "str_mysql.h"
 
 struct tab_chars {
   char **t_str;
@@ -140,19 +141,18 @@ char *get_words_from_file(char *f_title)
   return str;
 }
 
-struct tab_chars *str_to_tab_str(char *str)
+struct tab_chars *str_to_tab_str(char *str,char *sep)
 {
-  char *s = "-";
   struct tab_chars *t_chars = malloc(sizeof(struct tab_chars));
   char **t_str = calloc(100,sizeof(char*));
-  char *token = strtok(str,s);
+  char *token = strtok(str,sep);
   size_t i = 0;
 
   while(token != NULL)
   {
     t_str[i] = token;
     i++;
-    token = strtok(NULL,s);
+    token = strtok(NULL,sep);
   }
   t_chars->len = i;
   t_chars->t_str = t_str;
@@ -191,7 +191,7 @@ char *build_random_words_str(char *chars, size_t size_wrd, size_t nb_wrd)
 {
 
   /* Transform a str with words concatened to a tab of words */
-  struct tab_chars *t_chars = str_to_tab_str(chars);
+  struct tab_chars *t_chars = str_to_tab_str(chars,"-");
   
   char **t_str = t_chars->t_str;
   size_t len_t = t_chars->len;
@@ -213,11 +213,19 @@ char *build_random_words_str(char *chars, size_t size_wrd, size_t nb_wrd)
 /*
 ** Load the dico with the level file appropriate
 */
-char *load_dico_lvl(char *lvltitle,int i)
+char *load_dico_lvl(char *lvltitle , int i, int bd, struct S_MYSQL *smysql)
 {
+  char **args_from_file;
   /* Load the options of the level */
-  char **args_from_file = get_args_from_file(lvltitle,7);
-
+  if(bd == 0 )
+    args_from_file = get_args_from_file(lvltitle,7);
+  else
+  {
+    char *id_tmp = int_to_str(i);
+    char *tmp = select_level(id_tmp,smysql);
+    struct tab_chars *tab_c = str_to_tab_str(tmp," ");
+    args_from_file = tab_c->t_str;
+  }
   /* store the option in each apropriate var */
   size_t s_word = (size_t)atoi(*args_from_file);
   size_t n_word = (size_t)atoi(*(args_from_file+1));
