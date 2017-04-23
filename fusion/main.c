@@ -1,6 +1,10 @@
 # include "main.h"
 
 
+int cpt = 0;
+int score = 0;
+char *tmp;
+
 /*----------------------------------MAIN---------------------------------------
  *---------------------------------------------------------------------------*/
 int main(int argc, char *argv[])
@@ -17,7 +21,10 @@ int main(int argc, char *argv[])
 
   typed = GTK_LABEL(gtk_builder_get_object(builder, "typed"));
   ok = GTK_LABEL(gtk_builder_get_object(builder, "ok"));
+  typed1 = GTK_LABEL(gtk_builder_get_object(builder, "typed1"));
+  ok1 = GTK_LABEL(gtk_builder_get_object(builder, "ok1"));
 
+  entryok1 = GTK_ENTRY(gtk_builder_get_object(builder, "entryok1"));
   entryok = GTK_ENTRY(gtk_builder_get_object(builder, "entryok"));
   entry = GTK_ENTRY(gtk_builder_get_object(builder, "entry"));
   entryP = GTK_ENTRY(gtk_builder_get_object(builder, "entryP"));
@@ -202,7 +209,7 @@ void on_Game_clicked()
 
   gtk_stack_set_visible_child_name(GTK_STACK(IHM), "TestInsPage");
 
-  g_signal_connect(MainWindow, "key-release-event", G_CALLBACK(key_event), NULL);
+  g_signal_connect(MainWindow, "key-release-event", G_CALLBACK(key_event_Ins), NULL);
 
   gtk_entry_set_text(name, "");
   gtk_entry_set_text(firstname, "");
@@ -222,64 +229,171 @@ void on_gameback_clicked()
   gtk_stack_set_visible_child_name(GTK_STACK(IHM), "QcmPage");
 }
 
-const char *tmp;
 
-static gboolean *key_event()//GtkWidget *widget, GdkEventKey *event)
+
+int compare(char *s1, char *s2)
 {
-  //char *c = gdk_keyval_name(event->keyval);
-  //printf("%s\n", c);
-  size_t cpt = 0;
-  const char *c = gtk_entry_get_text(GTK_ENTRY(entryok));
-  const gchar *str = gtk_label_get_text(typed);
-  tmp = gtk_entry_get_text(GTK_ENTRY(entryok));
-  size_t l = strlen(c);
-  size_t le = strlen(tmp);
-  size_t len = strlen(str);
+    if(strlen(s1) != strlen(s2))
+          return 0;
+
+      for (size_t i = 0 ; i< strlen(s1) ; i++)
+          {
+                if (s1[i] != s2[i])
+                        return 0;
+                  }
+        return 1;
+}
+
+static gboolean *key_event_Game(GtkWidget *widget, GdkEventKey *event)
+{
+  char *c = gdk_keyval_name(event->keyval);
+  const gchar *cs1 = gtk_entry_get_text(GTK_ENTRY(entryok1));
+  const gchar *str = gtk_label_get_text(typed1);
+
   char *pts = calloc(10, sizeof(char));
+  char *cs = (char*)cs1;
+  size_t l = strlen(cs);
+  char *rep = calloc(l,sizeof(char));
+
+  rep = strncpy(rep,str,l);
+  int b = 0;
+  int len = strlen(str);
+  char c2 = c[0];
+
   if(cpt < len)
   {
-    for(size_t j = 0; j < le; j++)
+    if(c2 !=66)
     {
-      if(tmp[j] != c[j])
-        cpt--;
-    }
-    for(size_t i = 0; i < l; i++)
-    {
-      if(str[i] == c[i])
+      b  = compare(rep,cs);
+      if (b ==1)
+      {
+        score++;
         cpt++;
-      else if(str[i] != c[i])
+      }
+      else
+      {
+        score -=1;
         cpt--;
+      }
+    }
+    else
+    {
+      score--;
+      cpt--;
     }
   }
 
-  sprintf(pts, "%zu", cpt);
-  gtk_label_set_text(ok, pts);
+  sprintf(pts, "%d", score);
+  gtk_label_set_text(ok1, pts);
   return FALSE;
 }
+
+
+static gboolean *key_event_Ins(GtkWidget *widget, GdkEventKey *event)
+{
+  char *c = gdk_keyval_name(event->keyval);
+  const gchar *cs1 = gtk_entry_get_text(GTK_ENTRY(entryok));
+  const gchar *str = gtk_label_get_text(typed);
+
+  char *pts = calloc(10, sizeof(char));
+  char *cs = (char*)cs1;
+  size_t l = strlen(cs);
+  char *rep = calloc(l,sizeof(char));
+
+  rep = strncpy(rep,str,l);
+  int b = 0;
+  int len = strlen(str);
+  char c2 = c[0];
+
+  if(cpt < len)
+  {
+    if(c2 !=66)
+    {
+      b  = compare(rep,cs);
+      if (b ==1)
+      {
+        score++;
+        cpt++;
+      }
+      else
+      {
+        score -=1;
+        cpt--;
+      }
+    }
+    else
+    {
+      score--;
+      cpt--;
+    }
+  }
+
+  sprintf(pts, "%d", score);
+  gtk_label_set_text(ok, pts);
+  score = 0, cpt = 0;
+  return FALSE;
+}
+
 void on_validercat_clicked()
 {
+
+  int tab[3];
+
   if( gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(D)) )
+  {
+    tab[0] = 1;
     printf("Débutant\n");
+  }
   if( gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(I)) )
+  {
+    tab[0] = 2;
     printf("Intermédiaire \n");
+  }
   if( gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(E)) )
+  {
+    tab[0] = 3;
     printf("Expert \n");
+  }
   if( gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(M1)) )
+  {
+   tab[1] = 1;
     printf("Monde 1 \n");
+  }
   if( gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(M2)) )
+  {
+    tab[1] = 2;
     printf("Monde 2 \n");
+  }
   if( gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(M3)) )
+  {
+    tab[1] = 3;
     printf("Monde 3 \n");
+  }
   if( gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(N1)) )
-    printf("Niveau 1 \n");
+  {
+   tab[2] = 1;
+   printf("Niveau 1 \n");
+  }
   if( gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(N2)) )
+  {
+    tab[2] = 2;
     printf("Niveau 2 \n");
+  }
   if( gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(N3)) )
+  {
+    tab[2] = 3;
     printf("Niveau 3 \n");
+  }
+
+  for(int i = 0; i < 3; i++)
+    printf("%d ", tab[i]);
+  printf("\n");
+
 
   gtk_stack_set_visible_child_name(GTK_STACK(IHM), "GamePage");
 
-  g_signal_connect(MainWindow, "key-release-event", G_CALLBACK(key_event), NULL);
+
+  g_signal_connect(MainWindow, "key-release-event", G_CALLBACK(key_event_Game), NULL);
 }
 
 
