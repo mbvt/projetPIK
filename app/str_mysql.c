@@ -50,18 +50,21 @@ char* int_to_str(int nb)
 /******* BUILD QUERY FOR smysql->query *******/
 char* build_req_values(char* str1, char* str2, char* str3, char* str4, char* str5)
 {
-  strcat(str1, ",");
-  strcat(str1, str2);
-  strcat(str1, ",");
-  strcat(str1, str3);
-  strcat(str1, ",");
-  strcat(str1, str4);
-  strcat(str1, ",");
-  strcat(str1, str5);
+  char *req = calloc(1024,sizeof(char));
+
+  strcat(req, str1);
+  strcat(req, ",");
+  strcat(req, str2);
+  strcat(req, ",");
+  strcat(req, str3);
+  strcat(req, ",");
+  strcat(req, str4);
+  strcat(req, ",");
+  strcat(req, str5);
 
   //printf("builded req_val : %s\n", str1);
 
-  return str1;
+  return req;
 }
 
 /****** INIT CONNECTION STRUCT MYSQL *******/
@@ -199,7 +202,7 @@ int insert_table(struct S_MYSQL *smysql)
   strcat(query, values);
   strcat(query, end);
 
-  printf("Inserting %s :\n %s\n", smysql->table, query);
+  printf("Inserting %s :\n %s\n", table, query);
 
   char *err_msg = 0;
   int rc = sqlite3_exec(smysql->handle, query, 0, 0, &err_msg);
@@ -217,7 +220,7 @@ int insert_table(struct S_MYSQL *smysql)
   return id_insert;
 }
 
-/*int insert_lvl(struct S_MYSQL *smysql, int id, char *lb_lvl, char *txt, int speed, int score, int id_diff, int id_world)
+int insert_lvl(struct S_MYSQL *smysql)//, int id, char *lb_lvl, char *txt, int speed, int score, int id_diff, int id_world)
 {
   char *values = smysql->insert_values;
   char *table = smysql->table_name;
@@ -252,7 +255,57 @@ int insert_table(struct S_MYSQL *smysql)
 
   return id_insert;
 }
-*/
+
+int insert_res(struct S_MYSQL *smysql, int score, int level, int id_user)
+{
+  char *s_score = int_to_str(score);
+  char *s_lvl = int_to_str(level);
+  char *s_id = int_to_str(id_user);
+  
+  char *ins_val = calloc(20, sizeof(char));
+  strcat(ins_val, s_score);
+  strcat(ins_val, ",");
+  strcat(ins_val, s_id);
+  strcat(ins_val, ",");
+  strcat(ins_val, s_lvl);
+
+  char *values = ins_val; //smysql->insert_values;
+  //free(ins_val);
+  char *table = smysql->table_name;
+
+  char *str1 = "insert into ";
+  char *str3 = " values (NULL,";
+  char *end = ");";
+
+  size_t len = strlen(str1) + strlen(table) + strlen(str3) + strlen(values) + strlen(end);
+
+  char *query = calloc(len, sizeof(char));
+  strcat(query, str1);
+  strcat(query, table);
+  strcat(query, str3);
+  strcat(query, values);
+  strcat(query, end);
+
+  printf("Inserting result :\n %s\n", query);
+
+  char *err_msg = 0;
+  int rc = sqlite3_exec(smysql->handle, query, 0, 0, &err_msg);
+
+  if(rc != SQLITE_OK)
+  {
+    printf("SQL error : %s\n", err_msg);
+    sqlite3_free(err_msg);
+  }
+  free(query);
+
+  int id_insert = sqlite3_last_insert_rowid(smysql->handle);
+
+  printf("Inserted with id %d\n", id_insert); 
+
+  return id_insert;
+}
+
+
 struct S_MYSQL *connect_db(struct S_MYSQL *smysql)
 {
   smysql = calloc(1, sizeof(struct S_MYSQL));

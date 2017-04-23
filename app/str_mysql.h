@@ -55,6 +55,8 @@ char *select_user(char* name, char* firstname, struct S_MYSQL *smysql);
 void del_user(int id, struct S_MYSQL *smysql);
 
 int insert_table(struct S_MYSQL *smysql);
+int insert_lvl(struct S_MYSQL *smysql);
+int insert_res(struct S_MYSQL *smysql, int score, int level, int id_user);
 
 /* INIT CONNECTION TO DB */
 struct S_MYSQL *connect_db(struct S_MYSQL *smysql);

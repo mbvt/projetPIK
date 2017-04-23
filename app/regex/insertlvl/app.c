@@ -91,9 +91,20 @@ int main()
 {
   struct S_MYSQL *conn = NULL;
   conn = connect_db(conn);
+  conn->table_name = "results";
 
-  int x = insert_lvl_1_19(conn);
-  printf("%d",x); 
+  int score = 346;
+  int level = 5;
+  int id = 22;
+
+  int check = 0;
+  if((check = insert_res(conn, score, level, id)==0))
+    printf("Error while inserting result\n");
+  else
+    printf("Result inserted correctly\n");
+
+//  int x = insert_lvl_1_19(conn);
+//  printf("%d",x); 
   //int y = insert_lvl_13_19(conn);
   //printf("%d",y);
 //  char *str = build_one_str_from_words("./dico/lvl13");
