@@ -94,6 +94,57 @@ char* build_req_values(char* str1, char* str2, char* str3, char* str4, char* str
   return smysql;
 }
 */
+
+int callback2(void *, int, char **, char **);
+
+char* select_level(char* id_lvl, struct S_MYSQL *smysql)
+{
+  char *err_msg = 0;
+
+  char* req = calloc(516, sizeof(char));
+  strcat(req, "select length_w, nb_w, speed_exp_level, score_exp_level, text_level, id_diff, id_world from level ");
+  strcat(req, "where id_level = ");
+  strcat(req, id_lvl);
+  //strcat(req, " and fname_pik_user = ");
+  //strcat(req, firstname);
+  strcat(req, ";");
+
+  printf("Getting level :\n %s\n", req);
+
+  char *res = calloc(1024, sizeof (char));
+  int rc = sqlite3_exec(smysql->handle, req, callback2, res, &err_msg);
+
+ if(rc != SQLITE_OK)
+ {
+  printf("Failed to select data\n");
+  printf("SQL error : %s\n", err_msg);
+  sqlite3_free(err_msg);
+  return 0;
+ }
+
+  printf("%s\n", res);
+ return res;
+  
+
+}
+
+int callback2(void *ret, int nb_col, char **val_col, char **name_col)
+{
+  for(int i = 0; i < nb_col; ++i)
+  {
+    //printf("%s = %s\n", name_col[i], val_col[i] ? val_col[i] : "NULL");
+    strcat(ret, val_col[i]);
+    printf("%s\n", name_col[i]);
+    if(i < nb_col-1)
+      strcat(ret, " ");
+
+  }
+  //printf("%s\n", (char *)ret);
+
+  return 0;
+}
+
+
 /******** SELECT BY NAME AND FIRSTNAME ***********/
 
 int callback(void *, int, char **, char **);
