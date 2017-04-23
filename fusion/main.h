@@ -1,6 +1,7 @@
 # include <stdlib.h>
 # include <stdio.h>
 # include <gtk/gtk.h>
+# include <err.h>
 # include <SDL/SDL.h>
 # include <SDL/SDL_image.h>
 # include "user.h"

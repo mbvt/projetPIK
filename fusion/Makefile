@@ -7,7 +7,7 @@ LDFLAGS=
 LDLIBS= $(shell pkg-config --libs sqlite3) `pkg-config --libs gtk+-3.0`\
 				`pkg-config --libs sdl` -lSDL_image -export-dynamic -lm
 
-SRC= main.c str_mysql.c user.c
+SRC= main.c str_mysql.c user.c app.c level.c
 
 OBJ= ${SRC:.c=.o}
 DEP= ${SRC:.c=.d}

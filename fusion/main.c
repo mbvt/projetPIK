@@ -1,5 +1,5 @@
 # include "main.h"
-
+# include "level.h"
 
 int cpt = 0;
 int score = 0;
@@ -144,6 +144,10 @@ void on_CoEntry_clicked()
   gtk_label_set_text(errCo, "Nom d'utilisateur non trouvé");
 }
 
+
+
+/*----------------------------------------------------------------------------*
+ * -------------------------Inscription--------------------------------------*/
 void on_Game_clicked()
 {
 
@@ -230,19 +234,20 @@ void on_gameback_clicked()
   gtk_stack_set_visible_child_name(GTK_STACK(IHM), "QcmPage");
 }
 
-
+/*----------------------------------------------------------------------------*
+ *--------------------------------- Jeu -------------------------------------*/
 
 int compare(char *s1, char *s2)
 {
-    if(strlen(s1) != strlen(s2))
-          return 0;
+  if(strlen(s1) != strlen(s2))
+    return 0;
 
-      for (size_t i = 0 ; i< strlen(s1) ; i++)
-          {
-                if (s1[i] != s2[i])
-                        return 0;
-                  }
-        return 1;
+  for (size_t i = 0 ; i< strlen(s1) ; i++)
+  {
+    if (s1[i] != s2[i])
+      return 0;
+  }
+  return 1;
 }
 
 static gboolean *key_event_Game(GtkWidget *widget, GdkEventKey *event)
@@ -289,6 +294,9 @@ static gboolean *key_event_Game(GtkWidget *widget, GdkEventKey *event)
   return FALSE;
 }
 
+
+/*----------------------------------------------------------------------------*
+ *----------------------------- Test d'inscription --------------------------*/
 
 static gboolean *key_event_Ins(GtkWidget *widget, GdkEventKey *event)
 {
@@ -357,7 +365,7 @@ void on_validercat_clicked()
   }
   if( gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(M1)) )
   {
-   tab[1] = 1;
+    tab[1] = 1;
     printf("Monde 1 \n");
   }
   if( gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(M2)) )
@@ -372,8 +380,8 @@ void on_validercat_clicked()
   }
   if( gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(N1)) )
   {
-   tab[2] = 1;
-   printf("Niveau 1 \n");
+    tab[2] = 1;
+    printf("Niveau 1 \n");
   }
   if( gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(N2)) )
   {
@@ -386,10 +394,27 @@ void on_validercat_clicked()
     printf("Niveau 3 \n");
   }
 
-  for(int i = 0; i < 3; i++)
-    printf("%d ", tab[i]);
-  printf("\n");
+  /*
+     for(int i = 0; i < 3; i++)
+     printf("%d ", tab[i]);
+     printf("\n");
+     */
+  struct S_MYSQL *smysql = NULL;
+  smysql = connect_db(smysql);
+  smysql->table_name = "pik_user";
 
+  int id_lvl1 = compute_lvl_id(tab);
+  printf("id_lvl                           ............%d\n",id_lvl1);
+  char *id_lvl = int_to_str(id_lvl1);
+  char *lvl_title = calloc(12, sizeof(char));
+  strcat(lvl_title,"./dico/lvl");
+  strcat(lvl_title,id_lvl);
+
+  char *lvl_dico = "";
+  lvl_dico = load_dico_lvl(lvl_title,id_lvl1, 1, smysql);
+  printf("%s\n", lvl_dico);
+
+  gtk_label_set_text(typed1, lvl_dico);
 
   gtk_stack_set_visible_child_name(GTK_STACK(IHM), "GamePage");
 
