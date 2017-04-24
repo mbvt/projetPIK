@@ -5,7 +5,8 @@
 int cpt = 0;
 int score = 0;
 char *tmp;
-//struct timespec t1, t0;
+GtkLabel *error_test;
+
 /*----------------------------------MAIN---------------------------------------
  *---------------------------------------------------------------------------*/
 int main(int argc, char *argv[])
@@ -33,6 +34,7 @@ int main(int argc, char *argv[])
 
   testCo = GTK_LABEL(gtk_builder_get_object(builder, "testCo"));
   errCo  = GTK_LABEL(gtk_builder_get_object(builder, "errCo"));
+  error_test = GTK_LABEL(gtk_builder_get_object(builder, "error_test"));
 
   name      = GTK_ENTRY(gtk_builder_get_object(builder, "name"));
   firstname = GTK_ENTRY(gtk_builder_get_object(builder, "firstname"));
@@ -102,7 +104,25 @@ void on_Inscription_clicked()
 
 void on_qcm_clicked()
 {
-  gtk_stack_set_visible_child_name(GTK_STACK(IHM), "QcmPage");
+
+  struct S_MYSQL *smysql = NULL;
+  smysql = connect_db(smysql);
+  smysql->table_name = "pik_user";
+
+  const char *na = gtk_entry_get_text(GTK_ENTRY(name));
+  const char *fa = gtk_entry_get_text(GTK_ENTRY(firstname));
+
+  char *n = (char *)na;
+  char *f = (char *)fa;
+  char *a = "";
+
+
+  if(exist_user(n, f, smysql))
+    gtk_label_set_text(error_test, "Nom déjà existant");
+  else if((*n = *a) || (*f == *a))
+    gtk_label_set_text(error_test, "Données manquantes");
+  else
+    gtk_stack_set_visible_child_name(GTK_STACK(IHM), "QcmPage");
 }
 
 void on_connback_clicked()
@@ -196,6 +216,7 @@ void on_Game_clicked()
   {
     printf("User already exists\n");
     user = get_user(n, f, smysql);
+    //gtk_stack_set_visible_child_name(GTK_STACK(IHM), "CatePage");
   }
 
 
