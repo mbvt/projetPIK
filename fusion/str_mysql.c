@@ -109,7 +109,7 @@ char* select_level(char* id_lvl, struct S_MYSQL *smysql)
   //strcat(req, firstname);
   strcat(req, ";");
 
-  printf("Getting level :\n %s\n", req);
+ // printf("Getting level :\n %s\n", req);
 
   char *res = calloc(1024, sizeof (char));
   int rc = sqlite3_exec(smysql->handle, req, callback2, res, &err_msg);
@@ -122,7 +122,7 @@ char* select_level(char* id_lvl, struct S_MYSQL *smysql)
   return 0;
  }
 
-  printf("%s\n", res);
+ // printf("select_level %s\n", res);
  return res;
   
 
@@ -133,13 +133,17 @@ int callback2(void *ret, int nb_col, char **val_col, char **name_col)
   for(int i = 0; i < nb_col; ++i)
   {
     //printf("%s = %s\n", name_col[i], val_col[i] ? val_col[i] : "NULL");
+    size_t len = strlen(val_col[i]);
+    char *tmp = val_col[i];
+    if (tmp[len-1] == '\n')
+      tmp[len-1] ='\0';
     strcat(ret, val_col[i]);
-    printf("%s\n", name_col[i]);
-    if(i < nb_col-1)
-      strcat(ret, " ");
+//    printf("%s\n", val_col[i]);
+    //if(i < nb_col-1)
+    strcat(ret," ");
 
+  //  printf("%s\n", (char *)ret);
   }
-  //printf("%s\n", (char *)ret);
 
   return 0;
 }

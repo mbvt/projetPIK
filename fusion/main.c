@@ -1,10 +1,11 @@
 # include "main.h"
 # include "level.h"
+# include <time.h>
 
 int cpt = 0;
 int score = 0;
 char *tmp;
-
+//struct timespec t1, t0;
 /*----------------------------------MAIN---------------------------------------
  *---------------------------------------------------------------------------*/
 int main(int argc, char *argv[])
@@ -411,9 +412,9 @@ void on_validercat_clicked()
   strcat(lvl_title,id_lvl);
 
   char *lvl_dico = "";
-  lvl_dico = load_dico_lvl(lvl_title, id_lvl1, 1, smysql);
-  printf("%s\n", lvl_dico);
-
+  lvl_dico = load_dico_lvl(lvl_title,id_lvl1, 1, smysql);
+  printf("dico %s\n", lvl_dico);
+ // clock_gettime(CLOCK_MONOTONIC,&t0);
   gtk_label_set_text(typed1, lvl_dico);
 
   gtk_stack_set_visible_child_name(GTK_STACK(IHM), "GamePage");
