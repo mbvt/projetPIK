@@ -316,9 +316,12 @@ int insert_res(struct S_MYSQL *smysql, int score, int level, int id_user)
   char *s_score = int_to_str(score);
   char *s_lvl = int_to_str(level);
   char *s_id = int_to_str(id_user);
-  
-  char *ins_val = calloc(20, sizeof(char));
+  char *s_speed = "0";
+
+  char *ins_val = calloc(50, sizeof(char));
   strcat(ins_val, s_score);
+  strcat(ins_val, ",");
+  strcat(ins_val, s_speed);
   strcat(ins_val, ",");
   strcat(ins_val, s_id);
   strcat(ins_val, ",");
