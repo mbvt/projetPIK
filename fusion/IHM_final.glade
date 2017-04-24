@@ -583,6 +583,17 @@ Pedagogical Interactive Keyboard</property>
                 <property name="position">4</property>
               </packing>
             </child>
+            <child>
+              <object class="GtkLabel" id="error_test">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">5</property>
+              </packing>
+            </child>
           </object>
           <packing>
             <property name="name">InscriPage</property>
@@ -1706,7 +1717,7 @@ Nom d'utilisateur : </property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="valign">center</property>
-                <property name="label" translatable="yes">Que le doigté soit avec vous</property>
+                <property name="label" translatable="yes">Saisissez le texte ci-dessous :</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -1718,7 +1729,7 @@ Nom d'utilisateur : </property>
               <object class="GtkLabel" id="typed1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">brandonquinne</property>
+                <property name="label" translatable="yes">une phrase pour m'entraîner</property>
               </object>
               <packing>
                 <property name="expand">False</property>
