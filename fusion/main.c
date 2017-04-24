@@ -411,7 +411,7 @@ void on_validercat_clicked()
   strcat(lvl_title,id_lvl);
 
   char *lvl_dico = "";
-  lvl_dico = load_dico_lvl(lvl_title,id_lvl1, 1, smysql);
+  lvl_dico = load_dico_lvl(lvl_title, id_lvl1, 1, smysql);
   printf("%s\n", lvl_dico);
 
   gtk_label_set_text(typed1, lvl_dico);
