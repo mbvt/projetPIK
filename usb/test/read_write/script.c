@@ -37,16 +37,11 @@ struct matrix *get_keymap(char *filename)
       while ((token != NULL) && (n < keymap->col))
       {
         tab[m*keymap->col + n]  = token;
-        // printf("%s ",tab[m*keymap->col + n]);
-        // printf(" token  %s ",token);
-        // printf(" keymapcol = %zu\n",keymap->col );
-        // printf(" keymapcol = %zu\n",keymap->col );
         n++;
         token = strtok(NULL,sep);
       }
       n = 0;
       m++;
-      //printf(" cpt = %zu\n",m);
       line = calloc (50,sizeof (char));
     }
     fclose(file);
@@ -55,7 +50,7 @@ struct matrix *get_keymap(char *filename)
   keymap->tab = tab;
   return keymap;
 }
-
+/*
 void print_matrix(struct matrix *keymap)
 {
   for (size_t i = 0; i < keymap->line ; i++ ){
@@ -65,7 +60,7 @@ void print_matrix(struct matrix *keymap)
     printf ("|\n");
   }
 }
-
+*/
 char *get_char_from_numR(struct matrix *keymap, char *numr, char *bit)
 {
   size_t i = 0;
@@ -90,13 +85,12 @@ char *get_numW_from_char(struct matrix *keymap, char *c)
   }
   return NULL;
 }
+
 int main ()
 {
   struct matrix *keymap = get_keymap("biblio");
   char *c = get_char_from_numR(keymap,"0x09","2");
   char *numw = get_numW_from_char(keymap,"q");
-  printf(" char get : %s \n",c);
-  printf(" numW get : %s \n",numw);
   return 0;
 }
 

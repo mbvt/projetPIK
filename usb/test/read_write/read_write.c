@@ -137,6 +137,24 @@ void USB_Close(libusb_device_handle *devh)
     libusb_close(devh);
   libusb_exit(NULL);
 }
+
+void write_to_keybord (char *ptr_amine)
+{
+    char array_word [10];
+    int i = 0;
+    int len = 0;
+    len = strlen(ptr_amine);
+    while(*ptr_amine != '\0')
+    {
+      array_word[i] = *ptr_amine;
+      ptr_amine++;
+      printf(" ' %c ' \n", array_word[i]);
+      i++;
+    }
+    printf("%s \n", ptr_amine);
+    char array_numw [len];
+    char *numw = get_numW_from_char(keymap);
+}
 //----------------------- M A I N ---------------------------
 int main()
 {
@@ -144,16 +162,25 @@ int main()
     libusb_device_handle  *devh = NULL;
     devh = USB_Init();
     struct struct_write *str = malloc (sizeof (struct struct_write ));
-    str->speed = 0x01;
-    str->red = 0x00;
-    str->green = 0xFF;
-    str->blue = 0x00;
-    str->key = 0x04;
-    str->devh = devh;
+    //________ fin ini ==> debut de la phase de test _______________
     
-    keybordcolor(str);
+    //recu de amine
+    char *ptr_amine;
+    ptr_amine = "brandon";
+    // stoquer sur array_word
+    
+    struct matrix keymap = get_keymap("biblio");
+    
+    //____________read______________
+    //  ° Write en fonction des char
+    //  ° Lire char par char 
+    //  ° Verifier si il y a maatch 
+    //  ° en fonction de match ==> write 
+    
+    write_to_keybord(char *ptr_amine)
 
-   printf("ici 3\n"); 
+    //keybordcolor(str);
+    free(str);
   /*unsigned char data_read[1024];
   struct struct_key key;
   while(1)
@@ -162,4 +189,5 @@ int main()
     //sleep(0.1);
   }*/
   USB_Close(devh);
+  return 0;
 } 
