@@ -156,7 +156,6 @@ struct tab_chars *str_to_tab_str(char *str,char *sep)
   }
   t_chars->len = i;
   t_chars->t_str = t_str;
-  free(t_str);
   return t_chars;
 }
 
@@ -225,7 +224,6 @@ char *load_dico_lvl(char *lvltitle , int i, int bd, struct S_MYSQL *smysql)
     char *tmp = select_level(id_tmp,smysql);
     struct tab_chars *tab_c = str_to_tab_str(tmp," ");
     args_from_file = tab_c->t_str;
-    printf("%s\n",*args_from_file);
   }
   /* store the option in each apropriate var */
   size_t s_word = (size_t)atoi(*args_from_file);
@@ -233,17 +231,12 @@ char *load_dico_lvl(char *lvltitle , int i, int bd, struct S_MYSQL *smysql)
   char *var;
   char *text;
 
+  var = *(args_from_file+4);
   if (i < 13)
-  {
-    var = *(args_from_file+6);
     text = build_random_str(var,s_word,n_word);
-  }
-  else if(i < 16)
-  {
-    var = get_words_from_file(lvltitle);
+  else if(i < 20)
     text = build_random_words_str(var,s_word,n_word);
-  }
-  else if (i > 15)
+  else if (i > 21)
     err(3,"Level Not found");
 
   printf("  ______________________________________________________________\n");
