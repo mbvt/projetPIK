@@ -1,11 +1,11 @@
 # include "main.h"
 # include "level.h"
-# include <time.h>
+
+
 
 int cpt = 0;
 int score = 0;
 char *tmp;
-GtkLabel *error_test;
 
 /*----------------------------------MAIN---------------------------------------
  *---------------------------------------------------------------------------*/
@@ -35,6 +35,7 @@ int main(int argc, char *argv[])
   testCo = GTK_LABEL(gtk_builder_get_object(builder, "testCo"));
   errCo  = GTK_LABEL(gtk_builder_get_object(builder, "errCo"));
   error_test = GTK_LABEL(gtk_builder_get_object(builder, "error_test"));
+  scores =  GTK_LABEL(gtk_builder_get_object(builder, "scores"));
 
   name      = GTK_ENTRY(gtk_builder_get_object(builder, "name"));
   firstname = GTK_ENTRY(gtk_builder_get_object(builder, "firstname"));
@@ -163,6 +164,9 @@ void on_CoEntry_clicked()
   }
 
   gtk_label_set_text(errCo, "Nom d'utilisateur non trouvé");
+  gtk_entry_set_text(entry, "");
+  gtk_entry_set_text(entryP, "");
+
 }
 
 
@@ -310,6 +314,12 @@ static gboolean *key_event_Game(GtkWidget *widget, GdkEventKey *event)
       cpt--;
     }
   }
+  else
+  {
+    sprintf(pts, "  %d", score);
+    gtk_label_set_text(scores, pts);
+    gtk_stack_set_visible_child_name(GTK_STACK(IHM), "ScorePage");
+  }
 
   sprintf(pts, "%d", score);
   gtk_label_set_text(ok1, pts);
@@ -447,12 +457,18 @@ void on_validercat_clicked()
 
 void on_cateba_clicked()
 {
-  gtk_stack_set_visible_child_name(GTK_STACK(IHM), "MainPage");
+  gtk_stack_set_visible_child_name(GTK_STACK(IHM), "ConnPage");
+  gtk_label_set_text(errCo, "");
 }
 
 void on_gameback1_clicked()
 {
   gtk_stack_set_visible_child_name(GTK_STACK(IHM), "CatePage");
+}
+
+void on_mainmenu_clicked()
+{
+  gtk_stack_set_visible_child_name(GTK_STACK(IHM), "MainPage");
 }
 
 
@@ -477,3 +493,5 @@ void on_gameQuit_clicked(){ gtk_main_quit(); }
 void on_catequi_clicked(){ gtk_main_quit(); }
 
 void on_gameQuit1_clicked(){ gtk_main_quit(); }
+
+void on_scorequit_clicked(){ gtk_main_quit(); }

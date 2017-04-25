@@ -3,6 +3,7 @@
 # include <gtk/gtk.h>
 # include <err.h>
 # include <SDL/SDL.h>
+# include <time.h>
 # include <SDL/SDL_image.h>
 # include "user.h"
 
@@ -17,7 +18,7 @@ GtkWidget  *Connexion, *Inscription, *MainWindow, *TestInsPage;
 GtkWidget  *CoWindow, *InsWindow, *IHM, *CoEntry;
 GtkEntry   *entry, *entryP, *entryok, *entryok1, *name, *firstname, *age;
 GtkBuilder *builder;
-GtkLabel   *testCo, *errCo, *typed, *typed1, *ok1, *ok;
+GtkLabel   *testCo, *error_test, *scores, *errCo, *typed, *typed1, *ok1, *ok;
 GtkToggleButton *UCO, *UCN, *HO, *HN, *Dalt, *Mot;
 GtkToggleButton *D, *I, *E, *M1, *M2, *M3, *N1, *N2, *N3;
 GSList *group1, *group2, *group3;
