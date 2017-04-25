@@ -288,11 +288,19 @@ static gboolean *key_event_Game(GtkWidget *widget, GdkEventKey *event)
   size_t l = strlen(cs);
   char *rep = calloc(l,sizeof(char));
 
+  size_t lentmp = 1;
+  char *a = " ";
+
+  while (str[strlen(str)-lentmp] == *a)
+    lentmp++;
+
+  int len = strlen(str)-lentmp-1;
+
   rep = strncpy(rep,str,l);
   int b = 0;
-  int len = strlen(str);
   char c2 = c[0];
 
+  printf(" cpt : %d len %d\n",cpt,len);
   if(cpt < len)
   {
     if(c2 !=66)
@@ -320,6 +328,7 @@ static gboolean *key_event_Game(GtkWidget *widget, GdkEventKey *event)
     sprintf(pts, "  %d", score);
     gtk_label_set_text(scores, pts);
     gtk_stack_set_visible_child_name(GTK_STACK(IHM), "ScorePage");
+   // score = 0, cpt = 0;
   }
 
   sprintf(pts, "%d", score);
@@ -340,14 +349,20 @@ static gboolean *key_event_Ins(GtkWidget *widget, GdkEventKey *event)
 
   char *pts = calloc(10, sizeof(char));
   char *cs = (char*)cs1;
+
   size_t l = strlen(cs);
   char *rep = calloc(l,sizeof(char));
 
+  size_t lentmp = 1;
+  char *a = " ";
+
+  while (str[strlen(str)-lentmp] == *a)
+    lentmp++;
+  int len = strlen(str)-lentmp-1;
+
   rep = strncpy(rep,str,l);
   int b = 0;
-  int len = strlen(str);
   char c2 = c[0];
-
   if(cpt < len)
   {
     if(c2 !=66)
@@ -355,7 +370,7 @@ static gboolean *key_event_Ins(GtkWidget *widget, GdkEventKey *event)
       b  = compare(rep,cs);
       if (b ==1)
       {
-        score++;
+        score +=1;
         cpt++;
       }
       else
@@ -369,11 +384,18 @@ static gboolean *key_event_Ins(GtkWidget *widget, GdkEventKey *event)
       score--;
       cpt--;
     }
+    printf("cpt = %d, len = %d \n",cpt,len);
   }
-
+  else
+  {
+    printf("cpt = %d \n",cpt);
+    sprintf(pts, "  %d", score);
+    gtk_label_set_text(scores, pts);
+    gtk_stack_set_visible_child_name(GTK_STACK(IHM), "ScorePage");
+  // score = 0, cpt = 0;
+  }
   sprintf(pts, "%d", score);
   gtk_label_set_text(ok, pts);
-  score = 0, cpt = 0;
   return FALSE;
 }
 
