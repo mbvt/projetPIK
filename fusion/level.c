@@ -156,6 +156,7 @@ struct tab_chars *str_to_tab_str(char *str,char *sep)
   }
   t_chars->len = i;
   t_chars->t_str = t_str;
+  free(t_str);
   return t_chars;
 }
 
@@ -179,6 +180,7 @@ char *build_random_str(char *chars, size_t size_wrd, size_t nb_wrd)
     }
     strcat(str," ");
   }
+  free(tmp);
   return str;
 }
 
@@ -206,6 +208,7 @@ char *build_random_words_str(char *chars, size_t size_wrd, size_t nb_wrd)
       tmp = calloc (size_wrd,sizeof (char));
       strcat(str," ");
   }
+  free(tmp);
   return str;
 }
 

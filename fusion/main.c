@@ -324,7 +324,7 @@ static gboolean *key_event_Game(GtkWidget *widget, GdkEventKey *event)
      struct S_MYSQL *smysql = NULL;
     smysql = connect_db(smysql);
     smysql->table_name = "pik_user";
- 
+
     clock_gettime(CLOCK_MONOTONIC,&t1);
     double sec = t1.tv_sec - t0.tv_sec ;
     char *ctime = calloc (10,sizeof(char));
@@ -407,7 +407,9 @@ static gboolean *key_event_Ins(GtkWidget *widget, GdkEventKey *event)
     char *ctime = calloc (10,sizeof(char));
     sprintf(pts, "  %d", score);
     sprintf(ctime, "  %f", sec);
-      gtk_label_set_text(scores, pts);
+    
+    
+    gtk_label_set_text(scores, pts);
     gtk_label_set_text(times, ctime);
     gtk_stack_set_visible_child_name(GTK_STACK(IHM), "ScorePage");
 
