@@ -141,10 +141,9 @@ int callback2(void *ret, int nb_col, char **val_col, char **name_col)
 //    printf("%s\n", val_col[i]);
     //if(i < nb_col-1)
     strcat(ret," ");
-
   //  printf("%s\n", (char *)ret);
   }
-
+  (void)name_col;
   return 0;
 }
 

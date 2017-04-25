@@ -278,6 +278,7 @@ int compare(char *s1, char *s2)
 
 static gboolean *key_event_Game(GtkWidget *widget, GdkEventKey *event)
 {
+  (void)widget;
   char *c = gdk_keyval_name(event->keyval);
   const gchar *cs1 = gtk_entry_get_text(GTK_ENTRY(entryok1));
   const gchar *str = gtk_label_get_text(typed1);
@@ -332,6 +333,7 @@ static gboolean *key_event_Game(GtkWidget *widget, GdkEventKey *event)
 
 static gboolean *key_event_Ins(GtkWidget *widget, GdkEventKey *event)
 {
+  (void)widget;
   char *c = gdk_keyval_name(event->keyval);
   const gchar *cs1 = gtk_entry_get_text(GTK_ENTRY(entryok));
   const gchar *str = gtk_label_get_text(typed);
