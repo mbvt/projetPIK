@@ -321,17 +321,28 @@ static gboolean *key_event_Game(GtkWidget *widget, GdkEventKey *event)
   }
   else
   {
+     struct S_MYSQL *smysql = NULL;
+    smysql = connect_db(smysql);
+    smysql->table_name = "pik_user";
+ 
     clock_gettime(CLOCK_MONOTONIC,&t1);
     double sec = t1.tv_sec - t0.tv_sec ;
     char *ctime = calloc (10,sizeof(char));
     sprintf(pts, "  %d", score);
     sprintf(ctime, "  %f", sec);
 
+//    printf("Score bien enregistrer id_resultat : %f",sec);
+  //  int req = insert_res(smysql,1,2,score,sec);
+
+  //  printf("Score bien enregistrer id_resultat : %d",req);
+    gtk_entry_set_text(entryok1, "");
+    cpt= 0;
+    score = 0;
+
     gtk_label_set_text(scores, pts);
     gtk_label_set_text(times, ctime);
     gtk_stack_set_visible_child_name(GTK_STACK(IHM), "ScorePage");
 
-    gtk_entry_set_text(entryok1, "");
   }
 
   return FALSE;
@@ -391,13 +402,12 @@ static gboolean *key_event_Ins(GtkWidget *widget, GdkEventKey *event)
   }
   else
   {
-   clock_gettime(CLOCK_MONOTONIC,&t1);
+    clock_gettime(CLOCK_MONOTONIC,&t1);
     double sec = t1.tv_sec - t0.tv_sec ;
     char *ctime = calloc (10,sizeof(char));
     sprintf(pts, "  %d", score);
     sprintf(ctime, "  %f", sec);
-
-    gtk_label_set_text(scores, pts);
+      gtk_label_set_text(scores, pts);
     gtk_label_set_text(times, ctime);
     gtk_stack_set_visible_child_name(GTK_STACK(IHM), "ScorePage");
 
@@ -501,7 +511,9 @@ void on_gameback1_clicked()
 
 void on_mainmenu_clicked()
 {
+  g_signal_handlers_disconnect_by_func(MainWindow,key_event_Game,NULL);
   gtk_stack_set_visible_child_name(GTK_STACK(IHM), "CatePage");
+  gtk_label_set_text(ok1, "");
   gtk_label_set_text(scores, "");
   gtk_label_set_text(times, "");
   gtk_label_set_text(typed, "");

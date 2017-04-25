@@ -310,12 +310,14 @@ int insert_lvl(struct S_MYSQL *smysql)//, int id, char *lb_lvl, char *txt, int s
   return id_insert;
 }
 
-int insert_res(struct S_MYSQL *smysql, int score, int level, int id_user)
+int insert_res(struct S_MYSQL *smysql , int id_user , int level, int score , double speed)
 {
   char *s_score = int_to_str(score);
   char *s_lvl = int_to_str(level);
   char *s_id = int_to_str(id_user);
-  char *s_speed = "0.0";
+  char *s_speed = "";
+  printf("insert res = %f",speed);
+  sprintf(s_speed,"%f",speed);
 
   char *ins_val = calloc(50, sizeof(char));
   strcat(ins_val, s_score);
