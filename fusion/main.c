@@ -1,12 +1,12 @@
+# include <time.h>
 # include "main.h"
 # include "level.h"
-
 
 
 int cpt = 0;
 int score = 0;
 char *tmp;
-
+struct timespec t0,t1;
 /*----------------------------------MAIN---------------------------------------
  *---------------------------------------------------------------------------*/
 int main(int argc, char *argv[])
@@ -36,6 +36,7 @@ int main(int argc, char *argv[])
   errCo  = GTK_LABEL(gtk_builder_get_object(builder, "errCo"));
   error_test = GTK_LABEL(gtk_builder_get_object(builder, "error_test"));
   scores =  GTK_LABEL(gtk_builder_get_object(builder, "scores"));
+  times =  GTK_LABEL(gtk_builder_get_object(builder, "times"));
 
   name      = GTK_ENTRY(gtk_builder_get_object(builder, "name"));
   firstname = GTK_ENTRY(gtk_builder_get_object(builder, "firstname"));
@@ -287,20 +288,13 @@ static gboolean *key_event_Game(GtkWidget *widget, GdkEventKey *event)
   char *cs = (char*)cs1;
   size_t l = strlen(cs);
   char *rep = calloc(l,sizeof(char));
-
-  size_t lentmp = 1;
-  char *a = " ";
-
-  while (str[strlen(str)-lentmp] == *a)
-    lentmp++;
-
-  int len = strlen(str)-lentmp-1;
+  printf("score = %d\n",score);
+  int len = strlen(str);
 
   rep = strncpy(rep,str,l);
   int b = 0;
   char c2 = c[0];
 
-  printf(" cpt : %d len %d\n",cpt,len);
   if(cpt < len)
   {
     if(c2 !=66)
@@ -313,7 +307,7 @@ static gboolean *key_event_Game(GtkWidget *widget, GdkEventKey *event)
       }
       else
       {
-        score -=1;
+        score--;
         cpt--;
       }
     }
@@ -322,17 +316,24 @@ static gboolean *key_event_Game(GtkWidget *widget, GdkEventKey *event)
       score--;
       cpt--;
     }
+  sprintf(pts, "%d", score);
+  gtk_label_set_text(ok1, pts);
   }
   else
   {
+    clock_gettime(CLOCK_MONOTONIC,&t1);
+    double sec = t1.tv_sec - t0.tv_sec ;
+    char *ctime = calloc (10,sizeof(char));
     sprintf(pts, "  %d", score);
+    sprintf(ctime, "  %f", sec);
+
     gtk_label_set_text(scores, pts);
+    gtk_label_set_text(times, ctime);
     gtk_stack_set_visible_child_name(GTK_STACK(IHM), "ScorePage");
-   // score = 0, cpt = 0;
+
+    gtk_entry_set_text(entryok1, "");
   }
 
-  sprintf(pts, "%d", score);
-  gtk_label_set_text(ok1, pts);
   return FALSE;
 }
 
@@ -358,7 +359,7 @@ static gboolean *key_event_Ins(GtkWidget *widget, GdkEventKey *event)
 
   while (str[strlen(str)-lentmp] == *a)
     lentmp++;
-  int len = strlen(str)-lentmp-1;
+  int len = strlen(str)-lentmp;
 
   rep = strncpy(rep,str,l);
   int b = 0;
@@ -384,19 +385,24 @@ static gboolean *key_event_Ins(GtkWidget *widget, GdkEventKey *event)
       score--;
       cpt--;
     }
-    printf("cpt = %d, len = %d \n",cpt,len);
+  sprintf(pts, "%d", score);
+  gtk_label_set_text(ok, pts);
+
   }
   else
   {
-    printf("cpt = %d \n",cpt);
+   clock_gettime(CLOCK_MONOTONIC,&t1);
+    double sec = t1.tv_sec - t0.tv_sec ;
+    char *ctime = calloc (10,sizeof(char));
     sprintf(pts, "  %d", score);
+    sprintf(ctime, "  %f", sec);
+
     gtk_label_set_text(scores, pts);
+    gtk_label_set_text(times, ctime);
     gtk_stack_set_visible_child_name(GTK_STACK(IHM), "ScorePage");
-  // score = 0, cpt = 0;
+
   }
-  sprintf(pts, "%d", score);
-  gtk_label_set_text(ok, pts);
-  return FALSE;
+    return FALSE;
 }
 
 void on_validercat_clicked()
@@ -450,17 +456,11 @@ void on_validercat_clicked()
     printf("Niveau 3 \n");
   }
 
-  /*
-     for(int i = 0; i < 3; i++)
-     printf("%d ", tab[i]);
-     printf("\n");
-     */
   struct S_MYSQL *smysql = NULL;
   smysql = connect_db(smysql);
   smysql->table_name = "pik_user";
 
   int id_lvl1 = compute_lvl_id(tab);
-  printf("id_lvl                           ............%d\n",id_lvl1);
   char *id_lvl = int_to_str(id_lvl1);
   char *lvl_title = calloc(12, sizeof(char));
   strcat(lvl_title,"./dico/lvl");
@@ -469,7 +469,16 @@ void on_validercat_clicked()
   char *lvl_dico = "";
   lvl_dico = load_dico_lvl(lvl_title,id_lvl1, 1, smysql);
   printf("dico %s\n", lvl_dico);
- // clock_gettime(CLOCK_MONOTONIC,&t0);
+
+  size_t lentmp = strlen(lvl_dico)-2;
+  while (lvl_dico[lentmp] == ' ')
+    lentmp--;
+
+  if (lentmp < strlen(lvl_dico)-2 )
+    lvl_dico[lentmp] = '\0';
+
+  clock_gettime(CLOCK_MONOTONIC,&t0);
+
   gtk_label_set_text(typed1, lvl_dico);
 
   gtk_stack_set_visible_child_name(GTK_STACK(IHM), "GamePage");
@@ -492,7 +501,15 @@ void on_gameback1_clicked()
 
 void on_mainmenu_clicked()
 {
-  gtk_stack_set_visible_child_name(GTK_STACK(IHM), "MainPage");
+  gtk_stack_set_visible_child_name(GTK_STACK(IHM), "CatePage");
+  gtk_label_set_text(scores, "");
+  gtk_label_set_text(times, "");
+  gtk_label_set_text(typed, "");
+  gtk_label_set_text(typed1, "");
+  gtk_entry_set_text(entryok1, "");
+  gtk_entry_set_text(entryok, "");
+  score = 0;
+  cpt = 0;
 }
 
 
