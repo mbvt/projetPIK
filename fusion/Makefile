@@ -2,7 +2,7 @@
 CC=gcc
 
 CPPFLAGS= `pkg-config --cflags gtk+-3.0` `pkg-config --cflags sdl` -export-dynamic
-CFLAGS= $(shell pkg-config --cflags sqlite3) -Wall -Wextra -std=c99 -O3 -g
+CFLAGS= $(shell pkg-config --cflags sqlite3) -Wall -std=c99 -O3 -g
 LDFLAGS=
 LDLIBS= $(shell pkg-config --libs sqlite3) `pkg-config --libs gtk+-3.0`\
 				`pkg-config --libs sdl` -lSDL_image -export-dynamic -lm

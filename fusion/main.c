@@ -114,12 +114,12 @@ void on_qcm_clicked()
 
   char *n = (char *)na;
   char *f = (char *)fa;
-  char *a = "";
+  char *a = "\0";
 
 
   if(exist_user(n, f, smysql))
     gtk_label_set_text(error_test, "Nom déjà existant");
-  else if((*n = *a) || (*f == *a))
+  else if((*n == *a) || (*f == *a))
     gtk_label_set_text(error_test, "Données manquantes");
   else
     gtk_stack_set_visible_child_name(GTK_STACK(IHM), "QcmPage");
