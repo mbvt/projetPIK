@@ -1,6 +1,6 @@
 CC =gcc
 CPPFLAGS= `pkg-config libusb-1.0 --libs --cflags`
-CFLAGS= -Wall -Wextra -std=c99 -O3 -fno-stack-protector
+CFLAGS=  -Wall -Wextra -std=c99 -O3 -fno-stack-protector
 LDFLAGS=
 LDLIBS= `pkg-config libusb-1.0 --libs --cflags`
 
