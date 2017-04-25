@@ -229,7 +229,7 @@ char *load_dico_lvl(char *lvltitle , int i, int bd, struct S_MYSQL *smysql)
   size_t s_word = (size_t)atoi(*args_from_file);
   size_t n_word = (size_t)atoi(*(args_from_file+1));
   char *var;
-  char *text;
+  char *text = "";
 
   var = *(args_from_file+4);
   if (i < 13)
