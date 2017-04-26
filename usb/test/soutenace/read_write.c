@@ -25,58 +25,9 @@ struct struct_write {
 };
 
 
-//________________________C O L O R__________________________
-void keybordcolor(struct struct_write *str)
-{
-  int rc = 0;
-  uint16_t speed = str->speed;
-  uint16_t red = str->red;
-  uint16_t green = str->green;
-  uint16_t blue = str->blue;       
-  uint16_t key = str->key;
-  libusb_device_handle *devh = str->devh; 
-
-  unsigned char data_commit [] = { 0x11, 0xff, 0x0c, 0x5a, 
-    0x00, 0x00, 0x00, 0x00,
-    0x00, 0x00, 0x00, 0x00,
-    0x00, 0x00, 0x00, 0x00,
-    0x00, 0x00, 0x00, 0x00
-  };
-
-  unsigned char data1 [] = { 0x12, 0xff, 0x0c , 0x3a,
-    0x00, speed, 0x00, 0x0e, 
-    key, red, green, blue, 
-    0x00, 0x00, 0x00, 0x00,
-    0x00, 0x00, 0x00, 0x00,
-    0x00, 0x00, 0x00, 0x00,
-    0x00, 0x00, 0x00, 0x00,
-    0x00, 0x00, 0x00, 0x00,
-    0x00, 0x00, 0x00, 0x00,
-    0x00, 0x00, 0x00, 0x00,
-    0x00, 0x00, 0x00, 0x00,
-    0x00, 0x00, 0x00, 0x00,
-    0x00, 0x00, 0x00, 0x00,
-    0x00, 0x00, 0x00, 0x00,
-    0x00, 0x00, 0x00, 0x00,
-    0x00, 0x00, 0x00, 0x00
-  };
-
-
-  /*rc = libusb_control_transfer(devh, 0x21, 0x09, 0x0211, 1, 
-      data_commit, sizeof(data_commit), 10); 
-  */
-  rc = libusb_control_transfer(devh, 0x21, 0X09, 0x0212, 1, 
-      data1, sizeof(data1), 10); 
-
-  rc = libusb_control_transfer(devh, 0x21, 0x09, 0x0211, 1, 
-      data_commit, sizeof(data_commit), 10); 
-  
-  
-  (void)rc;
-}
 
 //_____________________ U S B  -  I N I T ________________________
-libusb_device_handle* USB_Init()
+libusb_device_handle* USB_Init(int i)
 {
   libusb_device_handle  *devh = NULL;
   uint16_t  PRODUCT_ID = 0xc330;
@@ -93,6 +44,10 @@ libusb_device_handle* USB_Init()
       libusb_detach_kernel_driver(devh, if_num);
     res = libusb_claim_interface(devh, if_num);
   }
+
+  if(i == 1)
+	write_color_init(libusb_device_handle *devh);
+  
   return devh;
 }
 
@@ -100,44 +55,8 @@ libusb_device_handle* USB_Init()
 void USB_Close(libusb_device_handle *devh, int i)
 {
   if (i == 1)
-  {
-    int rc = 0;
-  unsigned char data_commit [] = { 0x11, 0xff, 0x0c, 0x5a, 
-    0x00, 0x00, 0x00, 0x00,
-    0x00, 0x00, 0x00, 0x00,
-    0x00, 0x00, 0x00, 0x00,
-    0x00, 0x00, 0x00, 0x00
-    };
+	white_color_close(libusb_device_handle *devh);
   
-  unsigned char wave [] =  {0x11, 0xff, 0x0d, 0x3c, 0xFF, 0x04,
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x88, 0x01, 0x64, 0x01, 0x00, 0x00,
-    0x00, 0x00 };
-
-   unsigned char reseat [] = {0x11, 0xff, 0x0d, 0x3c, 0xff, 0x01, 0x00, 0x00,
-   0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
-   /*
-   rc = libusb_control_transfer(devh, 0x21, 0X09, 0x0211, 1,                     
-                                  wave, sizeof(wave), 100);
-printf("rc = %d \n", rc);  
-  rc = libusb_control_transfer(devh, 0x21, 0x09, 0x0211, 1, 
-      data_commit, sizeof(data_commit), 10); 
-
-printf("rc = %d \n", rc);  
-*/
-  rc = libusb_control_transfer(devh, 0x21, 0x09, 0x0211, 1, 
-      data_commit, sizeof(data_commit), 10); 
-printf("rc = %d \n", rc);  
-  
-  rc = libusb_control_transfer(devh, 0x21, 0X09, 0x0211, 1, reseat,
-    sizeof(reseat), 10);
-printf("rc = %d \n", rc);  
-  
-  rc = libusb_control_transfer(devh, 0x21, 0x09, 0x0211, 1, 
-      data_commit, sizeof(data_commit), 10); 
-printf("rc = %d \n", rc);  
-
-(void)rc;
-  }
   libusb_release_interface(devh, 0);
   libusb_release_interface(devh, 1);
 
@@ -147,6 +66,7 @@ printf("rc = %d \n", rc);
   if(devh)
     libusb_close(devh);
   libusb_exit(NULL);
+
 } 
 
 //____________ WRITE_TO_KEYBORD_______________
@@ -156,21 +76,21 @@ int write_to_keybord (libusb_device_handle *devh)
   uint16_t variable_local = 0x00;
   int rc = 0;
   
-  fprintf(stdout,"\n--------------\n Key :");
+  //fprintf(stdout,"\n--------------\n Key :");
   rc = scanf("%04x" , &variable_local);
-  fprintf(stdout,"\n Red :");
+  //fprintf(stdout,"\n Red :");
   rc = scanf("%04x" , &str->red);
-  fprintf(stdout,"\n Green :");
+  //fprintf(stdout,"\n Green :");
   rc = scanf("%04x" , &str->green);
-  fprintf(stdout,"\n Blue :");
+  //fprintf(stdout,"\n Blue :");
   rc = scanf("%04x" , &str->blue);
-  fprintf(stdout,"\n");
+  //fprintf(stdout,"\n");
 
   str->speed = 0x01;
   str->devh = devh;
   str->key = variable_local;
   
-  keybordcolor(str);
+  write_color_key(str);
   
   free(str);    
   (void)rc;
@@ -214,6 +134,7 @@ struct struct_write*   read_to_keybord(libusb_device_handle *devh)
   return str;
 }
 
+//---------------------------------------------------------------------
 int read_and_write(libusb_device_handle *devh)
 {
   
@@ -226,20 +147,20 @@ int read_and_write(libusb_device_handle *devh)
   {
     str = read_to_keybord(devh);
   }
-  fprintf(stdout,"\nKey %02x \n", str->key);
+  //fprintf(stdout,"\nKey %02x \n", str->key);
   str->red    = data_color[rand()%15];
-  fprintf(stdout,"Red %02x \n", str->red);
+  //fprintf(stdout,"Red %02x \n", str->red);
   str->green  = data_color[rand()%15];
-  fprintf(stdout,"Green %02x \n", str->green);
+  //fprintf(stdout,"Green %02x \n", str->green);
   str->blue  = data_color[rand()%15];
-  fprintf(stdout,"Blue %02x \n", str->blue);
+  //fprintf(stdout,"Blue %02x \n", str->blue);
   
   str->speed = 0x01;
   str->devh = devh;
   //str->key = 0x04;
   
   if(str->key != 0x00)
-      keybordcolor(str);
+      write_color_key(str);
 
   if(str->key == 0x29)
   {
@@ -253,12 +174,9 @@ int read_and_write(libusb_device_handle *devh)
 //----------------------- M A I N ---------------------------
 int main()
 {
-  //INIT LIBUSB
   libusb_device_handle  *devh = NULL;
-  //devh = USB_Init();
   //-----------------------------------------|
   // TEST WITH WRITE 
-  printf("begin test write : choose key to color");
   int res = 0;
   /*while(res == 0)
   {
@@ -276,20 +194,19 @@ int main()
   */
   //-----------------------------------------|
   // TEST_TO_READ_AND_WRITE
-   //res = 0;
-     // devh = USB_Init();
    while(res == 0)
    {
-      devh = USB_Init();
+      devh = USB_Init(0);
       res = read_and_write(devh);
       USB_Close(devh, 0);
    }
    //   USB_Close(devh);
-  //-------------------------------------------|
-  //END TEST ==> CLOSE LIBUSB
-    printf("ici init\n");
-    devh = USB_Init();
-    printf("ici end \n");
+ 
+ //-------------------------------------------|
+ 
+ //END TEST ==> CLOSE LIBUSB
+    devh = USB_Init(0);
+  
     USB_Close(devh, 1);
   return 0;
 } 
