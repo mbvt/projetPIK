@@ -1,10 +1,11 @@
 //#ifndef _MAIN_H
 //#define _MAIN_H
 
+# include "level.h"
 # include "main.h"
 
-int cpt = 0;
-int score = 0;
+static int cpt = 0;
+static int score = 0;
 
 /*----------------------------------------------------------------------------*
  *--------------------------------- Game -------------------------------------*/
@@ -22,7 +23,7 @@ int compare(char *s1, char *s2)
   return 1;
 }
 
-static gboolean *key_event_Game(GtkWidget *widget, GdkEventKey *event)
+gboolean *key_event_Game(GtkWidget *widget, GdkEventKey *event)
 {
   (void)widget;
   char *c = gdk_keyval_name(event->keyval);

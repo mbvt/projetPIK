@@ -39,7 +39,7 @@ void on_CoEntry_clicked();
 void on_Game_clicked();
 void on_validercat_clicked();
 int compare(char *s1, char *s2);
-static gboolean *key_event_Game(GtkWidget *widget, GdkEventKey *event);
-static gboolean *key_event_Ins(GtkWidget *widget, GdkEventKey *event);
+gboolean *key_event_Game(GtkWidget *widget, GdkEventKey *event);
+gboolean *key_event_Ins(GtkWidget *widget, GdkEventKey *event);
 
 #endif

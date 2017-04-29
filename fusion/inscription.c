@@ -3,8 +3,8 @@
 
 # include "main.h"
 
-int cpt = 0;
-int score = 0;
+static int cpt = 0;
+static int score = 0;
 
 /*-----------------------------------------------------------------------------
  *------------------------------ Inscription --------------------------------*/
@@ -138,7 +138,7 @@ void on_gameback_clicked()
 /*----------------------------------------------------------------------------*
  *----------------------------- Test d'inscription --------------------------*/
 
-static gboolean *key_event_Ins(GtkWidget *widget, GdkEventKey *event)
+gboolean *key_event_Ins(GtkWidget *widget, GdkEventKey *event)
 {
   (void)widget;
   char *c = gdk_keyval_name(event->keyval);
