@@ -7,25 +7,26 @@
 #include <time.h>
 
 #include "color.h"
-
-struct struct_key   {
+#include "convert.h"
+#include "read_write.h"
+/*struct struct_key   {
   uint16_t   num_w;
   uint16_t   num_r;
   char       array_nom[100];
   int        number_key;
   int        bit;
   int        groupe;
-};
-/*
-struct struct_write {
+  };
+
+  struct struct_write {
   uint16_t speed;
   uint16_t red;
   uint16_t green;
   uint16_t blue;
   uint16_t key;
   libusb_device_handle *devh;
-};
-*/
+  };
+ */
 
 
 //_____________________ U S B  -  I N I T ________________________
@@ -48,8 +49,8 @@ libusb_device_handle* USB_Init(int i)
   }
 
   if(i == 1)
-	write_color_init(devh);
-  
+    write_color_init(devh);
+
   return devh;
 }
 
@@ -57,8 +58,8 @@ libusb_device_handle* USB_Init(int i)
 void USB_Close(libusb_device_handle *devh, int i)
 {
   if (i == 1)
-	white_color_close(devh);
-  
+    white_color_close(devh);
+
   libusb_release_interface(devh, 0);
   libusb_release_interface(devh, 1);
 
@@ -77,32 +78,32 @@ int write_to_keybord (libusb_device_handle *devh)
   struct struct_write *str = malloc (sizeof (struct struct_write ));  
   uint16_t variable_local = 0x00;
   int rc = 0;
-  
+
   //fprintf(stdout,"\n--------------\n Key :");
-  rc = scanf("%04x" , &variable_local);
+  //rc = scanf("%04x" , &variable_local);
   //fprintf(stdout,"\n Red :");
-  rc = scanf("%04x" , &str->red);
+  //rc = scanf("%04x" , &str->red);
   //fprintf(stdout,"\n Green :");
-  rc = scanf("%04x" , &str->green);
+  //rc = scanf("%04x" , &str->green);
   //fprintf(stdout,"\n Blue :");
-  rc = scanf("%04x" , &str->blue);
+  //rc = scanf("%04x" , &str->blue);
   //fprintf(stdout,"\n");
 
   str->speed = 0x01;
   str->devh = devh;
   str->key = variable_local;
-  
+
   write_color_key(str, devh);
-  
+
   free(str);    
   (void)rc;
-  
+
   if(variable_local == 0x29)
     return 1;
 
   return 0;
 }
- 
+
 
 //_______________ R E A D - T O - K E Y B O R D _________________
 struct struct_write*   read_to_keybord(libusb_device_handle *devh)
@@ -117,7 +118,7 @@ struct struct_write*   read_to_keybord(libusb_device_handle *devh)
   for ( int i=0 ; i < size ; data_read[i++] = 0 );; 
 
   rc = libusb_bulk_transfer(devh, 0x81, data_read, 1024, &actual_length, 1);
-  
+
   if(actual_length > 0)
   {
     for(int i = 0; i < actual_length; i ++)
@@ -137,34 +138,28 @@ struct struct_write*   read_to_keybord(libusb_device_handle *devh)
 }
 
 //---------------------------------------------------------------------
-int read_and_write(libusb_device_handle *devh)
+int read_and_write(libusb_device_handle *devh, uint16_t key)
 {
-  
+
   uint16_t data_color [16] = {0x00, 0x10, 0x20, 0x30, 0x40, 0x50, 0x60, 0x70,
-  0x80, 0x90, 0xA0, 0xB0, 0xC0, 0xD0, 0xE0, 0xFF}; 
-  
+    0x80, 0x90, 0xA0, 0xB0, 0xC0, 0xD0, 0xE0, 0xFF}; 
+
   struct struct_write *str = malloc (sizeof (struct struct_write ));  
- str->key = 0; 
+  str->key = 0; 
   while(str->key == 0)
   {
     str = read_to_keybord(devh);
   }
-  //fprintf(stdout,"\nKey %02x \n", str->key);
   str->red    = data_color[rand()%15];
-  //fprintf(stdout,"Red %02x \n", str->red);
   str->green  = data_color[rand()%15];
-  //fprintf(stdout,"Green %02x \n", str->green);
   str->blue  = data_color[rand()%15];
-  //fprintf(stdout,"Blue %02x \n", str->blue);
-  
   str->speed = 0x01;
   str->devh = devh;
-  //str->key = 0x04;
-  
-  if(str->key != 0x00)
-      write_color_key(str, devh);
 
-  if(str->key == 0x29)
+  if(str->key != 0x00)
+    write_color_key(str, devh);
+
+  if(str->key == key)
   {
     free(str);
     return 1;
@@ -173,43 +168,52 @@ int read_and_write(libusb_device_handle *devh)
   return 0;
 }
 
+
 //----------------------- M A I N ---------------------------
 int main()
 {
   libusb_device_handle  *devh = NULL;
-  //-----------------------------------------|
-  // TEST WITH WRITE 
   int res = 0;
-  /*while(res == 0)
+  struct matrix *keymap = get_keymap("biblio");
+  char * ptr = "EPITA";
+  char * rep;
+  uint16_t key = 0x00;
+  rep = ptr;
+  int score = 0;
+  while(ptr != NULL)
   {
-    res = write_to_keybord(devh);
+    devh = USB_Init(0);
+    rep = get_numW_from_char(keymap, rep);
+    key = convert_char_to_uint(rep);
+    printf("test val key = 0x%02x \n", key);
+    ptr++;
+    res = read_and_write(devh, key);
+    if(res)
+    {
+      printf(" OK key value match");
+      score ++;
+    }
+    else
+    {
+      printf(" KO key value not match");
+      score --;
+    }
+    USB_Close(devh, 0);
   }
+  
+  /*
   //-----------------------------------------|
-  //TEST_TO_READ
-  res = 0;
-  printf("\nbegin test read : choose key to color\n");
   while(res == 0)
   {
-    res = read_to_keybord(devh);
+  devh = USB_Init(0);
+  res = read_and_write(devh);
+  USB_Close(devh, 0);
   }
+   */
+  //-------------------------------------------|
   (void)res;
-  */
-  //-----------------------------------------|
-  // TEST_TO_READ_AND_WRITE
-   while(res == 0)
-   {
-      devh = USB_Init(0);
-      res = read_and_write(devh);
-      USB_Close(devh, 0);
-   }
-   //   USB_Close(devh);
- 
- //-------------------------------------------|
- 
- //END TEST ==> CLOSE LIBUSB
-    devh = USB_Init(0);
-  
-    USB_Close(devh, 1);
+  devh = USB_Init(0);
+  USB_Close(devh, 1);
   return 0;
 } 
 //------------------- E N D _ M A I N -----------------------

@@ -4,7 +4,7 @@ CFLAGS= -Wall -Wextra -std=c99 -O2
 LDFLAGS=
 LDLIBS= `pkg-config libusb-1.0 --libs --cflags`
 
-SRC= read_write.c color.c 
+SRC= read_write.c color.c script.c convert.c 
 OBJ= ${SRC:.c=.o}
 
 #DEP= ${SRC:.c=.d}

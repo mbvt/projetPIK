@@ -29,8 +29,8 @@ void write_color_key(struct struct_write *str, libusb_device_handle *devh)
     0x00, 0x00, 0x00, 0x00
   };
 
-  send_data(data, devh);
-  send_data(data_commit, devh); 
+  send_data(data, devh, 1);
+  send_data(data_commit, devh, 0); 
 }
 
 
@@ -38,7 +38,7 @@ void write_color_key(struct struct_write *str, libusb_device_handle *devh)
 
 void write_color_init(libusb_device_handle *devh)
 {
-  unsigned char commit [] = {   0x11, 0xFF, 0x3c, 0x5a, 
+unsigned char commit [] = {   0x11, 0xFF, 0x3c, 0x5a, 
     0x04, 0x00, 0x00, 0x00,
     0x00, 0x00, 0x00, 0x88,
     0x00, 0x00, 0x00, 0x00,
@@ -52,8 +52,8 @@ void write_color_init(libusb_device_handle *devh)
     0x00, 0x00, 0x00, 0x00,
   };
 
-  send_data(all, devh);
-  send_data(commit, devh);
+  send_data(all, devh, 0);
+  send_data(commit, devh, 0);
 }
 
 
@@ -81,31 +81,31 @@ void white_color_close(libusb_device_handle *devh)
     0x00, 0x00, 0x00, 0x00,
   };
 
-  send_data(wave, devh);
-  send_data(commit, devh);
-  sleep(3);	
-  send_data(all, devh);
-  send_data(commit, devh);  
+  send_data(wave, devh , 0);
+  //send_data(commit, devh, 0);
+ // sleep(3);	
+  printf("after wave");
+  send_data(all, devh , 0);
+  send_data(commit, devh , 0);  
   sleep(1);
 }
 
 
 //_____________ SEND DATA TO THE WIRE IN USB _______________
 
-void send_data(unsigned char *data, libusb_device_handle *devh)
+void send_data(unsigned char *data, libusb_device_handle *devh, int i)
 {
-  int rc = 0;	
-    if(sizeof(data) == 20)
+    int rc = 0;	
+    if(i == 0)
     {
       rc = libusb_control_transfer(devh, 0x21, 0x09, 0x0211, 1, 
-          data , sizeof(data), 100);
+          data , 20, 100);
     }
 
     else
     {
       rc = libusb_control_transfer(devh, 0x21, 0x09, 0x0212, 1, 
-          data , sizeof(data), 100);
+          data , 64, 100);
     }
   (void)rc;
-
 }

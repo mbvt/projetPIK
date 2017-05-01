@@ -1,14 +1,9 @@
 # include <stdlib.h>
 # include <stdio.h>
 # include <string.h>
+# include "color.h"
 
-struct matrix
-{
-  size_t col;
-  size_t line;
-  char   **tab;
-};
-
+//__________________________________________________________________________
 struct matrix *get_keymap(char *filename)
 {
   struct matrix *keymap = malloc(sizeof(struct matrix));
@@ -50,17 +45,19 @@ struct matrix *get_keymap(char *filename)
   keymap->tab = tab;
   return keymap;
 }
-/*
-void print_matrix(struct matrix *keymap)
-{
-  for (size_t i = 0; i < keymap->line ; i++ ){
-    for (size_t j = 0; j < keymap->col ; j++){
-      printf ("| %3s ", keymap->tab[i*keymap->col + j]);
-    }
-    printf ("|\n");
-  }
-}
-*/
+  /*
+   void print_matrix(struct matrix *keymap)
+   {
+   for (size_t i = 0; i < keymap->line ; i++ ){
+   for (size_t j = 0; j < keymap->col ; j++){
+   printf ("| %3s ", keymap->tab[i*keymap->col + j]);
+   }
+   printf ("|\n");
+   }
+   }
+ */
+
+//_____________________________________________________________________
 char *get_char_from_numR(struct matrix *keymap, char *numr, char *bit)
 {
   size_t i = 0;
@@ -74,6 +71,7 @@ char *get_char_from_numR(struct matrix *keymap, char *numr, char *bit)
   return NULL;
 }
 
+//_______________________________________________________________________
 char *get_numW_from_char(struct matrix *keymap, char *c)
 {
   size_t i = 0;
@@ -86,11 +84,9 @@ char *get_numW_from_char(struct matrix *keymap, char *c)
   return NULL;
 }
 
-int main ()
-{
-  struct matrix *keymap = get_keymap("biblio");
-  char *c = get_char_from_numR(keymap,"0x09","2");
-  char *numw = get_numW_from_char(keymap,"q");
-  return 0;
-}
+//_______________________________________________________________________
+  //struct matrix *keymap = get_keymap("biblio");
+  //char *c = get_char_from_numR(keymap,"0x09","2");
+  //char *numw = get_numW_from_char(keymap,"q");
+  //return 0;
 
