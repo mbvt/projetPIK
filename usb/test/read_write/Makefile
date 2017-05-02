@@ -1,10 +1,10 @@
 CC =gcc
 CPPFLAGS= `pkg-config libusb-1.0 --libs --cflags`
-CFLAGS= -Wall -Wextra -std=c99 -O2
+CFLAGS= -Wall -Wextra -std=c99 -O2 -pthread -g
 LDFLAGS=
 LDLIBS= `pkg-config libusb-1.0 --libs --cflags`
 
-SRC= read_write.c color.c script.c convert.c 
+SRC= read_write.c color.c script.c convert.c pthread.c
 OBJ= ${SRC:.c=.o}
 
 #DEP= ${SRC:.c=.d}

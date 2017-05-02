@@ -35,7 +35,7 @@ uint16_t convert(char *ptr)
   return key;
 }
 
-uint16_t   convert_char_to_int(char *ptr)
+uint16_t   convert_char_to_uint(char *ptr)
 {
   int i = 0;
   uint16_t res = 0x00;

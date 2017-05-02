@@ -3,7 +3,7 @@
 # include <string.h>
 # include "color.h"
 
-//__________________________________________________________________________
+//_______________________________________________________________________
 struct matrix *get_keymap(char *filename)
 {
   struct matrix *keymap = malloc(sizeof(struct matrix));
@@ -82,6 +82,27 @@ char *get_numW_from_char(struct matrix *keymap, char *c)
     i++;
   }
   return NULL;
+}
+
+//_______________________________________________________________________
+uint16_t *get_key_from_zone(struct matrix *keymap, char *c)
+{
+  size_t i = 0;
+  int j = 0;
+  char *rep;
+  uint16_t key;
+  uint16_t array_key [100];
+  while( i < keymap->line)
+  {
+    if ( c == *(keymap->tab + i * keymap->col + 5) )
+      {
+        rep = *(keymap->tab + i * keymap->col + 1);
+        key = convert_char_to_uint(rep);
+        array_key[j] = key;
+        j++;
+      }
+  }
+  return array_key;
 }
 
 //_______________________________________________________________________

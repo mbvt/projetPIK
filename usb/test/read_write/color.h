@@ -1,3 +1,8 @@
+/*__________________________________________________________________
+  {                                                                }
+  {                        color . h                               }
+  {________________________________________________________________}*/
+
 #ifndef COLOR_H_
 #define COLOR_H_
 
@@ -35,5 +40,5 @@ void send_data(unsigned char *data, libusb_device_handle *devh, int i);
 struct matrix *get_keymap(char *filename); 
 char *get_char_from_numR(struct matrix *keymap, char *numr, char *bit);
 char *get_numW_from_char(struct matrix *keymap, char *c);
-
+uint16_t *get_key_from_zone(struct matrix *keymap, char *c);
 # endif
