@@ -57,4 +57,31 @@ uint16_t   convert_char_to_uint(char *ptr)
   }
   printf("    key out = 0x%02x \n", result);
   return result;
-}    
+}
+
+char * convert_uint_to_char(uint16_t key)
+{
+  uint16_t save = 0x00;
+  uint16_t cmp = 0x00;
+  char array_rep [4] = {'0', 'x'};
+  char array_comp [16] =
+  {'0', '1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
+  int i = 0;
+  save = key % 0x10;
+  while (cmp != save)
+  {
+    i++;
+    cmp = cmp + 0x01;
+  }
+  array_rep[3] = array_comp[i];
+  i = 0;
+  cmp = 0;
+  save = key / 0x10;
+  while (cmp != save)
+  {
+    cmp = cmp + 0x01;
+    i ++;
+  }
+  array_rep[2] = array_comp[i];
+  return array_rep;
+}

@@ -1,43 +1,52 @@
 #include "pthread.h"
 
-struct queue_key_hit {
-    uint16_t  ptr;
-    struct    queue_key_hit *next;
-};
-
-struct str_thread {
-    struct    queue_key_hit;
-    int       etat_touche;
-    uint16_t  key;
-};
-
 void *gestion_led(void *arg)
 {
-  // exttract struct 
-  // test si  la touche est bonne (1) ou non (0)
-  // send vert ou rouge  a  color pour colorier la touche 
-  // pthread_exit(NULL);
+  printf("open pthread : \n { \n");
+  (void)arg;
+  struct struct_key_hit *str = arg;
+  struct struct_write *str_w = malloc(sizeof(struct struct_write));
+  str_w->key = str->key;
+  str_w->speed = 0x01;
+  str_w->blue = 0x00;
+  str_w->green = 0x00;
+  str_w->red = 0x00;
+  str_w->devh = str->devh; 
+  
+  if(str->status_key == 1) // good key
+  {
+    str_w->green= 0xff;
+    printf("    good key\n");
+    write_color_key(str_w, str_w->devh);
+    sleep(1);
+  }
+   
+  else // bad key 
+  {
+    str_w->red= 0xff;
+    printf("    bad key\n");
+    write_color_key(str_w, str_w->devh);
+  }
+  
+  color_keymap_init(str_w->devh, 
+
+  //sleep(5);
+  //free(str_w);
+  //free(str);
+  
+  printf("    pthread  . . . \n } \n close pthread \n");
+  pthread_exit(NULL);
 }
 
 
 // on doit ouvrir un pthread uniquement si la queue n'est pas vide 
 
-int pthread (struct str_thread *str)
+void pthread (struct struct_key_hit *str_hit)
 {
-  struct str_thread *ptr_str = calloc (sizeof(struct str_thread), 10);
-  pthread_t *th_hles = malloc ( 10 * sizeof (pthread_t));
-  int cmp_queue = 0;
-  int i = 0;
-  while ( queue_key_hit->next != NULL)
-  {
-    pthread_create(th_hles + cmp_queue, NULL, gestion_led, str);
-    str->queue_key_hit = (str->queue_key_hit)->next;
-    cmp_queue++;
-  }
+  pthread_t th_hles;
+  pthread_create(&th_hles, NULL, gestion_led, str_hit);
+  pthread_join(th_hles, NULL);
+  write_color_key(str_hit->str_w, str_hit->&devh);
 
-  while(i <= cmp_queue)
-  {
-    pthread_join(*(th_hles + i), NULL);
-    i++;
-  }
+//end pthread 
 }

@@ -4,6 +4,7 @@
 
 void write_color_key(struct struct_write *str, libusb_device_handle *devh)
 {
+
   unsigned char data_commit [] = { 0x11, 0xff, 0x0c, 0x5a, 
     0x00, 0x00, 0x00, 0x00,
     0x00, 0x00, 0x00, 0x00,
@@ -67,13 +68,13 @@ void white_color_close(libusb_device_handle *devh)
     0x00, 0x00, 0x00, 0x00,
   };
 
-  unsigned char wave [] =  {	0x11, 0xff, 0x0d, 0x3c, 
+  /*unsigned char wave [] =  {	0x11, 0xff, 0x0d, 0x3c, 
     0x00, 0x04, 0x00, 0x00, 
     0x00, 0x00, 0x00, 0x00, 
     0x88, 0x02, 0x64, 0x02, 
     0x00, 0x00, 0x00, 0x00 
   };
-
+*/
   unsigned char all [] = {     0x11, 0xff, 0x0d, 0x3c,
     0x00, 0x00, 0xFF, 0xFF, 
     0xFF, 0x00, 0x00, 0x00, 
@@ -81,13 +82,13 @@ void white_color_close(libusb_device_handle *devh)
     0x00, 0x00, 0x00, 0x00,
   };
 
-  send_data(wave, devh , 0);
+  //send_data(wave, devh , 0);
   //send_data(commit, devh, 0);
  // sleep(3);	
-  printf("after wave");
+  //printf("after wave");
   send_data(all, devh , 0);
   send_data(commit, devh , 0);  
-  sleep(1);
+  //sleep(1);
 }
 
 
@@ -99,13 +100,13 @@ void send_data(unsigned char *data, libusb_device_handle *devh, int i)
     if(i == 0)
     {
       rc = libusb_control_transfer(devh, 0x21, 0x09, 0x0211, 1, 
-          data , 20, 100);
+          data , 20, 0);
     }
 
     else
     {
       rc = libusb_control_transfer(devh, 0x21, 0x09, 0x0212, 1, 
-          data , 64, 100);
+          data , 64, 0);
     }
   (void)rc;
 }

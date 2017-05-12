@@ -6,25 +6,26 @@
 #include <libusb-1.0/libusb.h>
 #include <time.h>
 
-#include "color.h"
-#include "convert.h"
 #include "read_write.h"
 
 //_______________ C O L O R  -  K E Y  -  I N I T ________________
-void color_keymap_init(libusb_device_handle *devh, struct matrix *keymap)
+str_hit* color_keymap_init(libusb_device_handle *devh, struct matrix *keymap, 
+                       int f, uint16_t key_reseat)
 {
+  int len = 0;
   int i = 0;
-  uint16_t *ptr_array_key;
+  
+  
   char array_group[9] = {'1', '2', '3', '4', '5', '6', '7', '8', '9'};
 
                                 //  R     G     B
   uint16_t array_color [9][3] = { {0x00, 0x00, 0xFF}, //1 = Bleu
                                   {0x54, 0x29, 0x00}, //2 = Maron
-                                  {0xFD, 0xF8, 0x31}, //3 = Jaune
-                                  {0x00, 0xF8, 0x31}, //4 = Orange
-                                  {0x34, 0x31, 0xFD}, //5 = Violet
-                                  {0xFD, 0x31, 0xDA}, //6 = Rose
-                                  {0x4A, 0x1A, 0x2C}, //7 = Bordaux
+                                  {0xFF, 0xFF, 0x00}, //3 = Jaune
+                                  {0xFE, 0x77, 0x00}, //4 = Orange
+                                  {0xA5, 0x00, 0xFE}, //5 = Violet
+                                  {0xFE, 0x00, 0xDA}, //6 = Rose
+                                  {0x65, 0x00, 0x01}, //7 = Bordaux
                                   {0xFF, 0x00, 0x00}, //8 = Rouge
                                   {0x00, 0xFF, 0x00}  //9 = Verre
                                 };
@@ -39,33 +40,63 @@ void color_keymap_init(libusb_device_handle *devh, struct matrix *keymap)
     str_w[i].speed = 0x01;
     str_w[i].devh  = devh;
   }
-  i = 0;
-  char *char_num_zone = NULL;
-  //now init all the key by group
-  while(i < 10)
-  {
-    *char_num_zone = array_group[i];
-    ptr_array_key = get_key_from_zone(keymap, char_num_zone);
-    while(ptr_array_key != NULL)
-    {
-      str_w[i].key = *ptr_array_key;
-      write_color_key(&str_w[i],devh);
-      ptr_array_key++;
-    }
-    str_w++;
-    i++;
-  }
-}
 
+  i = 0;
+  char *char_num_zone;
+  struct struct_zone *str = malloc(sizeof(struct struct_zone));
+  //now init all the key by group
+  if(f == 0)
+  {
+    while(i < 10)
+    {
+      char_num_zone = &array_group[i];
+      //printf(" char num zone = '%c' \n", *char_num_zone);
+      str = get_key_from_zone(keymap, char_num_zone); 
+      while( len < str->len)
+      {
+        str_w[i].key = str[0].array_key[len]; 
+        write_color_key(&str_w[i],devh);
+        len ++;
+      }
+      len = 0;
+      i++;
+    }
+  
+  }
+  
+  else // f != 0
+  {
+    i = 0;
+    char * char_key;
+    char * i;
+    uint16_t value = 0x00;
+    char_key = convert_uint_to_char(key_reseat);
+    i = get_Igroup_from_key(keymap, char_key);
+    (int)i;
+    printf("%d \n", i);
+    struct struct_key_hit *str_hit = malloc(sizeof(struct struct_key_hit));
+    str_hit.str_w->key = key_reseat;
+    str_hit.str_w->red = array_color[i][0];
+    str_hit.str_w->green = array_color[i][1];
+    str_hit.str_w->blue = array_color[i][2];
+    str_hit.str_w->speed = 0x01;
+    str_hit.str_w->devh = devh;
+  }
+
+  free(str);
+  free(str_w);
+  return str_hit;
+}
 //_______________ U S B  -  F I R S T  -  I N I T ________________
 void USB_Init_first(struct matrix *keymap)
 {
   //init libusb to with on the keybord just one time
   libusb_device_handle  *devh = NULL;
+  struct struct_key_hit *str_hit = malloc(sizeof(struct struct_key_hit));
   uint16_t  PRODUCT_ID = 0xc330;
   uint16_t VENDOR_ID = 0x046d;
   int res = 0;
-
+  int i = 0;
   res = libusb_init(NULL);
   if(res < 0)
     fprintf(stderr, "Error init libusb: %s\n", libusb_error_name(res));
@@ -78,8 +109,11 @@ void USB_Init_first(struct matrix *keymap)
   }
 
   // color keymap with respectiv zone 
-  color_keymap_init(devh, keymap);
-  
+  while(i < 10)
+  {
+    str_hit = color_keymap_init(devh, keymap, 0, 0x00);
+    i++;
+  }
   // Close libusb 
   libusb_release_interface(devh, 0);
   libusb_release_interface(devh, 1);
@@ -87,6 +121,7 @@ void USB_Init_first(struct matrix *keymap)
   libusb_attach_kernel_driver(devh, 0);
   libusb_attach_kernel_driver(devh, 1);
   
+  free(str_hit);
   if(devh)
     libusb_close(devh);
   libusb_exit(NULL);
@@ -203,31 +238,40 @@ struct struct_write*   read_to_keybord(libusb_device_handle *devh)
 //---------------------------------------------------------------------
 int read_and_write(libusb_device_handle *devh, uint16_t key)
 {
-
-  uint16_t data_color [16] = {0x00, 0x10, 0x20, 0x30, 0x40, 0x50, 0x60, 0x70,
-    0x80, 0x90, 0xA0, 0xB0, 0xC0, 0xD0, 0xE0, 0xFF}; 
-
-  struct struct_write *str = malloc (sizeof (struct struct_write ));  
-  str->key = 0; 
-  while(str->key == 0)
+  //stuct use to pthread
+  struct struct_key_hit *str_hit = malloc (sizeof(struct struct_key_hit));
+  
+  struct struct_write *str_w = malloc (sizeof (struct struct_write ));  
+  str_w->key = 0; 
+  while(str_w->key == 0)
   {
-    str = read_to_keybord(devh);
+    str_w = read_to_keybord(devh);
   }
-  str->red    = data_color[rand()%15];
-  str->green  = data_color[rand()%15];
-  str->blue  = data_color[rand()%15];
-  str->speed = 0x01;
-  str->devh = devh;
-
-  if(str->key != 0x00)
-    write_color_key(str, devh);
-
-  if(str->key == key)
+  
+  //str_w->speed = 0x01;
+  //str_w->devh = devh;
+  str_hit = color_keymap_init(devh, keymap, 1, key);
+  if(str_w->key != 0x00)
   {
-    free(str);
+    str_hit->key = str_w->key;
+  }
+  if(str_w->key == key)
+  {
+    str_hit->status_key = 1; // print green beacause key hit est the good key
+    pthread (str_hit);
+    free(str_hit);
+    free(str_w);
     return 1;
   }
-  free(str);
+  
+  else
+  {
+  str_hit->status_key = 0; // print red beacause key hit est the good key
+  pthread (str_hit);
+  free(str_hit);
+  free(str_w);
+  return 0;
+  }
   return 0;
 }
 
@@ -237,49 +281,47 @@ int main()
 {
   struct matrix *keymap = get_keymap("biblio");
   USB_Init_first(keymap);
-
   libusb_device_handle  *devh = NULL;
   int res = 0;
+  int j = 0;
   //struct matrix *keymap = get_keymap("biblio");
-  char * ptr = "EPITA";
+  char *ptr = "epita";
   char * rep;
+  char * bit = "2";
   uint16_t key = 0x00;
-  rep = ptr;
   int score = 0;
-  while(ptr != NULL)
+  printf("debut du test : 'epita' \n");
+  int len = strlen(ptr);
+  while(j < len)
   {
+    printf("-----------------------------------------------------\n");
     devh = USB_Init(0);
-    rep = get_numW_from_char(keymap, rep);
+    printf(" lettre = '%c' \n", *ptr);
+    printf(" bit = '%c' \n", *bit);
+    rep = get_char_from_numR(keymap,ptr,bit);
     key = convert_char_to_uint(rep);
     printf("test val key = 0x%02x \n", key);
-    ptr++;
     res = read_and_write(devh, key);
     if(res)
     {
-      printf(" OK key value match");
+      printf(" OK key value match \n");
       score ++;
     }
     else
     {
-      printf(" KO key value not match");
+      printf(" KO key value not match\n");
       score --;
     }
+    ptr++;
     USB_Close(devh, 0);
+    j++;
   }
   
-  /*
-  //-----------------------------------------|
-  while(res == 0)
-  {
-  devh = USB_Init(0);
-  res = read_and_write(devh);
-  USB_Close(devh, 0);
-  }
-   */
-  //-------------------------------------------|
   (void)res;
-  devh = USB_Init(0);
-  USB_Close(devh, 1);
+  //devh = USB_Init(0);
+  USB_Init_first(keymap);
+  // en 1 th
+  //USB_Close(devh, 0);
   return 0;
 } 
 //------------------- E N D _ M A I N -----------------------

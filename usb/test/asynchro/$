@@ -66,29 +66,42 @@ int main(void)
         printf("    key out = 0x%02x \n", result);
   //_________________________________________________
 */
-  uint16_t resu = 0x00;
+  uint16_t resu = 0x87;
   uint16_t save = 0x00;
-  uint16_t cmp = 0x00;
+  uint8_t bob = 0x00;
   char array_rep [4] = {'0', 'x'};
   char array_comp [16] =
   {'0', '1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
   int i = 0;
+  int j = 0;
+  uint16_t cmp = 0x00;
   
-  save = resu % 0x10;
-  while (cmp != save)
+  save = resu / 0x10;
+ // dernier bit 
+  while (save != resu)
   {
     i++;
-    cmp = cmp + 0x01;
+    save = save + 0x01;
   }
+  printf("i = %d, " i);
+  printf("save = 0x%02x \n" save);
   array_rep[3] = array_comp[i];
+  
+  // avant dernier bit 
   i = 0;
-  cmp = 0;
   save = resu / 0x10;
   while (cmp != save)
   {
-    cmp = cmp + 0x01;
+    cmp ++;
     i ++;
   }
+  printf("i = %d, " i);
+  printf("cmp = 0x%02x \n" cmp);
+  
   array_rep[2] = array_comp[i];
+  
+  printf("array_rep = '%s' \n", array_rep);
+  
   return 0;    
+
 }    

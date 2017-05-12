@@ -8,6 +8,12 @@
 
 #include "read_write.h"
 
+struct struct_zone {
+  uint16_t array_key[100];
+  int      len;
+  };
+
+
 struct struct_write {
   uint16_t   speed;
   uint16_t   red;
@@ -17,7 +23,7 @@ struct struct_write {
   libusb_device_handle *devh;
   };
 
-struct structu_key {
+struct struct_key {
   uint16_t  num_w;
   uint16_t  num_r;
   char      array_nom[20];
@@ -37,8 +43,10 @@ void write_color_key(struct struct_write *str, libusb_device_handle *devh);
 void write_color_init(libusb_device_handle *devh);
 void white_color_close(libusb_device_handle *devh);
 void send_data(unsigned char *data, libusb_device_handle *devh, int i);
+
 struct matrix *get_keymap(char *filename); 
 char *get_char_from_numR(struct matrix *keymap, char *numr, char *bit);
 char *get_numW_from_char(struct matrix *keymap, char *c);
-uint16_t *get_key_from_zone(struct matrix *keymap, char *c);
+char *get_Igroup_from_key(struct matrix *keymap, char *key);
+struct struct_zone *get_key_from_zone(struct matrix *keymap, char *c);
 # endif
