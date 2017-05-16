@@ -6,8 +6,8 @@
 #ifndef COLOR_H_
 #define COLOR_H_
 
-#include "read_write.h"
-
+#include "USB_Main.h"
+#include "color.h"
 struct struct_zone {
   uint16_t array_key[100];
   int      len;
@@ -31,13 +31,13 @@ struct struct_key {
   int       bit;
   int       groupe;
   };
-
+/*
 struct matrix {
   size_t    col;
   size_t    line;
   char    **tab;
   };
-
+*/
 // Definition des fonction 
 void write_color_key(struct struct_write *str, libusb_device_handle *devh);
 void write_color_init(libusb_device_handle *devh);

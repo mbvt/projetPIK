@@ -7,19 +7,16 @@
 #ifndef READ_WRITE_H_
 #define READ_WRITE_H_
 
-# include <unistd.h>
-# include <stdlib.h>
-# include <stdio.h>
-# include <errno.h>
-# include <inttypes.h>
-# include <libusb-1.0/libusb.h>
-# include <time.h>
-# include <pthread.h>
-# include <string.h>
-
+# include "USB_Main.h"
 # include "color.h"
-# include "convert.h"
-# include "pthread.h"
-//# include "queue.h"
+
+
+void color_keymap_init(libusb_device_handle *devh, struct matrix *keymap);
+void USB_Init_first(struct matrix *keymap);
+libusb_device_handle* USB_Init(int i);
+void USB_Close(libusb_device_handle *devh, int i);
+int write_to_keybord( libusb_device_handle *devh);
+struct struct_write* read_to_keybord(libusb_device_handle *devh);
+int read_and_write(libusb_device_handle *devh, uint16_t key);
 
 # endif 

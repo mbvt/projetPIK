@@ -95,7 +95,7 @@ char *get_Igroup_from_key(struct matrix *keymap, char *key)
   size_t i = 0;
   while (i < keymap->line)
   {
-    if (*key == *(keymap->tab + i * keymap->col + 1))
+    if (*key == *(*(keymap->tab + i * keymap->col + 1)))
       {
         return *(keymap->tab + i * keymap->col + 5);
       }

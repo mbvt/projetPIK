@@ -4,8 +4,12 @@
 
 void write_color_key(struct struct_write *str, libusb_device_handle *devh)
 {
-
-  unsigned char data_commit [] = { 0x11, 0xff, 0x0c, 0x5a, 
+/*  printf("--------\nkey = 0x%02x \n", str->key);
+  printf("red = 0x%02x \n", str->red);
+  printf("grn = 0x%02x \n", str->green);
+  printf("blu = 0x%02x \n", str->blue);
+  printf("spe = 0x%02x \n--------\n", str->speed);
+  */unsigned char data_commit [] = { 0x11, 0xff, 0x0c, 0x5a, 
     0x00, 0x00, 0x00, 0x00,
     0x00, 0x00, 0x00, 0x00,
     0x00, 0x00, 0x00, 0x00,
@@ -29,9 +33,10 @@ void write_color_key(struct struct_write *str, libusb_device_handle *devh)
     0x00, 0x00, 0x00, 0x00,
     0x00, 0x00, 0x00, 0x00
   };
-
+  send_data(data_commit, devh, 0); 
   send_data(data, devh, 1);
   send_data(data_commit, devh, 0); 
+  send_data(data, devh, 1);
 }
 
 
@@ -100,13 +105,15 @@ void send_data(unsigned char *data, libusb_device_handle *devh, int i)
     if(i == 0)
     {
       rc = libusb_control_transfer(devh, 0x21, 0x09, 0x0211, 1, 
-          data , 20, 0);
+          data , 20, 1000);
+      printf (" rc commit = %d \n", rc);    
     }
 
     else
     {
       rc = libusb_control_transfer(devh, 0x21, 0x09, 0x0212, 1, 
-          data , 64, 0);
+          data , 64, 1000);
+      printf (" rc data = %d \n", rc);    
     }
   (void)rc;
 }
