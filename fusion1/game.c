@@ -69,18 +69,19 @@ gboolean *key_event_Game(GtkWidget *widget, GdkEventKey *event)
   {
      struct S_MYSQL *smysql = NULL;
     smysql = connect_db(smysql);
-    smysql->table_name = "pik_user";
+    smysql->table_name = "results";
 
     clock_gettime(CLOCK_MONOTONIC,&t1);
     double sec = t1.tv_sec - t0.tv_sec ;
-    char *ctime = calloc (10,sizeof(char));
+    char *ctime = calloc (100,sizeof(char));
     sprintf(pts, "  %d", score);
     sprintf(ctime, "  %f", sec);
 
-//    printf("Score bien enregistrer id_resultat : %f",sec);
-  //  int req = insert_res(smysql,1,2,score,sec);
-
-  //  printf("Score bien enregistrer id_resultat : %d",req);
+    printf("Temps enregistre: %f secondes\n",sec);
+    
+    int req = insert_res(smysql,score,2,sec,1);
+    printf("Score bien enregistre id_resultat : %d",req);
+    
     gtk_entry_set_text(entryok1, "");
     cpt= 0;
     score = 0;
