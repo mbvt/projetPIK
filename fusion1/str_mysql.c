@@ -310,14 +310,27 @@ int insert_lvl(struct S_MYSQL *smysql)//, int id, char *lb_lvl, char *txt, int s
   return id_insert;
 }
 
-int insert_res(struct S_MYSQL *smysql , int id_user , int level, int score , double speed)
+char *double_to_str(double item)
+{
+  char* str = calloc(100, sizeof(char));
+  sprintf(str, "%f", item);
+  
+  return str;
+}
+
+int insert_res(struct S_MYSQL *smysql , int score, int level, double speed, int id_user)
 {
   char *s_score = int_to_str(score);
   char *s_lvl = int_to_str(level);
   char *s_id = int_to_str(id_user);
-  char *s_speed = "";
-  printf("insert res = %f",speed);
-  sprintf(s_speed,"%f",speed);
+  char *s_speed = double_to_str(speed);
+
+  //printf("\ns_speed before : %s\n", s_speed);
+  for(size_t i = 0; s_speed[i] != '\0'; ++i)
+  {
+    if(s_speed[i] == ',')
+      s_speed[i] = '.';
+  }
 
   char *ins_val = calloc(50, sizeof(char));
   strcat(ins_val, s_score);
@@ -389,6 +402,81 @@ struct S_MYSQL *connect_db(struct S_MYSQL *smysql)
 
   return smysql;
 }
+
+
+int callback3(void *, int nb_col, char **, char **);
+
+char *do_query(struct S_MYSQL *smysql, char* req)
+{
+  char *res = calloc(1024, sizeof(char));
+  char *err_msg = 0;
+  int rc = sqlite3_exec(smysql->handle, req, callback3, res, &err_msg);
+
+ if(rc != SQLITE_OK)
+ {
+  printf("Failed to select data\n");
+  printf("SQL error : %s\n", err_msg);
+  sqlite3_free(err_msg);
+  return 0;
+ }
+
+  return res;
+}
+
+
+int top_score(struct S_MYSQL *smysql, int id_user)
+{
+  char *id = int_to_str(id_user);
+
+  char *req = calloc(100, sizeof(char));
+  strcat(req,"select max(score) from results where id_pik_user = ");
+  strcat(req, id);
+  strcat(req, ";");
+  
+  char *res = do_query(smysql, req);
+  
+  int score = atoi(res);
+  free(res);
+  //printf("Max score : %d\n", score);
+  
+  return score;
+}
+
+double top_time(struct S_MYSQL *smysql, int id_user)
+{
+  char *id = int_to_str(id_user);
+  
+  char *req = calloc(100, sizeof(char));
+  strcat(req,"select min(speed) from results where id_pik_user = ");
+  strcat(req, id);
+  strcat(req, ";");
+
+  char* res = do_query(smysql, req);
+  
+  double time = atof(res);
+  free(res);
+  printf("Time : %f\n", time);
+  
+  return time;
+  
+}
+
+int callback3(void *ret, int nb_col, char **val_col, char **name_col)
+{
+  for(int i = 0; i < nb_col; ++i)
+  {
+    //printf("%s = %s\n", name_col[i], val_col[i] ? val_col[i] : "NULL");
+    strcat(ret, val_col[i]);
+    printf("%s\n", name_col[i]);
+    if(i < nb_col-1)
+      strcat(ret, ",");
+
+  }
+  //printf("%s\n", (char *)ret);
+
+  return 0;
+}
+
 
 /*
 int main()

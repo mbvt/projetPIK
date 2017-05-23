@@ -49,7 +49,8 @@ char* build_req_values(char* str1, char* str2, char* str3, char* str4, char* str
 /* select all data user by name and firstname, returns string of concated data*/
 char *select_user(char* name, char* firstname, struct S_MYSQL *smysql);
 char *select_level(char* id_lvl, struct S_MYSQL *smysql);
-
+int top_score(struct S_MYSQL *smysql, int id_user);
+double top_time(struct S_MYSQL *smysql, int id_user);
 /* Store result from query in string */
 //char *result_query(MYSQL *smysql);
 
@@ -57,7 +58,7 @@ void del_user(int id, struct S_MYSQL *smysql);
 
 int insert_table(struct S_MYSQL *smysql);
 int insert_lvl(struct S_MYSQL *smysql);
-int insert_res(struct S_MYSQL *smysql, int id_user, int level, int score, double speed );
+int insert_res(struct S_MYSQL *smysql, int score, int level, double speed, int id_user);
 
 /* INIT CONNECTION TO DB */
 struct S_MYSQL *connect_db(struct S_MYSQL *smysql);

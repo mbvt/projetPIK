@@ -78,7 +78,12 @@ gboolean *key_event_Game(GtkWidget *widget, GdkEventKey *event)
     sprintf(ctime, "  %f", sec);
 
     printf("Temps enregistre: %f secondes\n",sec);
-    
+  
+
+    double time = top_time(smysql, 1);
+    printf("Min Time : %f\n", time); 
+    int sc = top_score(smysql, 1);
+    printf("Top score : %d\n", sc); 
     int req = insert_res(smysql,score,2,sec,1);
     printf("Score bien enregistre id_resultat : %d",req);
     
