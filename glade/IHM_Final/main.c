@@ -240,7 +240,7 @@ static gboolean *key_event(GtkWidget *widget, GdkEventKey *event)
 
 /*-----------------------------QUIT BUTTON-------------------------------------
  *---------------------------------------------------------------------------*/
-
+/*
 void on_quit_clicked()
 {
   gtk_main_quit();
@@ -275,7 +275,7 @@ void on_gameQuit_clicked()
 {
   gtk_main_quit();
 }
-
+*/
 
 
 

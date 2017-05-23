@@ -6,7 +6,7 @@ CFLAGS= -Wall -Wextra -std=c99 -O0 -g
 LDFLAGS=
 LDLIBS= `pkg-config --libs gtk+-3.0` `pkg-config --libs sdl`  -lSDL_image -export-dynamic -lm
 
-SRC= main.c
+SRC= main.c quit.c
 OBJ= ${SRC:.c=.o}
 DEP= ${SRC:.c=.d}
 
