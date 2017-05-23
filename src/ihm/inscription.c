@@ -1,7 +1,7 @@
 //#ifndef _MAIN_H
 //#define _MAIN_H
 
-# include "main.h"
+# include "../main.h"
 
 static int cpt = 0;
 static int score = 0;

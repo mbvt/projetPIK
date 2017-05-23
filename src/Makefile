@@ -8,7 +8,7 @@ LDLIBS= $(shell pkg-config --libs sqlite3) `pkg-config --libs gtk+-3.0`\
 
 SRC= main.c\
 		 str_mysql.c user.c app.c level.c\
-		 quit_button.c inscription.c connexion.c game.c
+		 ./ihm/quit_button.c ./ihm/inscription.c ./ihm/connexion.c ./ihm/game.c
 
 OBJ= ${SRC:.c=.o}
 DEP= ${SRC:.c=.d}
