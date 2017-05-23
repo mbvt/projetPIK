@@ -49,8 +49,13 @@ char* build_req_values(char* str1, char* str2, char* str3, char* str4, char* str
 /* select all data user by name and firstname, returns string of concated data*/
 char *select_user(char* name, char* firstname, struct S_MYSQL *smysql);
 char *select_level(char* id_lvl, struct S_MYSQL *smysql);
+
+/* queries prepared */
 int top_score(struct S_MYSQL *smysql, int id_user);
 double top_time(struct S_MYSQL *smysql, int id_user);
+int top_level(struct S_MYSQL *smysql, int id_user);
+int nb_game(struct S_MYSQL *smysql, int id_user);
+
 /* Store result from query in string */
 //char *result_query(MYSQL *smysql);
 

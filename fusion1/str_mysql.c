@@ -461,6 +461,43 @@ double top_time(struct S_MYSQL *smysql, int id_user)
   
 }
 
+int top_level(struct S_MYSQL *smysql, int id_user)
+{
+  char *id = int_to_str(id_user);
+  
+  char *req = calloc(100, sizeof(char));
+  strcat(req,"select max(id_level) from results where id_pik_user = ");
+  strcat(req, id);
+  strcat(req, ";");
+
+  char* res = do_query(smysql, req);
+  
+  int lvl = atoi(res);
+  free(res);
+  printf("Max Level : %d\n", lvl);
+  
+  return lvl;
+}
+
+int nb_game(struct S_MYSQL *smysql, int id_user)
+{
+  char *id = int_to_str(id_user);
+  
+  char *req = calloc(100, sizeof(char));
+  strcat(req,"select count(id_pik_user) from results where id_pik_user = ");
+  strcat(req, id);
+  strcat(req, ";");
+
+  char* res = do_query(smysql, req);
+  
+  int nb = atoi(res);
+  free(res);
+  printf("Nb game : %d\n", nb);
+  
+  return nb;
+  
+}
+
 int callback3(void *ret, int nb_col, char **val_col, char **name_col)
 {
   for(int i = 0; i < nb_col; ++i)
