@@ -10,7 +10,8 @@
 # include "USB_Main.h"
 # include "color.h"
 
-
+struct struct_write* back_up_led(int i,libusb_device_handle *devh, uint16_t
+key);
 void color_keymap_init(libusb_device_handle *devh, struct matrix *keymap);
 void USB_Init_first(struct matrix *keymap);
 libusb_device_handle* USB_Init(int i);

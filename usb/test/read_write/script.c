@@ -45,17 +45,6 @@ struct matrix *get_keymap(char *filename)
   keymap->tab = tab;
   return keymap;
 }
-  /*
-   void print_matrix(struct matrix *keymap)
-   {
-   for (size_t i = 0; i < keymap->line ; i++ ){
-   for (size_t j = 0; j < keymap->col ; j++){
-   printf ("| %3s ", keymap->tab[i*keymap->col + j]);
-   }
-   printf ("|\n");
-   }
-   }
- */
 
 //_____________________________________________________________________
 char *get_char_from_numR(struct matrix *keymap, char *c, char *bit)
@@ -66,7 +55,6 @@ char *get_char_from_numR(struct matrix *keymap, char *c, char *bit)
     if (*c == *(*(keymap->tab +i * keymap->col)) && *bit == *(*(keymap->tab
           +i * keymap->col + 3)))
         {
-          printf("TROUVER = %s \n", *(keymap->tab + i * keymap->col));
           return *(keymap->tab + i * keymap->col + 2);
         }
     i++;
@@ -80,7 +68,7 @@ char *get_numW_from_char(struct matrix *keymap, char *c)
   size_t i = 0;
   while (i < keymap->line)
   {
-    if (c != *(keymap->tab + i * keymap->col))
+    if (*c == *(*(keymap->tab + i * keymap->col)))
       {
         return *(keymap->tab + i * keymap->col + 1);
       }
@@ -93,9 +81,26 @@ char *get_numW_from_char(struct matrix *keymap, char *c)
 char *get_Igroup_from_key(struct matrix *keymap, char *key)
 {
   size_t i = 0;
+  while ( i < keymap->line)
+  {
+    if (*key == *(*(keymap->tab +i * keymap->col + 1)))
+        {
+          return *(keymap->tab + i * keymap->col + 5);
+        }
+    i++;
+  }
+  return NULL;
+}
+
+//_______________________________________________________________________
+char * char_to_key (struct matrix *keymap, char *c)
+{
+  int match = 0;
+  size_t i = 0;
   while (i < keymap->line)
   {
-    if (*key == *(*(keymap->tab + i * keymap->col + 1)))
+    match = strcmp(c, *(keymap->tab +i * keymap->col + 1));
+    if(match == 0)
       {
         return *(keymap->tab + i * keymap->col + 5);
       }
@@ -104,6 +109,21 @@ char *get_Igroup_from_key(struct matrix *keymap, char *key)
   return NULL;
 }
 
+//_______________________________________________________________________
+char * bit_found (struct matrix *keymap, char *key)
+{
+  size_t i = 0;
+  while (i < keymap->line)
+  {
+    if (*key == *(*(keymap->tab + i * keymap->col + 1)))
+      {
+        return *(keymap->tab + i * keymap->col + 3);
+      }
+    i++;
+  }
+  return NULL;
+  
+}
 
 //_______________________________________________________________________
 struct struct_zone * get_key_from_zone(struct matrix *keymap, char *c)

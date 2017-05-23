@@ -8,6 +8,34 @@
 
 #include "read_write.h"
 
+struct struct_write* back_up_led (int i, libusb_device_handle *devh, 
+                                  uint16_t key)
+{
+  struct struct_write *str_w = malloc(sizeof(struct struct_write));
+
+                                //  R     G     B
+  uint16_t array_color [9][3] = { {0x00, 0x00, 0xFF}, //1 = Bleu
+                                  {0x00, 0xFF, 0xB4}, //2 = Vert deau
+                                  {0xFF, 0xFF, 0x00}, //3 = Jaune
+                                  {0xFE, 0x77, 0x00}, //4 = Orange
+                                  {0xA5, 0x00, 0xFE}, //5 = Violet
+                                  {0xFF, 0x00, 0xCA}, //6 = Rose
+                                  {0x65, 0x00, 0x01}, //7 = Bordaux
+                                  {0xFF, 0x00, 0x00}, //8 = Rouge
+                                  {0x00, 0xFF, 0x00}  //9 = Verre
+                                };
+
+    printf("i = %d \n", i);
+    str_w->key   = key;
+    str_w->red   = array_color   [i-1][0];
+    str_w->green = array_color   [i-1][1];
+    str_w->blue  = array_color   [i-1][2];
+    str_w->speed = 0x01;
+    str_w->devh  = devh;
+
+  return str_w;
+}
+
 //_______________ C O L O R  -  K E Y  -  I N I T ________________
 void color_keymap_init(libusb_device_handle *devh, struct matrix *keymap)
 {
@@ -59,7 +87,7 @@ void color_keymap_init(libusb_device_handle *devh, struct matrix *keymap)
       i++;
       //printf("____________________________________________\n");
     }
-  
+  free(str_w);
   free(str);
 }
 //_______________ U S B  -  F I R S T  -  I N I T ________________
@@ -198,7 +226,6 @@ struct struct_write*   read_to_keybord(libusb_device_handle *devh)
       {
         str->key = data_read[i];
         flag = 1;
-        fprintf(stdout,"\nKey ===> %02x \n", str->key);
       }
     }
   }

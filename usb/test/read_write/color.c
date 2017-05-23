@@ -4,12 +4,7 @@
 
 void write_color_key(struct struct_write *str, libusb_device_handle *devh)
 {
-/*  printf("--------\nkey = 0x%02x \n", str->key);
-  printf("red = 0x%02x \n", str->red);
-  printf("grn = 0x%02x \n", str->green);
-  printf("blu = 0x%02x \n", str->blue);
-  printf("spe = 0x%02x \n--------\n", str->speed);
-  */unsigned char data_commit [] = { 0x11, 0xff, 0x0c, 0x5a, 
+  unsigned char data_commit [] = { 0x11, 0xff, 0x0c, 0x5a, 
     0x00, 0x00, 0x00, 0x00,
     0x00, 0x00, 0x00, 0x00,
     0x00, 0x00, 0x00, 0x00,
@@ -33,6 +28,8 @@ void write_color_key(struct struct_write *str, libusb_device_handle *devh)
     0x00, 0x00, 0x00, 0x00,
     0x00, 0x00, 0x00, 0x00
   };
+  send_data(data_commit, devh, 0); 
+  send_data(data, devh, 1);
   send_data(data_commit, devh, 0); 
   send_data(data, devh, 1);
   send_data(data_commit, devh, 0); 
@@ -73,13 +70,6 @@ void white_color_close(libusb_device_handle *devh)
     0x00, 0x00, 0x00, 0x00,
   };
 
-  /*unsigned char wave [] =  {	0x11, 0xff, 0x0d, 0x3c, 
-    0x00, 0x04, 0x00, 0x00, 
-    0x00, 0x00, 0x00, 0x00, 
-    0x88, 0x02, 0x64, 0x02, 
-    0x00, 0x00, 0x00, 0x00 
-  };
-*/
   unsigned char all [] = {     0x11, 0xff, 0x0d, 0x3c,
     0x00, 0x00, 0xFF, 0xFF, 
     0xFF, 0x00, 0x00, 0x00, 
@@ -87,13 +77,8 @@ void white_color_close(libusb_device_handle *devh)
     0x00, 0x00, 0x00, 0x00,
   };
 
-  //send_data(wave, devh , 0);
-  //send_data(commit, devh, 0);
- // sleep(3);	
-  //printf("after wave");
   send_data(all, devh , 0);
   send_data(commit, devh , 0);  
-  //sleep(1);
 }
 
 
@@ -105,15 +90,13 @@ void send_data(unsigned char *data, libusb_device_handle *devh, int i)
     if(i == 0)
     {
       rc = libusb_control_transfer(devh, 0x21, 0x09, 0x0211, 1, 
-          data , 20, 1000);
-      printf (" rc commit = %d \n", rc);    
+          data , 20, 100);
     }
 
     else
     {
       rc = libusb_control_transfer(devh, 0x21, 0x09, 0x0212, 1, 
-          data , 64, 1000);
-      printf (" rc data = %d \n", rc);    
+          data , 64, 100);
     }
   (void)rc;
 }

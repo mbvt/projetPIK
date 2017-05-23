@@ -4,11 +4,11 @@ CFLAGS= -Wall -Wextra -std=c99 -O0 -g
 LDFLAGS=
 LDLIBS= `pkg-config libusb-1.0 --libs --cflags`
 
-SRC= asynchro.c
+SRC= test.c
 DEP= ${SRC:.c=.d}
 OBJ= ${SRC:.c=.o}
 
-asynchro: ${OBJ}
+test: ${OBJ}
 
 clean:
 	rm -f *.o *.txt

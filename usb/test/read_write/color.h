@@ -44,9 +44,12 @@ void write_color_init(libusb_device_handle *devh);
 void white_color_close(libusb_device_handle *devh);
 void send_data(unsigned char *data, libusb_device_handle *devh, int i);
 
+
 struct matrix *get_keymap(char *filename); 
+char * bit_found(struct matrix *keymap, char *key);
 char *get_char_from_numR(struct matrix *keymap, char *numr, char *bit);
 char *get_numW_from_char(struct matrix *keymap, char *c);
 char *get_Igroup_from_key(struct matrix *keymap, char *key);
+char * char_to_key(struct matrix *keymap, char *key);
 struct struct_zone *get_key_from_zone(struct matrix *keymap, char *c);
 # endif

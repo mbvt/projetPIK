@@ -4,15 +4,11 @@ uint16_t convert(char *ptr)
 {
   uint16_t key = 0x00;
   int cmp;
-  //printf(" in convert %d \n", *ptr);
   if(*ptr <= 57)
   {
     cmp = 48;   // '0' to '9' int ascii
-    //printf("        cmp = %d\n", cmp);
-   // printf(" key = 0x%02x  et cmp = %d \n", key, cmp);
     while( cmp < *ptr)
     {
-     // printf("   key = 0x%02x  et cmp = %d \n", key, cmp);
       key ++;
       cmp ++;
     }
@@ -23,7 +19,6 @@ uint16_t convert(char *ptr)
     key = 0x0A;
     while( cmp < *ptr)
     {   
-      //printf(" key = 0x%02x  et cmp = %d \n", key, cmp);
       key ++;
       cmp ++;
     }
@@ -44,7 +39,7 @@ char * convert_uint_to_char(uint16_t key)
 {
   uint16_t save = 0x00;
   uint16_t cmp = 0x00;
-  char *array_rep = malloc( 4 * sizeof(char));
+  char *array_rep = calloc(4,sizeof(char));
   
   array_rep [0] = '0';
   array_rep [1] = 'x';
