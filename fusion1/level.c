@@ -98,6 +98,17 @@ int compute_lvl_id(int *lvl_id)
     return lvl;
 }
 
+int *compute_lvl_optn(int lvl_id)
+{
+    int tab_opt[] = calloc (3,sizeof(int));
+    tab_opt[0] = lvl_id%10;
+    lvl_id = (lvl_id - tab_opt[0])/10;
+    tab_opt[1] = lv_id%10;
+    lvl_id = (lvl_id- tab_opt[1])/10;
+    tab_opt[2] = lvl_id;
+    
+    return {tab_opt[0],tab_opt[1],tab_opt[2]};
+}
 /*
 ** For the levels with multiple words, we using this function to concat
 ** all the words in one string with a separator.
