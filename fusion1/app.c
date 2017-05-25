@@ -150,10 +150,9 @@ void menu_level()
   game(lvl_dico);
 }
 
-/*
 int main()
 {
-  struct S_MYSQL *smysql = NULL;
+/*  struct S_MYSQL *smysql = NULL;
   smysql = connect_db(smysql);
   smysql->table_name = "pik_user";
 
@@ -164,7 +163,11 @@ int main()
   newuser = menu(newuser, smysql);                        
 
   menu_level();
-  
+*/
+  int *tab = compute_lvl_optn(12);
+  for (int i = 0 ; i < 3 ; i++){
+    printf("%d\n", tab[i] );
+  }
+
   return 0;
 }
-*/
