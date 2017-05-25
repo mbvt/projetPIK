@@ -498,6 +498,25 @@ int nb_game(struct S_MYSQL *smysql, int id_user)
   
 }
 
+double nb_time(struct S_MYSQL *smysql, int id_user)
+{
+  char *id = int_to_str(id_user);
+  
+  char *req = calloc(100, sizeof(char));
+  strcat(req,"select sum(speed) from results where id_pik_user = ");
+  strcat(req, id);
+  strcat(req, ";");
+
+  char* res = do_query(smysql, req);
+  
+  double nb = atof(res);
+  free(res);
+    printf("Nb Time : %f\n", nb);
+  
+  return nb;
+  
+}
+
 int callback3(void *ret, int nb_col, char **val_col, char **name_col)
 {
   for(int i = 0; i < nb_col; ++i)

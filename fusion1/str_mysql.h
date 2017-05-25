@@ -55,6 +55,8 @@ int top_score(struct S_MYSQL *smysql, int id_user);
 double top_time(struct S_MYSQL *smysql, int id_user);
 int top_level(struct S_MYSQL *smysql, int id_user);
 int nb_game(struct S_MYSQL *smysql, int id_user);
+double nb_time(struct S_MYSQL *smysql, int id_user);
+
 
 /* Store result from query in string */
 //char *result_query(MYSQL *smysql);
