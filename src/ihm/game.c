@@ -40,6 +40,9 @@ gboolean *key_event_Game(GtkWidget *widget, GdkEventKey *event)
   rep = strncpy(rep,str,l);
   int b = 0;
   char c2 = c[0];
+  char *markup;
+  const char *format2 = "<span size=\"xx-large\" foreground=\"#A80202\" face=\"Times\">\%s</span>";
+  const char *format1 = "<span size=\"xx-large\" foreground=\"#23A802\" face=\"Times\">\%s</span>";
 
   if(cpt < len)
   {
@@ -50,24 +53,35 @@ gboolean *key_event_Game(GtkWidget *widget, GdkEventKey *event)
       {
         score++;
         cpt++;
+
+        markup = g_markup_printf_escaped (format1, str);
+        gtk_label_set_markup (GTK_LABEL(typed1), markup);
       }
       else
       {
         score--;
         cpt--;
+
+        markup = g_markup_printf_escaped (format2, str);
+        gtk_label_set_markup (GTK_LABEL(typed1), markup);
       }
     }
     else
     {
       score--;
       cpt--;
+      markup = g_markup_printf_escaped (format2, str);
+      gtk_label_set_markup (GTK_LABEL(typed1), markup);
     }
-  sprintf(pts, "%d", score);
-  gtk_label_set_text(ok1, pts);
+    sprintf(pts, "%d", score);
+    gtk_label_set_text(ok1, pts);
+
+
   }
+
   else
   {
-     struct S_MYSQL *smysql = NULL;
+    struct S_MYSQL *smysql = NULL;
     smysql = connect_db(smysql);
     smysql->table_name = "pik_user";
 
@@ -77,10 +91,10 @@ gboolean *key_event_Game(GtkWidget *widget, GdkEventKey *event)
     sprintf(pts, "  %d", score);
     sprintf(ctime, "  %f", sec);
 
-//    printf("Score bien enregistrer id_resultat : %f",sec);
-  //  int req = insert_res(smysql,1,2,score,sec);
+    //printf("Score bien enregistrer id_resultat : %f",sec);
+    //int req = insert_res(smysql,1,2,score,sec);
+    //printf("Score bien enregistrer id_resultat : %d",req);
 
-  //  printf("Score bien enregistrer id_resultat : %d",req);
     gtk_entry_set_text(entryok1, "");
     cpt= 0;
     score = 0;
@@ -169,7 +183,11 @@ void on_validercat_clicked()
 
   clock_gettime(CLOCK_MONOTONIC,&t0);
 
-  gtk_label_set_text(typed1, lvl_dico);
+  const char *format = "<span size=\"xx-large\" face=\"Times\">\%s</span>";
+  char *markup;
+  markup = g_markup_printf_escaped(format, lvl_dico);
+  gtk_label_set_markup(GTK_LABEL(typed1), markup);
+  //gtk_label_set_text(typed1, lvl_dico);
 
   gtk_stack_set_visible_child_name(GTK_STACK(IHM), "GamePage");
 
@@ -192,7 +210,7 @@ void on_gameback1_clicked()
 void on_mainmenu_clicked()
 {
   g_signal_handlers_disconnect_by_func(MainWindow,key_event_Game,NULL);
-  gtk_stack_set_visible_child_name(GTK_STACK(IHM), "CatePage");
+  gtk_stack_set_visible_child_name(GTK_STACK(IHM), "MenuSGPage");
   gtk_label_set_text(ok1, "");
   gtk_label_set_text(scores, "");
   gtk_label_set_text(times, "");
