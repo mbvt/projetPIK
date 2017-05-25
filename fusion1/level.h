@@ -67,4 +67,6 @@ char *load_dico_lvl(char *lvltitle, int i,int bd,struct S_MYSQL *smysql);
 
 int compute_lvl_id(int *lvl_id);
 
+int *compute_lvl_optn(int lvl_id);
+
 #endif
