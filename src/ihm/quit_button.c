@@ -36,4 +36,11 @@ void on_gameQuit1_clicked()
 void on_scorequit_clicked()
 { gtk_main_quit(); }
 
+void on_mSGquit_clicked()
+{ gtk_main_quit(); }
+
+void on_statquit_clicked()
+{ gtk_main_quit(); }
+
+
 //# endif

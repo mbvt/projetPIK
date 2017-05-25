@@ -180,7 +180,7 @@ void on_validercat_clicked()
 
 void on_cateba_clicked()
 {
-  gtk_stack_set_visible_child_name(GTK_STACK(IHM), "ConnPage");
+  gtk_stack_set_visible_child_name(GTK_STACK(IHM), "MenuSGPage");
   gtk_label_set_text(errCo, "");
 }
 

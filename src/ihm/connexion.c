@@ -4,8 +4,8 @@
 # include "../main.h"
 
 
-/*-----------------------------------------------------------------------------
- *------------------------------ Connexion ----------------------------------*/
+/*----------------------------------------------------------------------------*
+ *-------------------------------- Connexion --------------------------------*/
 void on_Connexion_clicked()
 {
   gtk_stack_set_visible_child_name(GTK_STACK(IHM), "ConnPage");
@@ -36,7 +36,7 @@ void on_CoEntry_clicked()
   if(exist_user(f, n, smysql))
   {
     gtk_label_set_text(testCo, f);
-    gtk_stack_set_visible_child_name(GTK_STACK(IHM), "CatePage");
+    gtk_stack_set_visible_child_name(GTK_STACK(IHM), "MenuSGPage");
   }
 
   gtk_label_set_text(errCo, "Nom d'utilisateur non trouvé");
@@ -44,5 +44,29 @@ void on_CoEntry_clicked()
   gtk_entry_set_text(entryP, "");
 
 }
+
+/*----------------------------------------------------------------------------*
+ *--------------------------------Statistiques-------------------------------*/
+
+void on_statback_clicked()
+{
+  gtk_stack_set_visible_child_name(GTK_STACK(IHM), "MenuSGPage");
+}
+
+void on_mSGback_clicked()
+{
+  gtk_stack_set_visible_child_name(GTK_STACK(IHM), "MainPage");
+}
+
+void on_stat_clicked()
+{
+  gtk_stack_set_visible_child_name(GTK_STACK(IHM), "StatPage");
+}
+
+void on_menuniveau_clicked()
+{
+  gtk_stack_set_visible_child_name(GTK_STACK(IHM), "CatePage");
+}
+
 
 //# endif
