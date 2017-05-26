@@ -591,8 +591,6 @@ int insert_best_res(struct S_MYSQL *smysql, int id_user)
     printf("User %s in best_res yet\n", id);
     strcat(req2, "update best_res set total_score = ");
     strcat(req2, s_score);
-    //strcat(req2, " and avg = ");
-    //strcat(req2, s_avg);
     strcat(req2, " where id_pik_user = ");
     strcat(req2, id);
     strcat(req2, ";");
