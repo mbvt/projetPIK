@@ -41,7 +41,7 @@ char* insert_string(char *word)
 /****** CONVERT INT TO STRING ******/
 char* int_to_str(int nb)
 {
-  char* str_int = calloc(3, sizeof(char));
+  char* str_int = calloc(300, sizeof(char));
   sprintf(str_int, "%d", nb);
 
   return str_int;
@@ -514,7 +514,7 @@ int get_sum_score(struct S_MYSQL *smysql, int id_user)
 
   int nb = atoi(res);
   free(res);
-  printf("Score sum user %s : %f\n", id, nb);
+  printf("Score sum user %s : %d\n", id, nb);
 
   return nb;
 
@@ -543,8 +543,8 @@ double get_nb_time(struct S_MYSQL *smysql, int id_user)
 int get_best_player(struct S_MYSQL *smysql)
 {
   char *req = calloc(100, sizeof(char));
-  strcat(req,"select id_pik_user from best_res where best_score = ");
-  strcat(req, "(select max(best_score) from best_res);");
+  strcat(req,"select id_pik_user from best_res where total_score = ");
+  strcat(req, "(select max(total_score) from best_res);");
 
   char* res = do_query(smysql, req);
 
@@ -564,9 +564,10 @@ int insert_best_res(struct S_MYSQL *smysql, int id_user)
 
   char* id = int_to_str(id_user);
   char* s_score = int_to_str(score);
+  printf("s_score = %s\n",s_score);
   char* s_game = int_to_str(nb_game);
 
-  char *s_avg = calloc(10, sizeof(char));
+  char *s_avg = calloc(1024, sizeof(char));
   sprintf(s_avg, "%f", avg);
   
   for(size_t i = 0; s_avg[i] != '\0'; ++i)
@@ -575,31 +576,46 @@ int insert_best_res(struct S_MYSQL *smysql, int id_user)
       s_avg[i] = '.';
   }
 
-  char* req = calloc(100, sizeof(char));
-  strcat(req, "select best_score from best_res where id_pik_user = ");
+  char* req = calloc(1024, sizeof(char));
+  strcat(req, "select total_score from best_res where id_pik_user = ");
   strcat(req, id);
   strcat(req, ";");
 
   char *res = do_query(smysql, req);
   free(req);
-
+  printf("RES = %s\n", res);
+  char* req2 = calloc(1024, sizeof(char));
+  char* req2_1 = calloc(1024, sizeof(char));
   if(strlen(res) != 0)
   {
-    char* req2 = calloc(300, sizeof(char));
-    strcat(req2, "update best_res set best_score = best_score + ");
+    printf("User %s in best_res yet\n", id);
+    strcat(req2, "update best_res set total_score = ");
     strcat(req2, s_score);
-    strcat(req2, " and avg = ");
-    strcat(req2, s_avg);
+    //strcat(req2, " and avg = ");
+    //strcat(req2, s_avg);
     strcat(req2, " where id_pik_user = ");
     strcat(req2, id);
     strcat(req2, ";");
+    printf("req2 = %s\n", req2);
 
     char* res2 = do_query(smysql, req2);
+    free(req2);
+    free(res2);
+   
+    strcat(req2_1, "update best_res set avg = ");
+    strcat(req2_1, s_avg);
+    strcat(req2_1, " where id_pik_user = ");
+    strcat(req2_1, id);
+    strcat(req2_1, ";");
 
-    return score
+    char *res3 = do_query(smysql, req2_1);
+    free(req2_1);
+    free(res3);
+
+    return score;
   }
 
-  char* req3 = calloc(300, sizeof(char));
+  char* req3 = calloc(1024, sizeof(char));
   strcat(req3, "insert into best_res values (NULL,");
   strcat(req3, s_score);
   strcat(req3, ",");
@@ -608,6 +624,8 @@ int insert_best_res(struct S_MYSQL *smysql, int id_user)
   strcat(req3, id);
   strcat(req3, ");");
 
+  printf("User %s in best_res yet", id);
+  
   char *err_msg = 0;
   int rc = sqlite3_exec(smysql->handle, req3, 0, 0, &err_msg);
 
