@@ -1,6 +1,6 @@
 #include "USB_Main.h"
-
-int USB_Main(char *ptr, 
+/*
+int USB_letter(char *ptr, 
     libusb_device_handle *devh, 
     struct matrix *keymap, 
     char *bit)
@@ -14,11 +14,128 @@ int USB_Main(char *ptr,
   score = read_and_write(devh, key);
   return score;
 }
-
+*/
 // AMINE MAIN : oui c'est pour toi mon grand, implement ce main 'maison' a la
 // place de l'endroi ou tu appel mon code. Merci =) 
 
+int USB_word ( char * ptr_test, struct matrix *keymap) 
+{
+  libusb_device_handle *devh = NULL;
+  uint16_t key = 0x00;
+  char * char_key;
+  char * lettre;
+  int groupe_of_key = 0;
+  int i = 0;
+  //int len = strlen(ptr_test);
+  int score = 0;
+//  char *group_led; 
+//  int gr_led;
+  struct struct_write *str_w = malloc(sizeof(struct struct_write));
+  struct struct_write *str_r = malloc(sizeof(struct struct_write));
+  devh = USB_Init(0);
+  
+  //struct matrix *keymap;
+  //keymap = get_keymap("biblio");
+  //USB_Init_first(keymap);
+  //while(i < len)
+  //{
+   
+   // 0x29 = espace
+   if( ptr_test == '\0')
+    {
+      str_w->key = 0x2c;
+    }
+  
+    else
+    {
+      printf("ici \n");
+      char_key = get_numW_from_char(keymap, ptr_test);
+      key = convert_char_to_uint(char_key);
+      str_w->key = key;
+    }
+    
+    printf("ici3 \n");
+    while(str_r->key == 0)
+    {
+      str_r = read_to_keybord(devh);
+    } 
+    str_r->speed = 0x01;
+    str_r->blue  = 0x00;
+    str_r->green = 0x00;
+    str_r->red   = 0x00;
+    str_r->devh  = devh;
+    if(str_r->key == str_w->key) // GOOD key
+    {
+      str_r->green = 0xFF;
+      write_color_key(str_r,devh);
+      score ++;
+      i++;
+    }
+    else //badkey
+    {
+      score--;
+      str_r->red = 0xFF;
+      write_color_key(str_r,devh);
+    }
+    printf("ici4 \n");
+    if(str_r->key != 0x2c)
+    {
+    printf("key != 0x2c\n");
+    char_key = convert_uint_to_char(str_r->key);
+    lettre = char_to_key(keymap, char_key);
+    groupe_of_key = (int)*lettre-48;
+    }
+    else 
+    {
+      groupe_of_key = 7;
+    }
+    printf("ici5\n");
+    str_w = back_up_led (groupe_of_key, devh, str_r->key);
+    usleep(300000);
+    write_color_key(str_w, devh);
+    USB_Close(devh,0);
+  //}
+  //USB_Init_first(keymap);
+  return score;
+}
+
 int main()
+{
+  char *ptr_char = "azerty uiop";
+  char *ptr_send;
+  int score = 0;
+  int res = 0;
+  int i = 0;
+  struct matrix *keymap;
+  keymap = get_keymap("biblio");
+  USB_Init_first(keymap);
+  int len = strlen(ptr_char);
+  printf("ici1\n");
+  while(i < len) 
+  {
+    ptr_send = ptr_char;
+    res = USB_word(ptr_send, keymap);
+    if(res == 1)
+    {
+      ptr_char ++;
+      i ++;
+      score ++;
+    }
+    else 
+      score--;
+    
+    // les prints sont les données a affiché sur IHM 
+    printf("score = %d \n", score);
+    printf("char  = %c \n", *ptr_char);
+    // fin des printf 
+  }
+
+  return 0;
+}
+
+
+/*
+int USB_word ( char * ptr_test); 
 {
   libusb_device_handle *devh = NULL;
   uint16_t key = 0x00;
@@ -58,24 +175,12 @@ int main()
       write_color_key(str_r,devh);
       score ++;
       i++;
-    /*
-    printf("\n SK = 0x%02x \n", str_r->key);
-    printf(" SR = 0x%02x \n", str_r->red);
-    printf(" SG = 0x%02x \n", str_r->green);
-    printf(" SB = 0x%02x \n", str_r->blue);
-    */
     }
     else //badkey
     {
       score--;
       str_r->red = 0xFF;
-    /*
-    printf("\n SK = 0x%02x \n", str_r->key);
-    printf(" SR = 0x%02x \n", str_r->red);
-    printf(" SG = 0x%02x \n", str_r->green);
-    printf(" SB = 0x%02x \n", str_r->blue);
-    */
-  write_color_key(str_r,devh);
+      write_color_key(str_r,devh);
     }
 
     char_key = convert_uint_to_char(str_r->key);
@@ -83,18 +188,13 @@ int main()
     groupe_of_key = (int)*lettre-48;
     
     str_w = back_up_led (groupe_of_key, devh, str_r->key);
-    /*
-    printf(" K = 0x%02x \n", str_w->key);
-    printf(" R = 0x%02x \n", str_w->red);
-    printf(" G = 0x%02x \n", str_w->green);
-    printf(" B = 0x%02x \n", str_w->blue);
-    */
     usleep(300000);
     write_color_key(str_w, devh);
-    //________________________________________________
     USB_Close(devh,0);
   }
   printf("Score = %d \n", score); 
   USB_Init_first(keymap);
   return 0;
 }
+
+*/
