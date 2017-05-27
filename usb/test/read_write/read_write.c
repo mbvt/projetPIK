@@ -25,7 +25,6 @@ struct struct_write* back_up_led (int i, libusb_device_handle *devh,
                                   {0x00, 0xFF, 0x00}  //9 = Verre
                                 };
 
-    printf("i = %d \n", i);
     str_w->key   = key;
     str_w->red   = array_color   [i-1][0];
     str_w->green = array_color   [i-1][1];

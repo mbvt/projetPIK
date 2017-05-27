@@ -15,8 +15,6 @@ int USB_letter(char *ptr,
   return score;
 }
 */
-// AMINE MAIN : oui c'est pour toi mon grand, implement ce main 'maison' a la
-// place de l'endroi ou tu appel mon code. Merci =) 
 
 int USB_word ( char * ptr_test, struct matrix *keymap) 
 {
@@ -33,32 +31,25 @@ int USB_word ( char * ptr_test, struct matrix *keymap)
   struct struct_write *str_w = malloc(sizeof(struct struct_write));
   struct struct_write *str_r = malloc(sizeof(struct struct_write));
   devh = USB_Init(0);
-  
-  //struct matrix *keymap;
-  //keymap = get_keymap("biblio");
-  //USB_Init_first(keymap);
-  //while(i < len)
-  //{
+ str_r->key = 0x00;
    
-   // 0x29 = espace
-   if( ptr_test == '\0')
+   if( *ptr_test == ' ')
     {
       str_w->key = 0x2c;
     }
   
     else
     {
-      printf("ici \n");
       char_key = get_numW_from_char(keymap, ptr_test);
       key = convert_char_to_uint(char_key);
       str_w->key = key;
     }
     
-    printf("ici3 \n");
-    while(str_r->key == 0)
+    while(str_r->key == 0x00)
     {
       str_r = read_to_keybord(devh);
     } 
+
     str_r->speed = 0x01;
     str_r->blue  = 0x00;
     str_r->green = 0x00;
@@ -77,25 +68,23 @@ int USB_word ( char * ptr_test, struct matrix *keymap)
       str_r->red = 0xFF;
       write_color_key(str_r,devh);
     }
-    printf("ici4 \n");
+    
     if(str_r->key != 0x2c)
     {
-    printf("key != 0x2c\n");
     char_key = convert_uint_to_char(str_r->key);
     lettre = char_to_key(keymap, char_key);
     groupe_of_key = (int)*lettre-48;
     }
     else 
     {
-      groupe_of_key = 7;
+      groupe_of_key = 6;
     }
-    printf("ici5\n");
     str_w = back_up_led (groupe_of_key, devh, str_r->key);
     usleep(300000);
     write_color_key(str_w, devh);
     USB_Close(devh,0);
-  //}
-  //USB_Init_first(keymap);
+    free(str_r);
+    free(str_w);
   return score;
 }
 
@@ -110,10 +99,10 @@ int main()
   keymap = get_keymap("biblio");
   USB_Init_first(keymap);
   int len = strlen(ptr_char);
-  printf("ici1\n");
   while(i < len) 
   {
     ptr_send = ptr_char;
+    
     res = USB_word(ptr_send, keymap);
     if(res == 1)
     {
@@ -125,8 +114,8 @@ int main()
       score--;
     
     // les prints sont les données a affiché sur IHM 
-    printf("score = %d \n", score);
-    printf("char  = %c \n", *ptr_char);
+    printf("score = %d ", score);
+    printf(" |  char  = %c \n", *ptr_char);
     // fin des printf 
   }
 
