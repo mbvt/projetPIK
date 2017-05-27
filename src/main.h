@@ -15,8 +15,6 @@ extern struct S_GSQL {
   struct user *user;
 } *conn;
 
-//int cpt = 0;
-//int score = 0;
 char *tmp;
 struct timespec t0,t1;
 

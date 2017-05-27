@@ -1705,10 +1705,9 @@ Nom d'utilisateur : </property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel">
+                  <object class="GtkLabel" id="nb">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">label</property>
                   </object>
                   <packing>
                     <property name="resize">True</property>
@@ -1740,10 +1739,9 @@ Nom d'utilisateur : </property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel">
+                  <object class="GtkLabel" id="ms">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">label</property>
                   </object>
                   <packing>
                     <property name="resize">True</property>
@@ -1775,10 +1773,9 @@ Nom d'utilisateur : </property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel">
+                  <object class="GtkLabel" id="mt">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">label</property>
                   </object>
                   <packing>
                     <property name="resize">True</property>
@@ -1810,10 +1807,9 @@ Nom d'utilisateur : </property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel">
+                  <object class="GtkLabel" id="mn">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">label</property>
                   </object>
                   <packing>
                     <property name="resize">True</property>
@@ -1837,7 +1833,7 @@ Nom d'utilisateur : </property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="margin_right">20</property>
-                    <property name="label" translatable="yes">Niveau actuel         </property>
+                    <property name="label" translatable="yes">Meilleur joueur         </property>
                   </object>
                   <packing>
                     <property name="resize">False</property>
@@ -1845,10 +1841,9 @@ Nom d'utilisateur : </property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel">
+                  <object class="GtkLabel" id="mj">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">label</property>
                   </object>
                   <packing>
                     <property name="resize">True</property>

@@ -40,43 +40,51 @@ gboolean *key_event_Game(GtkWidget *widget, GdkEventKey *event)
   rep = strncpy(rep,str,l);
   int b = 0;
   char c2 = c[0];
-  char *markup;
+  char *markup, *markup1;
   const char *format2 = "<span size=\"xx-large\" foreground=\"#A80202\" face=\"Times\">\%s</span>";
   const char *format1 = "<span size=\"xx-large\" foreground=\"#23A802\" face=\"Times\">\%s</span>";
+  const char *format = "<span size=\"xx-large\" face=\"Times\">\%s</span>";
+
+  const char *pp, *nn;
+  char *f, *n;
+  char *tmp = calloc(strlen(format1) + len + 10, sizeof(char));
+  char *dst = calloc(strlen(format1) + len + 10, sizeof(char));
 
   if(cpt < len)
   {
     if(c2 !=66)
     {
       b  = compare(rep,cs);
-      if (b ==1)
+
+      if (b == 1)
       {
         score++;
         cpt++;
-
-        markup = g_markup_printf_escaped (format1, str);
-        gtk_label_set_markup (GTK_LABEL(typed1), markup);
+        tmp = strncpy(dst, str,(size_t)cpt);
+        markup = g_markup_printf_escaped(format1, tmp);
       }
       else
       {
         score--;
         cpt--;
-
-        markup = g_markup_printf_escaped (format2, str);
-        gtk_label_set_markup (GTK_LABEL(typed1), markup);
+        tmp = strncpy(dst, str,(size_t)cpt);
+        markup = g_markup_printf_escaped(format2, tmp);
       }
     }
     else
     {
       score--;
       cpt--;
-      markup = g_markup_printf_escaped (format2, str);
-      gtk_label_set_markup (GTK_LABEL(typed1), markup);
+      tmp = strncpy(dst, str,(size_t)cpt);
+      markup = g_markup_printf_escaped(format2, tmp);
     }
+
+    markup1 = g_markup_printf_escaped(format, str+cpt);
+    dst = strcat(markup, markup1);
+    gtk_label_set_markup(GTK_LABEL(typed1), dst);
+
     sprintf(pts, "%d", score);
     gtk_label_set_text(ok1, pts);
-
-
   }
 
   else
@@ -87,7 +95,7 @@ gboolean *key_event_Game(GtkWidget *widget, GdkEventKey *event)
 
     clock_gettime(CLOCK_MONOTONIC,&t1);
     double sec = t1.tv_sec - t0.tv_sec ;
-    char *ctime = calloc (10,sizeof(char));
+    char *ctime = calloc (100,sizeof(char));
     sprintf(pts, "  %d", score);
     sprintf(ctime, "  %f", sec);
 
@@ -98,6 +106,16 @@ gboolean *key_event_Game(GtkWidget *widget, GdkEventKey *event)
     gtk_entry_set_text(entryok1, "");
     cpt= 0;
     score = 0;
+
+
+    pp = gtk_entry_get_text(GTK_ENTRY(entry));
+    nn = gtk_entry_get_text(GTK_ENTRY(entryP));
+    f = (char *)pp;
+    n = (char *)nn;
+
+    printf("ca marche1 : %s\n", f);
+    printf("ca marche2 : %s\n", n);
+
 
     gtk_label_set_text(scores, pts);
     gtk_label_set_text(times, ctime);
