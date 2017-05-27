@@ -41,7 +41,7 @@ char* insert_string(char *word)
 /****** CONVERT INT TO STRING ******/
 char* int_to_str(int nb)
 {
-  char* str_int = calloc(3, sizeof(char));
+  char* str_int = calloc(300, sizeof(char));
   sprintf(str_int, "%d", nb);
 
   return str_int;
@@ -69,29 +69,29 @@ char* build_req_values(char* str1, char* str2, char* str3, char* str4, char* str
 
 /****** INIT CONNECTION STRUCT MYSQL *******/
 /*struct S_MYSQL *conn_init_sql()
-{
-  //int check = 1;
-  struct S_MYSQL *smysql = malloc(sizeof(struct S_MYSQL));
-  //struct S_MYSQL *smysql;
-  MYSQL *var = mysql_init(NULL);
-
-  //smysql->con = &var;
-  smysql->con = var;
-  //if(check == 0)
-  // printf("Error while init in connect_sql");
-
-  smysql->server = "localhost";
-  smysql->user = "adminPIK";
-  smysql->password = "projetpik";
-  smysql->db = "projetpik";
-
-  if(mysql_real_connect(smysql->con, smysql->server, smysql->user, smysql->password, smysql->db, 0, NULL, 0) == NULL)
   {
-    printf("Failed to connect database %s\n", smysql->db);
-    //mysql_close(smysql->con);
-  }
+//int check = 1;
+struct S_MYSQL *smysql = malloc(sizeof(struct S_MYSQL));
+//struct S_MYSQL *smysql;
+MYSQL *var = mysql_init(NULL);
 
-  return smysql;
+//smysql->con = &var;
+smysql->con = var;
+//if(check == 0)
+// printf("Error while init in connect_sql");
+
+smysql->server = "localhost";
+smysql->user = "adminPIK";
+smysql->password = "projetpik";
+smysql->db = "projetpik";
+
+if(mysql_real_connect(smysql->con, smysql->server, smysql->user, smysql->password, smysql->db, 0, NULL, 0) == NULL)
+{
+printf("Failed to connect database %s\n", smysql->db);
+//mysql_close(smysql->con);
+}
+
+return smysql;
 }
 */
 
@@ -109,22 +109,22 @@ char* select_level(char* id_lvl, struct S_MYSQL *smysql)
   //strcat(req, firstname);
   strcat(req, ";");
 
- // printf("Getting level :\n %s\n", req);
+  // printf("Getting level :\n %s\n", req);
 
   char *res = calloc(1024, sizeof (char));
   int rc = sqlite3_exec(smysql->handle, req, callback2, res, &err_msg);
 
- if(rc != SQLITE_OK)
- {
-  printf("Failed to select data\n");
-  printf("SQL error : %s\n", err_msg);
-  sqlite3_free(err_msg);
-  return 0;
- }
+  if(rc != SQLITE_OK)
+  {
+    printf("Failed to select data\n");
+    printf("SQL error : %s\n", err_msg);
+    sqlite3_free(err_msg);
+    return 0;
+  }
 
- // printf("select_level %s\n", res);
- return res;
-  
+  // printf("select_level %s\n", res);
+  return res;
+
 
 }
 
@@ -138,10 +138,10 @@ int callback2(void *ret, int nb_col, char **val_col, char **name_col)
     if (tmp[len-1] == '\n')
       tmp[len-1] ='\0';
     strcat(ret, val_col[i]);
-//    printf("%s\n", val_col[i]);
+    //    printf("%s\n", val_col[i]);
     //if(i < nb_col-1)
     strcat(ret," ");
-  //  printf("%s\n", (char *)ret);
+    //  printf("%s\n", (char *)ret);
   }
   (void)name_col;
   return 0;
@@ -171,17 +171,17 @@ char* select_user(char* name, char *firstname, struct S_MYSQL *smysql)
   char *res = calloc(100, sizeof (char));
   int rc = sqlite3_exec(smysql->handle, req, callback, res, &err_msg);
 
- if(rc != SQLITE_OK)
- {
-  printf("Failed to select data\n");
-  printf("SQL error : %s\n", err_msg);
-  sqlite3_free(err_msg);
-  return 0;
- }
+  if(rc != SQLITE_OK)
+  {
+    printf("Failed to select data\n");
+    printf("SQL error : %s\n", err_msg);
+    sqlite3_free(err_msg);
+    return 0;
+  }
 
   printf("%s\n", res);
- return res;
-  
+  return res;
+
 
 }
 
@@ -266,7 +266,7 @@ int insert_table(struct S_MYSQL *smysql)
     printf("SQL error : %s\n", err_msg);
     sqlite3_free(err_msg);
   }
-  
+
   int id_insert = sqlite3_last_insert_rowid(smysql->handle);
 
   printf("Inserted with id %d\n", id_insert); 
@@ -302,7 +302,7 @@ int insert_lvl(struct S_MYSQL *smysql)//, int id, char *lb_lvl, char *txt, int s
     printf("SQL error : %s\n", err_msg);
     sqlite3_free(err_msg);
   }
-  
+
   int id_insert = sqlite3_last_insert_rowid(smysql->handle);
 
   printf("Inserted with id %d\n", id_insert); 
@@ -314,9 +314,10 @@ char *double_to_str(double item)
 {
   char* str = calloc(100, sizeof(char));
   sprintf(str, "%f", item);
-  
+
   return str;
 }
+
 
 int insert_res(struct S_MYSQL *smysql , int score, int level, double speed, int id_user)
 {
@@ -387,7 +388,7 @@ struct S_MYSQL *connect_db(struct S_MYSQL *smysql)
   //sqlite3_stmt *stmt;
   sqlite3 *handle;
 
-//====> void insert_level_dico(char *text, 
+  //====> void insert_level_dico(char *text, 
 
   retval = sqlite3_open(db, &handle);
 
@@ -412,19 +413,19 @@ char *do_query(struct S_MYSQL *smysql, char* req)
   char *err_msg = 0;
   int rc = sqlite3_exec(smysql->handle, req, callback3, res, &err_msg);
 
- if(rc != SQLITE_OK)
- {
-  printf("Failed to select data\n");
-  printf("SQL error : %s\n", err_msg);
-  sqlite3_free(err_msg);
-  return 0;
- }
+  if(rc != SQLITE_OK)
+  {
+    printf("Failed to select data\n");
+    printf("SQL error : %s\n", err_msg);
+    sqlite3_free(err_msg);
+    return 0;
+  }
 
   return res;
 }
 
 
-int top_score(struct S_MYSQL *smysql, int id_user)
+int get_top_score(struct S_MYSQL *smysql, int id_user)
 {
   char *id = int_to_str(id_user);
 
@@ -432,71 +433,215 @@ int top_score(struct S_MYSQL *smysql, int id_user)
   strcat(req,"select max(score) from results where id_pik_user = ");
   strcat(req, id);
   strcat(req, ";");
-  
+
   char *res = do_query(smysql, req);
-  
+  free(req);
+
   int score = atoi(res);
   free(res);
   //printf("Max score : %d\n", score);
-  
+
   return score;
 }
 
-double top_time(struct S_MYSQL *smysql, int id_user)
+double get_top_time(struct S_MYSQL *smysql, int id_user)
 {
   char *id = int_to_str(id_user);
-  
+
   char *req = calloc(100, sizeof(char));
   strcat(req,"select min(speed) from results where id_pik_user = ");
   strcat(req, id);
   strcat(req, ";");
 
   char* res = do_query(smysql, req);
-  
+  free(req);
+
   double time = atof(res);
   free(res);
   printf("Time : %f\n", time);
-  
+
   return time;
-  
+
 }
 
-int top_level(struct S_MYSQL *smysql, int id_user)
+int get_top_level(struct S_MYSQL *smysql, int id_user)
 {
   char *id = int_to_str(id_user);
-  
+
   char *req = calloc(100, sizeof(char));
   strcat(req,"select max(id_level) from results where id_pik_user = ");
   strcat(req, id);
   strcat(req, ";");
 
   char* res = do_query(smysql, req);
-  
+
   int lvl = atoi(res);
   free(res);
   printf("Max Level : %d\n", lvl);
-  
+
   return lvl;
 }
 
-int nb_game(struct S_MYSQL *smysql, int id_user)
+int get_nb_game(struct S_MYSQL *smysql, int id_user)
 {
   char *id = int_to_str(id_user);
-  
+
   char *req = calloc(100, sizeof(char));
   strcat(req,"select count(id_pik_user) from results where id_pik_user = ");
   strcat(req, id);
   strcat(req, ";");
 
   char* res = do_query(smysql, req);
-  
+
   int nb = atoi(res);
   free(res);
   printf("Nb game : %d\n", nb);
-  
+
   return nb;
-  
+
 }
+
+int get_sum_score(struct S_MYSQL *smysql, int id_user)
+{
+  char *id = int_to_str(id_user);
+
+  char *req = calloc(100, sizeof(char));
+  strcat(req,"select sum(score) from results where id_pik_user = ");
+  strcat(req, id);
+  strcat(req, ";");
+
+  char* res = do_query(smysql, req);
+
+  int nb = atoi(res);
+  free(res);
+  printf("Score sum user %s : %d\n", id, nb);
+
+  return nb;
+
+}
+
+
+double get_nb_time(struct S_MYSQL *smysql, int id_user)
+{
+  char *id = int_to_str(id_user);
+
+  char *req = calloc(100, sizeof(char));
+  strcat(req,"select sum(speed) from results where id_pik_user = ");
+  strcat(req, id);
+  strcat(req, ";");
+
+  char* res = do_query(smysql, req);
+
+  double nb = atof(res);
+  free(res);
+  printf("Nb Time : %f\n", nb);
+
+  return nb;
+
+}
+
+int get_best_player(struct S_MYSQL *smysql)
+{
+  char *req = calloc(100, sizeof(char));
+  strcat(req,"select id_pik_user from best_res where total_score = ");
+  strcat(req, "(select max(total_score) from best_res);");
+
+  char* res = do_query(smysql, req);
+
+  int id = atoi(res);
+  free(res);
+  printf("Best Player id: %d\n", id);
+
+  return id;
+} 
+
+
+int insert_best_res(struct S_MYSQL *smysql, int id_user)
+{
+  int score = get_sum_score(smysql, id_user);
+  int nb_game = get_nb_game(smysql, id_user);
+  double avg = (score / nb_game);
+
+  char* id = int_to_str(id_user);
+  char* s_score = int_to_str(score);
+  printf("s_score = %s\n",s_score);
+  char* s_game = int_to_str(nb_game);
+
+  char *s_avg = calloc(1024, sizeof(char));
+  sprintf(s_avg, "%f", avg);
+  
+  for(size_t i = 0; s_avg[i] != '\0'; ++i)
+  {
+    if(s_avg[i] == ',')
+      s_avg[i] = '.';
+  }
+
+  char* req = calloc(1024, sizeof(char));
+  strcat(req, "select total_score from best_res where id_pik_user = ");
+  strcat(req, id);
+  strcat(req, ";");
+
+  char *res = do_query(smysql, req);
+  free(req);
+  printf("RES = %s\n", res);
+  char* req2 = calloc(1024, sizeof(char));
+  char* req2_1 = calloc(1024, sizeof(char));
+  if(strlen(res) != 0)
+  {
+    printf("User %s in best_res yet\n", id);
+    strcat(req2, "update best_res set total_score = ");
+    strcat(req2, s_score);
+    strcat(req2, " where id_pik_user = ");
+    strcat(req2, id);
+    strcat(req2, ";");
+    printf("req2 = %s\n", req2);
+
+    char* res2 = do_query(smysql, req2);
+    free(req2);
+    free(res2);
+   
+    strcat(req2_1, "update best_res set avg = ");
+    strcat(req2_1, s_avg);
+    strcat(req2_1, " where id_pik_user = ");
+    strcat(req2_1, id);
+    strcat(req2_1, ";");
+
+    char *res3 = do_query(smysql, req2_1);
+    free(req2_1);
+    free(res3);
+
+    return score;
+  }
+
+  char* req3 = calloc(1024, sizeof(char));
+  strcat(req3, "insert into best_res values (NULL,");
+  strcat(req3, s_score);
+  strcat(req3, ",");
+  strcat(req3, s_avg);
+  strcat(req3, ",");
+  strcat(req3, id);
+  strcat(req3, ");");
+
+  printf("User %s in best_res yet", id);
+  
+  char *err_msg = 0;
+  int rc = sqlite3_exec(smysql->handle, req3, 0, 0, &err_msg);
+
+  if(rc != SQLITE_OK)
+  {
+    printf("SQL error : %s\n", err_msg);
+    sqlite3_free(err_msg);
+  }
+  free(req3);
+
+  int id_insert = sqlite3_last_insert_rowid(smysql->handle);
+
+  printf("Best score inserted with id %d\n", id_insert); 
+
+  return id_insert;
+
+}
+
 
 int callback3(void *ret, int nb_col, char **val_col, char **name_col)
 {
@@ -516,36 +661,36 @@ int callback3(void *ret, int nb_col, char **val_col, char **name_col)
 
 
 /*
-int main()
-{
-  struct S_MYSQL *smysql = NULL;
-  smysql = connect_db(smysql);
-  smysql->insert_values = "NULL, \"test34\", \"test34n\", 11, 1, 2";
-  smysql->table_name = "pik_user";
+   int main()
+   {
+   struct S_MYSQL *smysql = NULL;
+   smysql = connect_db(smysql);
+   smysql->insert_values = "NULL, \"test34\", \"test34n\", 11, 1, 2";
+   smysql->table_name = "pik_user";
 
-  char *name = "Quinne";
-  char *firstname = "Brandon";
+   char *name = "Quinne";
+   char *firstname = "Brandon";
 
-  int ret = 0;
-  int id_user = 0;
-  char *data = "";
-  
-  id_user = insert_table(smysql);
-  if(id_user == 0)
-    printf("Error inserting in table\n");
+   int ret = 0;
+   int id_user = 0;
+   char *data = "";
 
-  data = select_user(name, firstname, smysql);
-  printf("Select complete:\n%s\n", data);
+   id_user = insert_table(smysql);
+   if(id_user == 0)
+   printf("Error inserting in table\n");
 
-  del_user(id_user, smysql);
+   data = select_user(name, firstname, smysql);
+   printf("Select complete:\n%s\n", data);
 
-  data = select_user(name, firstname, smysql);
-  if(ret == 24)
-    printf("Select complete\n");
+   del_user(id_user, smysql);
+
+   data = select_user(name, firstname, smysql);
+   if(ret == 24)
+   printf("Select complete\n");
 
 
-  sqlite3_close(smysql->handle);
+   sqlite3_close(smysql->handle);
 
-  return 0;
-}
-*/
+   return 0;
+   }
+   */
