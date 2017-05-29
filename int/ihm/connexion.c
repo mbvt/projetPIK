@@ -47,6 +47,7 @@ void on_CoEntry_clicked()
   {
     gtk_label_set_text(testCo, f);
     gtk_stack_set_visible_child_name(GTK_STACK(IHM), "MenuSGPage");
+
   }
 
   gtk_label_set_text(errCo, "Nom d'utilisateur non trouvé");

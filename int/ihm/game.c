@@ -21,77 +21,83 @@ int compare(char *s1, char *s2)
 }
 
 void event_Game(GtkWidget *widget, GdkEventKey *event)
+//void event_Game()
 {
   (void)widget;
   (void)event;
-  //char *c = gdk_keyval_name(event->keyval);
-  //const gchar *cs1 = gtk_entry_get_text(GTK_ENTRY(entryok1));
-
-  // str char wait 
+  /* char typed */
+  
   const gchar *str_wait = gtk_label_get_text(typed1);
   char *ptr_char = (char *)str_wait;
-  char *ptr_send;
   int score = 0;
-  int i = 0;
+  size_t i = 0;
   int res = 0;
+  size_t len = strlen(ptr_char);
+  char *pts = calloc(100, sizeof(char));
+  char *str_typed = calloc(len,sizeof(char));
+  char *ptr_send = calloc(len,sizeof(char));
+
+  /* Init keymap */
   struct matrix *keymap;
-  int len = strlen(ptr_char);
-  char *pts = calloc(10, sizeof(char));
-  //char *cs = (char*)cs1;
-  //size_t l = strlen(cs);
-  //char *rep = calloc(l,sizeof(char));
-  //printf("score = %d\n",score);
-  //rep = strncpy(rep,str,l);
-  //char c2 = c[0];
+  keymap = get_keymap("biblio");
+  USB_Init_first(keymap);
+ 	 
   char *markup, *markup1;
-  // TO DO 
   const char *format2 = "<span size=\"xx-large\" foreground=\"#A80202\" face=\"Times\">\%s</span>";
   const char *format1 = "<span size=\"xx-large\" foreground=\"#23A802\" face=\"Times\">\%s</span>";
   const char *format = "<span size=\"xx-large\" face=\"Times\">\%s</span>";
 
-  //const char *pp, *nn;
-  //char *f, *n;
-  char *tmp = calloc(strlen(format1) + len + 10, sizeof(char));
-  char *dst = calloc(strlen(format1) + len + 10, sizeof(char));
-  //////////////////////
-  // REP USB          //
+  const char *pp, *nn;
+  char *f, *n;
+  char *tmp;
+  char *dst;
 
-  keymap = get_keymap("biblio");
-  USB_Init_first(keymap);
+
   while(i < len) 
   {
-    ptr_send = ptr_char;
+    tmp = calloc(strlen(format1) + len + 10, sizeof(char));
+    dst = calloc(strlen(format1) + len + 10, sizeof(char));
+ 
+    ptr_send = strcpy(ptr_send,ptr_char);
 
     res = USB_word(ptr_send, keymap);
     if(res == 1)
     {
+      char *c = calloc(4,sizeof(char));
+      *c = *ptr_char;
+      str_typed = strcat(str_typed,c);
       ptr_char ++;
       i ++;
       score ++;
-      tmp = strncpy(dst, str_wait,(size_t)cpt);
+      tmp = strncpy(dst, str_wait,i);
       markup = g_markup_printf_escaped(format1, tmp);
+
     }
     else 
     {
       score--;
-      tmp = strncpy(dst, str_wait,(size_t)cpt);
+      tmp = strncpy(dst, str_wait,i);
       markup = g_markup_printf_escaped(format2, tmp);
-    }
-    // les prints sont les données a affiché sur IHM 
-    printf("score = %d ", score);
-    printf(" |  char  = %c \n", *ptr_char);
-    //////////////////////
 
-    markup1 = g_markup_printf_escaped(format, str_wait+cpt);
+
+    }
+    markup1 = g_markup_printf_escaped(format, str_wait+i);
     dst = strcat(markup, markup1);
     gtk_label_set_markup(GTK_LABEL(typed1), dst);
-
+    
     sprintf(pts, "%d", score);
     gtk_label_set_text(ok1, pts);
-  }
-  // fin de la chaine
+    
+    gtk_label_set_text(saisi, str_typed);
+    
+    gtk_stack_set_visible_child_name(GTK_STACK(IHM), "GamePage");
   
-  // init de la bdd
+    while (gtk_events_pending ())
+        gtk_main_iteration ();
+
+  
+  }
+
   struct S_MYSQL *smysql = NULL;
   smysql = connect_db(smysql);
   smysql->table_name = "pik_user";
@@ -103,25 +109,19 @@ void event_Game(GtkWidget *widget, GdkEventKey *event)
   sprintf(pts, "  %d", score);
   sprintf(ctime, "  %f", sec);
 
-  //printf("Score bien enregistrer id_resultat : %f",sec);
-  //int req = insert_res(smysql,1,2,score,sec);
-  //printf("Score bien enregistrer id_resultat : %d",req);
-
-  // reinitialisation des scores
-  /*gtk_entry_set_text(entryok1, "");
-  cpt= 0;
-  score = 0;
-  */
   /***  recupération des nom prenoms de l'utilisateur ***/
-  /*
   pp = gtk_entry_get_text(GTK_ENTRY(entry));
   nn = gtk_entry_get_text(GTK_ENTRY(entryP));
   f = (char *)pp;
   n = (char *)nn;
-  */
-  // set_text = write in label 
+ printf (" name player : %s",n); 
+ printf (" firstname player : %s",f);
+
+	//printf("gtk_label_set_text = %s \n", (char *)scores);
   gtk_label_set_text(scores, pts);
+  
   gtk_label_set_text(times, ctime);
+  
   gtk_stack_set_visible_child_name(GTK_STACK(IHM), "ScorePage");
 
 }
@@ -205,12 +205,14 @@ void on_validercat_clicked()
   char *markup;
   markup = g_markup_printf_escaped(format, lvl_dico);
   gtk_label_set_markup(GTK_LABEL(typed1), markup);
-  //gtk_label_set_text(typed1, lvl_dico);
+  gtk_label_set_text(typed1, lvl_dico);
 
   gtk_stack_set_visible_child_name(GTK_STACK(IHM), "GamePage");
 
+  //event_Game();
 
   g_signal_connect(MainWindow, "key-release-event", G_CALLBACK(event_Game), NULL);
+  //g_signal_connect(MainWindow, "key-release-event", G_CALLBACK(event_Game), NULL);
 }
 
 
@@ -227,7 +229,7 @@ void on_gameback1_clicked()
 
 void on_mainmenu_clicked()
 {
-  g_signal_handlers_disconnect_by_func(MainWindow,key_event_Game,NULL);
+  g_signal_handlers_disconnect_by_func(MainWindow,event_Game,NULL);
   gtk_stack_set_visible_child_name(GTK_STACK(IHM), "MenuSGPage");
   gtk_label_set_text(ok1, "");
   gtk_label_set_text(scores, "");

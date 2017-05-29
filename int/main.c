@@ -28,8 +28,9 @@ int main(int argc, char *argv[])
   testCo = GTK_LABEL(gtk_builder_get_object(builder, "testCo"));
   errCo  = GTK_LABEL(gtk_builder_get_object(builder, "errCo"));
   error_test = GTK_LABEL(gtk_builder_get_object(builder, "error_test"));
-  scores =  GTK_LABEL(gtk_builder_get_object(builder, "scores"));
-  times =  GTK_LABEL(gtk_builder_get_object(builder, "times"));
+  scores = GTK_LABEL(gtk_builder_get_object(builder, "scores"));
+  times = GTK_LABEL(gtk_builder_get_object(builder, "times")); 
+  saisi = GTK_LABEL(gtk_builder_get_object(builder, "saisi"));
 
   name      = GTK_ENTRY(gtk_builder_get_object(builder, "name"));
   firstname = GTK_ENTRY(gtk_builder_get_object(builder, "firstname"));

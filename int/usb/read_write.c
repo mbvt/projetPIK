@@ -86,8 +86,8 @@ void color_keymap_init(libusb_device_handle *devh, struct matrix *keymap)
       i++;
       //printf("____________________________________________\n");
     }
-  free(str_w);
-  free(str);
+ // free(str_w);
+ // free(str);
 }
 //_______________ U S B  -  F I R S T  -  I N I T ________________
 void USB_Init_first(struct matrix *keymap)
@@ -193,7 +193,7 @@ int write_to_keybord (libusb_device_handle *devh)
 
   write_color_key(str, devh);
 
-  free(str);    
+  //free(str);    
   (void)rc;
 
   if(variable_local == 0x29)
