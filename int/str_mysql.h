@@ -51,6 +51,7 @@ char *select_user(char* name, char* firstname, struct S_MYSQL *smysql);
 char *select_level(char* id_lvl, struct S_MYSQL *smysql);
 
 /* prepared get queries */
+int get_id_user(struct S_MYSQL *smysql, char *name, char *fname);
 int get_top_score(struct S_MYSQL *smysql, int id_user);
 double get_top_time(struct S_MYSQL *smysql, int id_user);
 int get_top_level(struct S_MYSQL *smysql, int id_user);
@@ -58,7 +59,7 @@ int get_nb_game(struct S_MYSQL *smysql, int id_user);
 double get_nb_time(struct S_MYSQL *smysql, int id_user);
 int get_sum_score(struct S_MYSQL *smysql, int id_user);
 int get_best_player(struct S_MYSQL *smysql);
-
+char **get_f_name(struct S_MYSQL *smysql, int id);
 /* Store result from query in string */
 //char *result_query(MYSQL *smysql);
 

@@ -540,6 +540,31 @@ double get_nb_time(struct S_MYSQL *smysql, int id_user)
 
 }
 
+char **get_f_name(struct S_MYSQL *smysql, int id)
+{
+  char** f_name = calloc(2, sizeof(char*));
+  char* s_id = int_to_str(id);
+  
+  char *req = calloc(100, sizeof(char));
+  strcat(req,"select fname_pik_user from pik_user where id_pik_user = ");
+  strcat(req, s_id);
+  strcat(req, ";");
+
+  f_name[0] = do_query(smysql, req);
+
+  char *req2 = calloc(100, sizeof(char));
+  strcat(req2,"select name_pik_user from pik_user where id_pik_user = ");
+  strcat(req2, s_id);
+  strcat(req2, ";");
+
+  f_name[1] = do_query(smysql, req2);
+
+  free(req);
+  free(req2);
+
+  return f_name;
+}
+
 int get_best_player(struct S_MYSQL *smysql)
 {
   char *req = calloc(100, sizeof(char));
@@ -551,6 +576,26 @@ int get_best_player(struct S_MYSQL *smysql)
   int id = atoi(res);
   free(res);
   printf("Best Player id: %d\n", id);
+
+  return id;
+}
+
+int get_id_user(struct S_MYSQL *smysql, char *name, char *fname)
+{
+  char *s_fname = insert_string(fname);
+  char *s_name = insert_string(name);
+
+  char *req = calloc(100, sizeof(char));
+  strcat(req,"select id_pik_user from pik_user where fname_pik_user = ");
+  strcat(req, s_fname);
+  strcat(req, ";");
+
+  char* res = do_query(smysql, req);
+  printf("req = %s\n", req);
+  int id = atoi(res);
+  free(res);
+  //id = 2;
+  printf("User id: %d\n", id);
 
   return id;
 } 

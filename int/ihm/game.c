@@ -109,21 +109,24 @@ void event_Game(GtkWidget *widget, GdkEventKey *event)
   sprintf(pts, "  %d", score);
   sprintf(ctime, "  %f", sec);
 
-  /***  recupération des nom prenoms de l'utilisateur ***/
+ 
+  /*** TODO  recupération des nom prenoms de l'utilisateur ***/
   pp = gtk_entry_get_text(GTK_ENTRY(entry));
   nn = gtk_entry_get_text(GTK_ENTRY(entryP));
   f = (char *)pp;
   n = (char *)nn;
- printf (" name player : %s",n); 
- printf (" firstname player : %s",f);
+  printf (" name player : %s",n); 
+  printf (" firstname player : %s",f);
+  // TODO INSERTION DANS LA BASE
 
-	//printf("gtk_label_set_text = %s \n", (char *)scores);
+  
+ //printf("gtk_label_set_text = %s \n", (char *)scores);
   gtk_label_set_text(scores, pts);
   
   gtk_label_set_text(times, ctime);
   
   gtk_stack_set_visible_child_name(GTK_STACK(IHM), "ScorePage");
-
+ // TODO RECOPIER DANS INSCRIPTION 
 }
 
 
@@ -205,7 +208,6 @@ void on_validercat_clicked()
   char *markup;
   markup = g_markup_printf_escaped(format, lvl_dico);
   gtk_label_set_markup(GTK_LABEL(typed1), markup);
-  gtk_label_set_text(typed1, lvl_dico);
 
   gtk_stack_set_visible_child_name(GTK_STACK(IHM), "GamePage");
 

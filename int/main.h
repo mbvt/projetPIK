@@ -24,6 +24,7 @@ GtkWidget  *CoWindow, *InsWindow, *IHM, *CoEntry;
 GtkEntry   *entry, *entryP, *entryok, *entryok1, *name, *firstname, *age;
 GtkBuilder *builder;
 GtkLabel   *testCo, *error_test, *scores, *errCo, *typed;
+GtkLabel   *nb, *ms, *mt, *mn, *mj;
 GtkLabel   *typed1, *ok1, *ok, *times, *saisi;
 GtkToggleButton *UCO, *UCN, *HO, *HN, *Dalt, *Mot;
 GtkToggleButton *D, *I, *E, *M1, *M2, *M3, *N1, *N2, *N3;

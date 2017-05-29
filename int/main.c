@@ -31,6 +31,12 @@ int main(int argc, char *argv[])
   scores = GTK_LABEL(gtk_builder_get_object(builder, "scores"));
   times = GTK_LABEL(gtk_builder_get_object(builder, "times")); 
   saisi = GTK_LABEL(gtk_builder_get_object(builder, "saisi"));
+   
+  nb = GTK_LABEL(gtk_builder_get_object(builder, "nb"));
+  ms = GTK_LABEL(gtk_builder_get_object(builder, "ms"));
+  mt = GTK_LABEL(gtk_builder_get_object(builder, "mt"));
+  mn = GTK_LABEL(gtk_builder_get_object(builder, "mn"));
+  mj = GTK_LABEL(gtk_builder_get_object(builder, "mj"));
 
   name      = GTK_ENTRY(gtk_builder_get_object(builder, "name"));
   firstname = GTK_ENTRY(gtk_builder_get_object(builder, "firstname"));

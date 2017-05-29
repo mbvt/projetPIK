@@ -78,6 +78,40 @@ void on_stat_clicked()
 
   f = (char *)pp;
   n = (char *)nn;
+  
+  struct S_MYSQL *smysql = calloc(1, sizeof(struct S_MYSQL));
+  smysql = connect_db(smysql);
+
+  int id_u = get_id_user(smysql, f, n);
+  
+  int nb_game = get_nb_game(smysql, id_u);
+  int b_score = get_top_score(smysql, id_u);
+  double b_time = get_top_time(smysql, id_u);
+  int b_lvl = get_top_level(smysql, id_u);
+
+  int id_b_player = get_best_player(smysql);
+ 
+  char **tab_fname = get_f_name(smysql, id_b_player);
+  char *f_name = tab_fname[0];
+  char *name = tab_fname[1];
+
+  int bp_score = get_sum_score(smysql, id_b_player);
+
+  char *nb1 = int_to_str(nb_game);
+  char *ms1 = int_to_str(b_score);
+  char *mt1 = int_to_str(b_time);
+  char *mn1 = int_to_str(b_lvl);
+  printf("%s\n",nb1);
+  printf("%s\n",ms1);
+  printf("%s\n",mt1);
+  printf("%s\n",mn1);
+
+  gtk_label_set_text(nb, nb1);
+  gtk_label_set_text(ms, ms1);
+  gtk_label_set_text(mt, mt1);
+  gtk_label_set_text(mn, mn1);
+  gtk_label_set_text(mj, f_name);
+
 
   printf("ca marche1 : %s\n", f);
   printf("ca marche2 : %s\n", n);
