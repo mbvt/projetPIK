@@ -50,6 +50,12 @@ int USB_word ( char * ptr_test, struct matrix *keymap)
       str_r = read_to_keybord(devh);
     } 
 
+    if ((str_r->key == 0xE1) || (str_r->key == 0xE5) || (str_r->key == 0x39))
+    {
+      free(str_r);
+      return -2;
+    }
+
     str_r->speed = 0x01;
     str_r->blue  = 0x00;
     str_r->green = 0x00;
