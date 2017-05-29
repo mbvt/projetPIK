@@ -71,6 +71,7 @@ void on_mSGback_clicked()
 
 void on_stat_clicked()
 {
+  /*------------------------Tu peux rajouter tes trucs ici-------------------*/
   gtk_stack_set_visible_child_name(GTK_STACK(IHM), "StatPage");
   pp = gtk_entry_get_text(GTK_ENTRY(entry));
   nn = gtk_entry_get_text(GTK_ENTRY(entryP));

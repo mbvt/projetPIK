@@ -4,6 +4,8 @@
 # include "../level.h"
 # include "../main.h"
 
+GtkLabel *saisi;
+
 static int cpt = 0;
 static int score = 0;
 
@@ -122,7 +124,11 @@ gboolean *key_event_Game(GtkWidget *widget, GdkEventKey *event)
     gtk_stack_set_visible_child_name(GTK_STACK(IHM), "ScorePage");
 
   }
-
+  for(int i = 0; i < 3; i++)
+  {
+    printf("%d\n", i);
+    gtk_label_set_text(saisi, "je fonctionne");
+  }
   return FALSE;
 }
 
