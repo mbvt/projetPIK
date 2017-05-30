@@ -108,20 +108,12 @@ if(nb_game != 0)
   char *ms1 = int_to_str(b_score);
   char *mt1 = int_to_str(b_time);
   char *mn1 = int_to_str(b_lvl);
-  printf("%s\n",nb1);
-  printf("%s\n",ms1);
-  printf("%s\n",mt1);
-  printf("%s\n",mn1);
 
   gtk_label_set_text(nb, nb1);
   gtk_label_set_text(ms, ms1);
   gtk_label_set_text(mt, mt1);
   gtk_label_set_text(mn, mn1);
   gtk_label_set_text(mj, f_name);
-
-
-  printf("ca marche1 : %s\n", f);
-  printf("ca marche2 : %s\n", n);
 }
 
 void on_menuniveau_clicked()

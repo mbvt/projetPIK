@@ -5,7 +5,20 @@
 int main(int argc, char *argv[])
 {
   gtk_init(&argc, &argv);
+  
+   printf("   ____________________________________________________________\n");
+  printf("  |                                                            |\n");
+  printf("  |                 BIENVENUE SUR LE PROJET PIK                |\n");
+  printf("  |____________________________________________________________|\n");
+  printf("  |                                                            |\n");
+  printf("  |             Produced by -- Team ChocAPI-K                  |\n");
+  printf("  |                         -- Amine, Brandon, Vincent, Morgan |\n");
+  printf("  |                                                            |\n");
+  printf("  |                      Projet Libre EPITA | Promo 2020 - API |\n");
+  printf("  |____________________________________________________________|\n");
+  printf("\n");
 
+  
   builder = gtk_builder_new();
   gtk_builder_add_from_file (builder, "IHM_final.glade", NULL);
 
