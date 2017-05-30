@@ -1,13 +1,24 @@
 # include "main.h"
 
-GtkLabel *saisi;
-
 /*----------------------------------MAIN---------------------------------------
  *---------------------------------------------------------------------------*/
 int main(int argc, char *argv[])
 {
   gtk_init(&argc, &argv);
+  
+   printf("   ____________________________________________________________\n");
+  printf("  |                                                            |\n");
+  printf("  |                 BIENVENUE SUR LE PROJET PIK                |\n");
+  printf("  |____________________________________________________________|\n");
+  printf("  |                                                            |\n");
+  printf("  |             Produced by -- Team ChocAPI-K                  |\n");
+  printf("  |                         -- Amine, Brandon, Vincent, Morgan |\n");
+  printf("  |                                                            |\n");
+  printf("  |                      Projet Libre EPITA | Promo 2020 - API |\n");
+  printf("  |____________________________________________________________|\n");
+  printf("\n");
 
+  
   builder = gtk_builder_new();
   gtk_builder_add_from_file (builder, "IHM_final.glade", NULL);
 
@@ -30,9 +41,20 @@ int main(int argc, char *argv[])
   testCo = GTK_LABEL(gtk_builder_get_object(builder, "testCo"));
   errCo  = GTK_LABEL(gtk_builder_get_object(builder, "errCo"));
   error_test = GTK_LABEL(gtk_builder_get_object(builder, "error_test"));
-  scores =  GTK_LABEL(gtk_builder_get_object(builder, "scores"));
-  times =  GTK_LABEL(gtk_builder_get_object(builder, "times"));
-  saisi =  GTK_LABEL(gtk_builder_get_object(builder, "saisi"));
+  scores = GTK_LABEL(gtk_builder_get_object(builder, "scores"));
+  times = GTK_LABEL(gtk_builder_get_object(builder, "times")); 
+  saisi = GTK_LABEL(gtk_builder_get_object(builder, "saisi"));
+  saisi1 = GTK_LABEL(gtk_builder_get_object(builder, "saisi1"));
+   
+  nb = GTK_LABEL(gtk_builder_get_object(builder, "nb"));
+  ms = GTK_LABEL(gtk_builder_get_object(builder, "ms"));
+  mt = GTK_LABEL(gtk_builder_get_object(builder, "mt"));
+  mn = GTK_LABEL(gtk_builder_get_object(builder, "mn"));
+  mjn = GTK_LABEL(gtk_builder_get_object(builder, "mjn"));
+  mjp = GTK_LABEL(gtk_builder_get_object(builder, "mjp"));
+  mjs = GTK_LABEL(gtk_builder_get_object(builder, "mjs"));
+  numlvl = GTK_LABEL(gtk_builder_get_object(builder, "numlvl"));
+  err_lvl = GTK_LABEL(gtk_builder_get_object(builder, "err_lvl"));
 
   name      = GTK_ENTRY(gtk_builder_get_object(builder, "name"));
   firstname = GTK_ENTRY(gtk_builder_get_object(builder, "firstname"));
