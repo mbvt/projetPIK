@@ -394,14 +394,13 @@ int get_top_level(struct S_MYSQL *smysql, int id_user)
 int get_nb_game(struct S_MYSQL *smysql, int id_user)
 {
   char *id = int_to_str(id_user);
-
+  
   char *req = calloc(100, sizeof(char));
   strcat(req,"select count(id_pik_user) from results where id_pik_user = ");
   strcat(req, id);
   strcat(req, ";");
 
   char* res = do_query(smysql, req);
-
   int nb = atoi(res);
   free(res);
 
@@ -489,12 +488,13 @@ int get_id_user(struct S_MYSQL *smysql, char *name, char *fname)
 {
   char *s_fname = insert_string(fname);
   char *s_name = insert_string(name);
+  (void)s_name;
 
   char *req = calloc(100, sizeof(char));
-  strcat(req,"select id_pik_user from pik_user where name_pik_user = ");
+  strcat(req,"select id_pik_user from pik_user where fname_pik_user = ");
   strcat(req, s_name);
-  strcat(req, "and fname_pik_user = ");
-  strcat(req, s_fname);
+  //strcat(req, "and fname_pik_user = ");
+  //strcat(req, s_fname);
   strcat(req, ";");
 
   char* res = do_query(smysql, req);
