@@ -22,7 +22,7 @@ int USB_word ( char * ptr_test, struct matrix *keymap)
       str_w->key = 0x2c;
     }
   
-    else
+    else 
     {
       char_key = get_numW_from_char(keymap, ptr_test);
       key = convert_char_to_uint(char_key);
@@ -32,8 +32,8 @@ int USB_word ( char * ptr_test, struct matrix *keymap)
     while(str_r->key == 0x00)
     {
       str_r = read_to_keybord(devh);
-    } 
-
+   } 
+ 
     str_r->speed = 0x01;
     str_r->blue  = 0x00;
     str_r->green = 0x00;

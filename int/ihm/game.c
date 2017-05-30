@@ -52,21 +52,15 @@ void event_Game(GtkWidget *widget, GdkEventKey *event)
   char *tmp;
   char *dst;
 
-
   while(i < len) 
   {
     tmp = calloc(strlen(format1) + len + 10, sizeof(char));
     dst = calloc(strlen(format1) + len + 10, sizeof(char));
  
     ptr_send = strcpy(ptr_send,ptr_char);
-
+   
     res = USB_word(ptr_send, keymap);
     
-    if(res == -2) // maj activé 
-    {
-      *ptr_send = *ptr_send + 'a' - 'A';
-      printf("ptr_send test shift = %c \n", *ptr_send);
-    }
 
     if(res == 1)
     {

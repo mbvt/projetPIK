@@ -85,9 +85,16 @@ void on_stat_clicked()
   int id_u = get_id_user(smysql, f, n);
   
   int nb_game = get_nb_game(smysql, id_u);
-  int b_score = get_top_score(smysql, id_u);
-  double b_time = get_top_time(smysql, id_u);
-  int b_lvl = get_top_level(smysql, id_u);
+  int b_score = 0;
+  double b_time = 0;
+  int b_lvl = 0;
+
+if(nb_game != 0)
+  {
+    b_score = get_top_score(smysql, id_u);
+    b_time = get_top_time(smysql, id_u);
+    b_lvl = get_top_level(smysql, id_u);
+  }
 
   int id_b_player = get_best_player(smysql);
  
