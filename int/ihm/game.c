@@ -3,6 +3,7 @@
 
 static int cpt = 0;
 static int score = 0;
+static int id_lvl1 = 0;
 
 /*----------------------------------------------------------------------------*
  *--------------------------------- Game -------------------------------------*/
@@ -21,7 +22,6 @@ int compare(char *s1, char *s2)
 }
 
 void event_Game(GtkWidget *widget, GdkEventKey *event)
-//void event_Game()
 {
   (void)widget;
   (void)event;
@@ -101,9 +101,8 @@ void event_Game(GtkWidget *widget, GdkEventKey *event)
 
   struct S_MYSQL *smysql = NULL;
   smysql = connect_db(smysql);
-  smysql->table_name = "pik_user";
+  smysql->table_name = "results";
 
-  // calcule du temps 
   clock_gettime(CLOCK_MONOTONIC,&t1);
   double sec = t1.tv_sec - t0.tv_sec ;
   char *ctime = calloc (100,sizeof(char));
@@ -111,23 +110,25 @@ void event_Game(GtkWidget *widget, GdkEventKey *event)
   sprintf(ctime, "  %f", sec);
 
  
-  /*** TODO  recupération des nom prenoms de l'utilisateur ***/
   pp = gtk_entry_get_text(GTK_ENTRY(entry));
   nn = gtk_entry_get_text(GTK_ENTRY(entryP));
   f = (char *)pp;
   n = (char *)nn;
-  printf (" name player : %s",n); 
-  printf (" firstname player : %s",f);
-  // TODO INSERTION DANS LA BASE
 
+  int id_u = get_id_user(smysql, n, f);
+  int id_insert = insert_res(smysql, score, id_lvl1, sec, id_u);
+  if(id_insert < 1)
+    printf("Not registred id level number : %d\n", id_lvl1);
   
- //printf("gtk_label_set_text = %s \n", (char *)scores);
+  int id_best_res = insert_best_res(smysql, id_u);
+  if(id_best_res == 0)
+    printf("No best result to show\n");
+ 
   gtk_label_set_text(scores, pts);
   
   gtk_label_set_text(times, ctime);
   
   gtk_stack_set_visible_child_name(GTK_STACK(IHM), "ScorePage");
- // TODO RECOPIER DANS INSCRIPTION 
 }
 
 
@@ -186,8 +187,17 @@ void on_validercat_clicked()
   smysql = connect_db(smysql);
   smysql->table_name = "pik_user";
 
-  int id_lvl1 = compute_lvl_id(tab);
+  id_lvl1 = compute_lvl_id(tab);
+  printf("id_lvl1 = %d", id_lvl1);
+  
   char *id_lvl = int_to_str(id_lvl1);
+  if(id_lvl1 > 19)
+  {
+    gtk_label_set_text(err_lvl, "Niveau non disponible");
+  }
+else
+{
+  gtk_label_set_text(numlvl, id_lvl);
   char *lvl_title = calloc(12, sizeof(char));
   strcat(lvl_title,"./dico/lvl");
   strcat(lvl_title,id_lvl);
@@ -217,7 +227,7 @@ void on_validercat_clicked()
   g_signal_connect(MainWindow, "key-release-event", G_CALLBACK(event_Game), NULL);
   //g_signal_connect(MainWindow, "key-release-event", G_CALLBACK(event_Game), NULL);
 }
-
+}
 
 void on_cateba_clicked()
 {

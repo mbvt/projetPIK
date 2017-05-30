@@ -24,8 +24,8 @@ GtkWidget  *CoWindow, *InsWindow, *IHM, *CoEntry;
 GtkEntry   *entry, *entryP, *entryok, *entryok1, *name, *firstname, *age;
 GtkBuilder *builder;
 GtkLabel   *testCo, *error_test, *scores, *errCo, *typed;
-GtkLabel   *nb, *ms, *mt, *mn, *mj;
-GtkLabel   *typed1, *ok1, *ok, *times, *saisi;
+GtkLabel   *nb, *ms, *mt, *mn, *mjp, *mjn, *mjs, *numlvl, *err_lvl;
+GtkLabel   *typed1, *ok1, *ok, *times, *saisi, *saisi1;
 GtkToggleButton *UCO, *UCN, *HO, *HN, *Dalt, *Mot;
 GtkToggleButton *D, *I, *E, *M1, *M2, *M3, *N1, *N2, *N3;
 GSList *group1, *group2, *group3;
@@ -43,6 +43,6 @@ int compare(char *s1, char *s2);
 //void event_Game();
 void event_Game(GtkWidget *widget, GdkEventKey *event);
 //gboolean *event_Game(GtkWidget *widget, GdkEventKey *event);
-gboolean *key_event_Ins(GtkWidget *widget, GdkEventKey *event);
+void event_Ins(GtkWidget *widget, GdkEventKey *event);
 
 #endif
